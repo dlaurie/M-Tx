@@ -6,8 +6,8 @@ It contains the file `mtx.tex` and all the sources for generating the
 binary executable file (`prepmx`, `prepmx.exe`, etc., depending on your 
 operating system).  There is no documentation and there are no examples.
 These are included with the stable release available in the TeXLive
-and MikTeX distributions of TeX. (If you do have installed one of those, 
-you will not be able to do any useful work with `prepmx`.)
+and MikTeX distributions of TeX. (If you have not installed one of those, 
+you will be unable to do any useful work with `prepmx`.)
 
 You probably got it from <https://github.com/dlaurie/M-Tx>. If not,
 you should; that may well contain newer code by now.
@@ -27,20 +27,19 @@ versions of this README included details, all probably obsolete by now.
 "GNU System" means any system on which standard GNU utilities such as "bash"
 and "make" is available.  Typical GNU systems are 
 
-(a) Linux 
-(b) Windows with the Cygwin package installed 
-(c) other systems on which an appropriate package has been installed.  
+- Linux 
+- Windows with the Cygwin package installed 
 
 You do not need a GNU system to use M-Tx, but it is easier to make the 
 executable on a GNU system.
  
 If your system has GNU Make, simply type
 
-  make
+    make
 
 Otherwise, type 
 
-  fpc -B -So prepmx
+    fpc -B -So prepmx
 
 to make the executable. 
 
