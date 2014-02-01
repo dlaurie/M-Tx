@@ -1,0 +1,139 @@
+% mtx.tex   Dirk Laurie 2001-3-11  Corrections: see mtxtexdate, below.
+
+% All TeX commands put directly into PMX files by M-Tx are defined below,
+%   except the following:
+% 1. \input mtx
+% 2. code to achieve a multi-bar rest
+% 3. User's own inline TeX
+% 4. \mtxversion and \mtxdate are defined in prepmx itself
+% 5. Utterly basic TeX commands like "\ " and "%"
+% It is therefore possible for a TeXpert to tune the performance
+%   of M-Tx without touching the preprocessor.
+
+% The commands all start with the letters "\mtx" except one:
+%  "\:" is a short alias for "\relax" to save space on input line length
+
+\ifx\mtxtexversion\undefined\else\endinput\fi 
+
+\def\mtxtexversion{0.60}
+\def\mtxtexdate{16 March 2005}
+\let\:=\relax
+\message{mtx.tex \mtxtexversion\space<\mtxtexdate>} 
+\message{M-Tx \mtxversion\space(Music from TeXt) <\mtxdate>} 
+
+\input musixtex
+\ifx\akkoladen\undefined\message{Your musixtex.tex is too old}\fi
+
+\input pmx
+\def\pmxneeded{2.5}
+\ifdim\pmxversion pt<\pmxneeded  pt\message{Requires PMX Version
+\pmxneeded. Please upgrade.}\fi
+ 
+\input musixlyr
+\ifx\assignlyricshere\undefined\message{Your musixlyr.tex is too old}\fi
+
+% M-Tx font definitions
+% Three macros are associated with each lyrics font, e.g.
+%   \mtxmyfont defines \myfont but does not select it
+%   \myfont selects it later
+%   \mtxMyfont (note capital) defines and selects \myfont
+
+\def\mtxInstrfont{\twelvebf}
+
+\def\mtxeightsf{\font\eightsf=cmss8}
+\def\mtxEightsf{\mtxeightsf\eightsf}
+
+\def\mtxtensf{\font\tensf=cmss10}
+\def\mtxTensf{\mtxtensf\tensf}
+
+\def\mtxelevensf{\font\elevensf=cmss10 scaled \magstephalf}
+\def\mtxElevensf{\mtxelevensf\elevensf}
+
+\def\mtxtwelvesf{\font\twelvesf=cmss12}
+\def\mtxTwelvesf{\mtxtwelvesf\twelvesf}
+
+% Title fonts are immediately selected
+
+\def\mtxBigsf{\font\Bigtype=cmss9 scaled \magstep2}
+\def\mtxBIGsf{\font\BIGtype=cmss9 scaled \magstep4}
+
+\def\mtxAllsf{\mtxElevensf\mtxBigsf\mtxBIGsf}
+
+% M-Tx music sizes
+
+\def\mtxTinySize{\tinyvalue}
+\def\mtxSmallSize{\smallvalue}
+\def\mtxNormalSize{\normalvalue}
+\def\mtxLargeSize{\largevalue}
+\def\mtxHugeSize{\Largevalue}
+
+% musixlyr interface
+
+\def\mtxSetLyrics#1#2{\setlyrics{#1}{#2}}
+\def\mtxCopyLyrics#1#2{\copylyrics{#1}{#2}}
+\def\mtxAssignLyrics#1#2{\assignlyrics{#1}{#2}}
+\def\mtxAuxLyr#1{\auxlyr{#1}}
+\def\mtxLyrlink{\lyrlink}
+%
+% 2003-08-05, scancm@biobase.dk: corrected definition of \mtxLowLyrlink
+%
+\def\mtxLowLyrlink{\lowlyrlink}
+\def\mtxLyricsAdjust#1#2{\setsongraise{#1}{#2\internote}}
+\def\mtxAuxLyricsAdjust#1#2{\auxsetsongraise{#1}{#2\internote}}
+\def\mtxLyrModeAlter#1{\lyrmodealter{#1}}
+\def\mtxLyrModeNormal#1{\lyrmodenormal{#1}}
+\def\mtxBM{\beginmel}
+\def\mtxEM{\endmel}
+\def\mtxAuxBM{\auxlyr\mtxBM}
+\def\mtxAuxEM{\auxlyr\mtxEM}
+
+% Other macros
+
+\def\mtxTenorClef#1{\settrebleclefsymbol{#1}\treblelowoct}
+\def\mtxVerseNumber#1{#1 }
+\def\mtxInterInstrument#1#2{\setinterinstrument{#1}{#2\Interligne}}
+\def\mtxStaffBottom#1{\gdef\atnextline{\stafftopmarg #1\Interligne}}
+\def\mtxGroup#1#2#3{\grouptop{#1}{#2}\groupbottom{#1}{#3}}
+\def\mtxPageHeight#1{\vsize #1}
+\def\mtxTwoInstruments#1#2{\vbox{\hbox{#1}\hbox{#2}}}
+\def\mtxTitleLine#1{\gdef\mtxTitle{#1}}
+\def\mtxComposerLine#1#2{\gdef\mtxPoetComposer{#1\hfill #2}}
+\def\mtxInstrName#1{{\mtxInstrfont #1}}
+\def\mtxSetSize#1#2{\setsize{#1}{#2}}
+\def\mtxDotted{\dotted}
+\let\mathflat\flat
+\let\mathsharp\sharp
+\def\flat{\musixfont\char'062}
+\def\sharp{\musixfont\char'064}
+%\def\mtxSharp{\raise1ex\hbox{\musicsmallfont\char'064}}
+%\def\mtxFlat{\raise1ex\hbox{\musicsmallfont\char'062}}
+\def\mtxSharp{\raise1ex\hbox{\sharp}}
+\def\mtxFlat{\raise1ex\hbox{\flat}}
+\def\mtxIcresc{\icresc}
+\def\mtxTcresc{\tcresc}
+\def\mtxCresc#1{\crescendo{#1\elemskip}}
+\def\mtxIdecresc{\icresc}
+\def\mtxTdecresc{\tdecresc}
+\def\mtxDecresc#1{\decrescendo{#1\elemskip}}
+\def\mtxPF{\ppff}
+\def\mtxLchar#1#2{\lchar{#1}{#2}}
+\def\mtxCchar#1#2{\cchar{#1}{#2}}
+\def\mtxZchar#1#2{\zchar{#1}{#2}}
+\def\mtxVerseNumberOffset{3}
+\def\mtxVerse{\loffset{\mtxVerseNumberOffset}\lyr}
+\makeatletter
+\def\comma#1{\check@staff\raise1.2\internote\llap{\BIGfont'\kern#1\noteskip}\fi}
+\makeatother
+
+%\def\mtxVerse{%
+%  \znotes\minlyrspace=-10cm%     to inhibit right-shifting of the numbers
+%         \llyr\lyroffset{-2}%    make the numbers stand off to the left
+%         \lyr%                   post the numbers
+%  \en}
+
+% M-Tx default settings
+
+\sepbarrules
+
+\immediate\write10{=== end of mtx.tex ===}
+\endinput
