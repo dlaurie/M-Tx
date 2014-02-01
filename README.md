@@ -1,5 +1,5 @@
-                   M-Tx Preprocessor Source Code
-                   =============================
+M-Tx Preprocessor Source Code
+=============================
 
 This is a development version of `prepmx`, the M-Tx Preprocessor.
 It contains the file `mtx.tex` and all the sources for generating the
@@ -44,8 +44,8 @@ Otherwise, type
 
 to make the executable. 
 
-                   For experts only
-                   ----------------
+For experts only
+----------------
 
 You can modify the source code as you wish -- this is open source software
 and the license is MIT.  If you wish to redistribute your modified version,
