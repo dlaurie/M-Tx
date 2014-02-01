@@ -1,8 +1,10 @@
    Corrections and enhancements to M-Tx starting from 0.53
    Newest items at top
 
-Version 0.60e
+Version 0.60e (RETRACTED)
   Any bar word starting with `|` terminates a pickup, not only `|`.
+  Actually the manual was clear on this point, so the current version
+  has reverted to 0.60d.
 
 Version 0.60d
   Replaced space character tie label by no label,

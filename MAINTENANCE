@@ -26,7 +26,7 @@ time later.
 Instead of some dull generalities, here is a blow-by-blow account of
 how an actual bug reported by Wojtek Chemijewski on the Werner Icking 
 Music Archive mailing list `<tex-music@tug.org>` on 2014-01-29 was
-found and corrected.
+found and "corrected".
 
 2. Case study
 -------------
@@ -34,7 +34,7 @@ found and corrected.
 I'm doing this from a command line in Ubuntu Linux. It will be much
 the same on a Mac. On Windows, you need to have Cygwin installed.
 
-In M-Tx 0.60, the following bug appears:
+In M-Tx 0.60, the following behaviour was considered to be a bug:
 
 > If the piece starts with a pickup, then the bar separator at the end
 of the pickup is only recognized as terminating a pickup when it is 
@@ -193,4 +193,19 @@ The change is enough to cure the reported bug, so we document it at the
 top of `prepmx.pas` and in `Corrections`, changing the version number to
 `0.60e`.
 
+It was not a bug
+----------------
 
+After carrying out the above exercise, I carefully reread the M-Tx
+manual and found:
+
+> If your piece starts with a pickup, it is defined by a bar line at the 
+> end of “bar 0”, i.e. the incomplete bar containing the pickup. Even 
+> when there is a repeat sign after the pickup, so that you don’t 
+> actually see a bar line in the printed music, you still need a bar 
+> line before the repeat sign, otherwise M-Tx cannot know where the 
+> pickup stops. The bar line defining the pickup is compulsory in the 
+> first voice found, and optional but recommended in the others.
+
+Be warned, therefore, that M-Tx 0.60e is a dead end. The next version
+of M-Tx will branch from 0.60d again. 

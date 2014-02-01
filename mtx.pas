@@ -241,7 +241,7 @@ begin
       end;
     appendToLine(voice,enote);
     if note='' then done:=true;  { !!! else word_bound[here]:=length(line); }
-    if note[1]=barsym then
+    if note=barsym then
     if meternum=0 then
       error3(voice,'You may not use bar lines in barless music')
     else if bar_length=0 then markBar(voice)
