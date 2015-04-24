@@ -1,4 +1,5 @@
 unit notes;
+{$V-}
 
 interface uses control;
 

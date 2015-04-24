@@ -113,6 +113,7 @@ procedure lyricsParagraph;
       other: array[other_index] of string[lyrtaglength];
       numbered: boolean;
 begin  if not doLyrics then exit;
+  if para_len<2 then fatalerror('empty lyrics paragraph');
   w:=NextWord(P[1],blank,dummy);  l:=length(w);  line_no := orig_line_no[1];
   if w[l]<>'}' then  w:=w+'}';
   first:=GetNextWord(w,dummy,'}');  nother:=0;
