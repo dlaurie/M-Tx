@@ -31,6 +31,8 @@ procedure initOctaves(octaves: string);
 procedure renewPitch (voice: integer; var note: string);
 function chordPitch(voice: integer): integer;
 procedure renewChordPitch (voice: integer; note: string);
+procedure defineRange(voice: integer; range: string);
+procedure checkRange(voice: integer; note: string);
 procedure rememberDurations;
 procedure restoreDurations;
 procedure chordTie(voice: integer; var lab: char);
@@ -43,10 +45,20 @@ const
   init_oct: string = '';
   lowest_pitch = -9;
   highest_pitch = 61;
+  range_name: array[-6..49] of string = (
+'0c','0d','0e','0f','0g','0a','0b',
+'1c','1d','1e','1f','1g','1a','1b',
+'2c','2d','2e','2f','2g','2a','2b',
+'3c','3d','3e','3f','3g','3a','3b',
+'4c','4d','4e','4f','4g','4a','4b',
+'5c','5d','5e','5f','5g','5a','5b',
+'6c','6d','6e','6f','6g','6a','6b',
+'7c','7d','7e','7f','7g','7a','7b');
 
 type
   line_status = record
-    pitch, chord_pitch, octave_adjust, beam_level, slur_level, after_slur: integer;
+    pitch, chord_pitch, octave_adjust, beam_level, 
+      slur_level, after_slur: integer;
     octave, lastnote, chord_lastnote, duration, slurID, tieID: char;
     beamnext, beamed, slurnext, slurred, no_beam_melisma: boolean;
     no_slur_melisma: array[1..12] of boolean; 
@@ -56,6 +68,41 @@ type
 
 var current: array[voice_index] of line_status;
     lastdur: array[voice_index] of char;
+    voice_range, range_low, range_high: array[voice_index] of string;
+
+{ Range limits are user-specified as e.g. 3c. To make comparisons
+meaningful, a and b (which come after g) are translated to h and i. }
+
+procedure checkRange(voice: integer; note: string);
+begin 
+  if voice_range[voice]='' then exit;
+  if length(note)>2 { assume usual PMX form with octave } then 
+    note := note[3]+note[1];
+  if note[2]='a' then note[2]:='h'; 
+  if note[2]='b' then note[2]:='i';
+  if (note<range_low[voice]) or (note>range_high[voice]) then
+    error3(voice,note+' is out of range, specified as '+voice_range[voice])
+end;
+
+procedure defineRange(voice: integer; range: string);
+begin
+  voice_range[voice] := range;
+  if range='' then exit;
+  if not (
+         ('0'<=range[1]) and (range[1]<='7')
+     and ('a'<=range[2]) and (range[2]<='g')
+     and (range[3]='-')
+     and ('0'<=range[4]) and (range[4]<='7')
+     and ('a'<=range[5]) and (range[5]<='g')
+     ) then error('Badly formatted range "'+range+
+       '" for voice '+voice_label[voice]+', must be e.g. 3c-4a',print);
+  if range[2]='a' then range[2]:='h';
+  if range[2]='b' then range[2]:='i';
+  if range[5]='a' then range[5]:='h';
+  if range[5]='b' then range[5]:='i';
+  range_low[voice]:=substr(range,1,2);
+  range_high[voice]:=substr(range,4,2);
+end;
 
 procedure chordTie(voice: integer; var lab: char);
   var n: integer;
@@ -153,9 +200,7 @@ function newPitch (voice: integer; note: string; pitch: integer;
    lastnote: char): integer;
   var interval, npitch: integer;
       oct: char;
-begin {if debugMode then
-  write('New pitch for note ',note,' relative to ',lastnote,
-     ' at pitch ',pitch);}
+begin 
   oct:=octaveCode(note); 
   if oct='=' then oct:=initOctave(voiceStave(voice));
   if (oct>='0') and (oct<='9') then
@@ -165,12 +210,11 @@ begin {if debugMode then
   interval := ord(note[1])-ord(lastnote);
   if interval>3 then dec(interval,7);
   if interval<-3 then inc(interval,7);
-  npitch:=pitch+interval; {if debugMode then write(' was ',npitch);}
+  npitch:=pitch+interval; 
   while oct<>' ' do 
   begin if oct='+' then inc(npitch,7) else if oct='-' then dec(npitch,7);
     removeOctaveCode(oct,note); oct:=octaveCode(note)
   end;
-  {if debugMode then writeln(' is ',npitch);}
   newPitch:=npitch
 end;
 
@@ -299,14 +343,18 @@ begin  with current[voice] do
   end;
 end;
 
+{ This is the routine called by prepmx.pas for every normal and chordal
+note, immediately after checkOctave. It does two things: adjusts pitch
+of notes following a C: chord to what it would have been without that
+chord, and checks for pitch overruns. }
 procedure renewPitch (voice: integer; var note: string);
   var pstat: integer;
 begin with current[voice] do
-  begin  pstat:=newPitch (voice, note, chord_pitch, chord_lastnote);
-    if debugMode then write('Current pitch in voice ',voice,' is ',pitch,
-      ', last note was ',lastnote,', this note is ',note);
+  begin 
+    pstat:=newPitch (voice, note, chord_pitch, chord_lastnote);
     pitch := newPitch (voice, note, pitch, lastnote);
     if pitch<>pstat then repitch(note,pitch-pstat);
+    checkRange(voice,range_name[pitch]);
     if (pitch<lowest_pitch) and checkPitch then 
     begin write('Pitch of note ',note,' following ',lastnote,' reported as ',pitch);
       error3(voice,'Pitch too low')
@@ -316,10 +364,6 @@ begin with current[voice] do
       error3(voice,'Pitch too high')
     end;
     lastnote:=note[1];
-    if debugMode then writeln(', repitched to ',pitch);
-    if debugMode and (pitch<>pstat) then
-      writeln('Pitch from melodic line = ',pitch,
-      '   from last chordal note = ', pstat);
   end;
 end;
 

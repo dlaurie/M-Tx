@@ -83,7 +83,7 @@ type
       extra: integer;
     vocal: boolean;
     bar_bound: array[bar_index0] of word_index0;
-    word_bound: array[word_index0] of integer;
+    word_bound, orig_word_bound: array[word_index0] of integer;
     scan: word_scan;
     end;
 
@@ -175,7 +175,8 @@ end;
 procedure resetInfo(voice: voice_index; var buf: string);
 begin  with info[voice] do
   begin buf := P[mus];  P[mus]:='';
-    bar_bound[0]:=0;  word_bound[0]:=0; nbar:=0;  here := 0;
+    bar_bound[0]:=0;  word_bound[0]:=0; orig_word_bound[0]:=0; 
+    nbar:=0;  here := 0;
   end;
 end;
 
@@ -194,7 +195,10 @@ end;
 
 procedure appendToLine(voice: voice_index; note: string);
 begin if note<>'' then with info[voice] do
-  begin P[mus]:=P[mus]+note+blank; word_bound[here]:=length(P[mus]); end;
+  begin P[mus]:=P[mus]+note+blank; word_bound[here]:=length(P[mus]); 
+    orig_word_bound[here]:=nextWordBound(orig_P[mus],note[1],
+      orig_word_bound[here-1]);
+  end;
 end;
 
 procedure markBar(voice: voice_index);
@@ -209,8 +213,8 @@ procedure barForward(voice: voice_index; nbars: integer);
 begin  with info[voice] do
   begin
     if (nbar+nbars<0) then error3(voice, 'Next voice before bar is full');
+    if nbar+nbars>max_bars then error3(voice,'Bars per line limit exceeded');
     inc(nbar,nbars);
-    if nbar>max_bars then error3(voice,'Bars per line limit exceeded');
     if nbars>0 then bar_bound[nbar]:=here;
   end;
 end;
@@ -233,10 +237,13 @@ begin  curtail(w,':');  findVoice:=0;
 end;
 
 procedure info3(voice: voice_index);
+  var p: integer;
 begin  with info[voice] do
   begin
     writeln ('In voice "', voice_label[voice], '" near word ', here, ':');
-    writeln(' ':word_bound[here],'V')
+    p:=orig_word_bound[here-1]-1;
+    if p<0 then p:=0;
+    writeln(' ':p,'V')
   end
 end;
 
@@ -316,9 +323,11 @@ procedure GetNextMusWord (var buf, note: string; var nscan: music_word);
         ' inserts empty text: did you define it before use?',print);
       if length(macro_text[playID])+length(buf)>255
       then error('Expansion of macro '+playtag+' causes buffer overflow',print)
-      else begin if debugMode then writeln('Inserting macro '+playtag+' text "'
-        +macro_text[playID]+'"');
-        writeln('Buffer before insert: ',buf);
+      else begin if debugMode then 
+        begin writeln('Inserting macro '+playtag+' text "'
+           +macro_text[playID]+'"');
+           writeln('Buffer before insert: ',buf)
+        end;
         buf:=macro_text[playID]+buf; exit 
       end
     end;

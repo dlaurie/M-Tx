@@ -16,6 +16,8 @@ procedure toUpper(var s: string);
 procedure delete1 (var s: string; p: integer);
 procedure predelete (var s: string; l: integer);
 procedure shorten (var s: string; new_length: integer);
+function nextWordBound(s: string; trigger: char; p: integer): integer;
+  { find end of first word starting with trigger after s[p] }
 
 implementation
 
@@ -96,5 +98,12 @@ function substr (var s: string; start, count: integer): string;
     writeln('insertchar: string too short');
     substr := copy(s,start,count);
   end;
+
+function nextWordBound(s: string; trigger: char; p: integer): integer;
+ begin
+  repeat p:=p+1 until s[p]=trigger;
+  while (p<length(s)) and (s[p+1]<>' ') do p:=p+1;
+  nextWordBound:=p;
+end;
 
 end.

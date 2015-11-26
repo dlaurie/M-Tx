@@ -11,7 +11,7 @@ procedure OpenFiles;
 procedure CloseFiles;
 procedure putLine (line: string);
 procedure put(line: string; putspace: boolean);
-procedure tex3 (s: string);
+procedure TeXtype2 (s: string);
 function endOfInfile: boolean;
 
 implementation uses control, strings, utility;
@@ -24,11 +24,23 @@ var teststyle: integer;
 function endOfInfile: boolean;
   begin endOfInfile:=eofAll; end;
 
-procedure tex3 (s: string);
+procedure putTeXlines(s: string);
+  var p: integer;
+begin p:=pos1(#10,s);
+  while p>0 do
+  begin
+    putLine('\'+substr(s,1,p-1)+'\');
+    predelete(s,p);
+    p:=pos1(#10,s)
+  end; 
+  if length(s)>0 then putLine('\'+s+'\');
+end;
+
+procedure TeXtype2 (s: string);
   begin
     if pmx_preamble_done then
       if s[1]='%' then putLine(s)
-      else if first_paragraph then putLine('\'+s+'\')
+      else if first_paragraph then putTeXLines(s)
       else putLine('\\'+s+'\')
     else putLine(s);
   end;

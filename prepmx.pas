@@ -1,13 +1,12 @@
 program prepmx;
 uses control, strings, globals, preamble, lyrics, mtx, analyze,
   mtxline, status, uptext, notes, files, utility;
-{ fpc mistakenly thinks CONTROL and GLOBALS are not used }
 
 { CMO: addition/change by Christian Mondrup }
 
 {* M-Tx preprocessor to PMX     Dirk Laurie }
-const version = '0.60e';
-      version_date = '<24 April 2014>';
+const version = '0.61';
+      version_date = '<10 August 2015>';
 
 {* See file "Corrections" for updates later than those listed below
 }
@@ -180,7 +179,7 @@ other: if note[1]=grace_group then
         if ngrace>0 then dec(ngrace);
       end;
 { For a zword, take note of pitch but do not change the contents }
-{ Add spurious duration because repich expects duration to be present }
+{ Add spurious duration because repitch expects duration to be present }
 zword: begin cutnote:=note; predelete(cutnote,1); insertchar('4',cutnote,2);
          checkOctave(voice,cutnote); renewPitch(voice,cutnote)
        end;
@@ -226,7 +225,7 @@ begin
   par_line:=musicLineNo(voice);
   nmulti :=0;  ngrace := 0;  line_no:=orig_line_no[par_line];
   repeat note:=getMusicWord(voice);  if note='' then exit;
-    if debugMode then writeln(voice,' ',note);
+    { if debugMode then writeln(voice,' ',note); }
     case thisNote(voice) of
   rword: begin  if multi_bar_rest then
            begin countBars(note); note:=multibar;
@@ -378,6 +377,7 @@ procedure doMusic;
 begin  first_paragraph:=true;  pmx_preamble_done:=false;  bar_no:=1;
   repeat_sign:='';  must_respace:=false; must_restyle:=false;
   repeat final_paragraph := endOfInfile;
+    orig_P := P;
     if (para_len>0) and not ignore_input and thisCase then
     begin  if no_commands_yet then
       begin interpretCommands;  printFeatures(false);
@@ -389,7 +389,8 @@ begin  first_paragraph:=true;  pmx_preamble_done:=false;  bar_no:=1;
         no_commands_yet:=false
       end;
       if startsWithBracedWord(P[1]) then lyricsParagraph else
-      begin musicParagraph;  first_paragraph:=false;
+      begin 
+        musicParagraph;  first_paragraph:=false;
         writeRepeat(repeat_sign);
       end
     end;
@@ -427,6 +428,7 @@ begin   { ---- Main program ------------------------ }
   this_version := version;  this_version_date := version_date;
   writeln ('==> This is M-Tx ' + version + ' (Music from TeXt) ' +
     version_date );
+
   mtxLevel(version);  OpenFiles;  no_commands_yet:=true;  preambleDefaults;
   no_report_errors:=false;
   topOfPMXfile;

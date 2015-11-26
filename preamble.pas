@@ -21,7 +21,6 @@ function isCommand(command: string): boolean;
 const known = true;
 
 implementation  uses control, mtxline, strings, files, status, utility;
-{ fpc mistakenly thinks CONTROL is not used }
 
 const blank = ' ';
       colon = ':';
@@ -32,9 +31,9 @@ const blank = ' ';
       warn_redefine: boolean = false;
 
 type command_type =
-     ( none, title, composer, pmx, options, msize, bars, shortnote,
+     ( none, title, composer, pmx, tex, options, msize, bars, shortnote,
        style, sharps, flats, meter, space, pages, systems,
-       enable, disable, name, indent,
+       enable, disable, range, name, indent,
        poet, part, only, octave, start );
 
    line_type = ( unknown, colon_line, command_line, comment_line,
@@ -45,18 +44,19 @@ type command_type =
 
 const c1 = title; cn = start;
       commands: array[command_type] of string[16] =
-  ( 'NONE', 'TITLE', 'COMPOSER', 'PMX', 'OPTIONS',
+  ( 'NONE', 'TITLE', 'COMPOSER', 'PMX', 'TEX', 'OPTIONS',
     'SIZE', 'BARS/LINE', 'SHORT',
     'STYLE', 'SHARPS', 'FLATS', 'METER', 'SPACE', 'PAGES', 'SYSTEMS',
-    'ENABLE', 'DISABLE',
+    'ENABLE', 'DISABLE', 'RANGE',
     'NAME', 'INDENT', 'POET', 'PART', 'ONLY', 'OCTAVE', 'START');
      cline: array[command_type] of string =
-   ( '', '', '', '', '', '', '', '1/4',
-     '', '0', '',  'C', '', '1', '1', '', '', '', '', '', '', '', '', '' );
+   ( '', '', '', '', '', '', '', '', '1/4', (* short *)
+     '', '0', '',  'C', '', '1', '1', (* systems *)
+     '', '', '', '', '', '', '', '', '', '' );
       redefined: array[command_type] of boolean =
     ( false, false, false, false, false, false, false, false, false,
       false, false, false, false, false, false, false, false, false,
-      false, false, false, false, false, false );
+      false, false, false, false, false, false, false, false );
 
 (** Known styles *)
       known_style: array[style_index] of string = (
@@ -78,6 +78,7 @@ var old_known_styles: style_index;
     style_used: array[style_index] of boolean;
     omit_line: array[paragraph_index] of boolean;
     orig_style_line: array[style_index] of style_index0;
+    orig_range_line: integer;
 
 var nclefs, n_pages, n_systems, n_sharps, ngroups: integer;
     part_line, title_line, composer_line, pmx_line, options_line,
@@ -214,7 +215,8 @@ begin  for c:=c1 to cn do cline[c]:='';
 end;
 
 function omitLine(line: paragraph_index): boolean;
-begin if line=0 then omitLine:=true else omitLine:=omit_line[line] end;
+begin omitLine := (line>0) and omit_line[line] 
+end;
 
 procedure setName;
   var i: integer;
@@ -317,6 +319,9 @@ end;
 function isCommand(command: string): boolean;
 begin  isCommand:=findCommand(command)<>none  end;
 
+function mustAppend(command: command_type): boolean;
+begin mustAppend := command=tex end;
+
 procedure doEnable(var line: string; choice: boolean);
   var word: string;
 begin
@@ -326,24 +331,53 @@ begin
   until word=''
 end;
 
+procedure setRange(line: string);
+  var v,p: integer;
+begin 
+  line_no := orig_range_line;
+  for v:=1 to nvoices do 
+  begin p:=pos(voice_label[v]+'=',line);
+    if p>0 then
+    begin
+      if length(line)<p+6 then
+        error('At least five characters must follow "'+voice_label[v]+'="',
+        print);
+      defineRange(v,substr(line,p+2,5));
+    end
+    else defineRange(v,'');
+  end;
+end;
+
+function isAssertion(var line: string): boolean;
+begin 
+  exit(false)
+end;  
+
 function doCommand(line: string): line_type;
   var command: string;
     last_command: command_type;
     starts_with_note: boolean;
 begin
-  if line[1]=comment then begin doCommand:=comment_line; exit; end;
+  if (line[1]=comment) and not isAssertion(line) then
+  begin doCommand:=comment_line; exit; end;
   starts_with_note := maybeMusicLine(line);
   command:=GetNextWord(line,blank,colon);
   if endsWith(command,colon) then
   begin last_command:=findCommand(command);
     doCommand:=command_line;
     if last_command = enable then doEnable(line,true)
-    else if last_command = disable then doEnable(line,false);
+    else if last_command = disable then doEnable(line,false)
+    else if last_command = range then orig_range_line := line_no;
     if last_command<>none then
-    begin cline[last_command]:=line;
-      if last_command=start then start_line:=line;
-      if warn_redefine and redefined[last_command] then
+    begin 
+      if mustAppend(last_command) and redefined[last_command] then
+        cline[last_command]:=cline[last_command]+#10+line
+      else 
+      begin cline[last_command]:=line;
+        if warn_redefine and redefined[last_command] then
         warning('You have redefined preamble command '+command,print);
+      end;
+      if last_command=start then start_line:=line;
       redefined[last_command]:=true;
     end
     else begin doCommand:=colon_line;  addStyle(command+colon+' '+line);
@@ -420,6 +454,7 @@ begin
   if cline[flats]<>'' then
   begin getNum(cline[flats],n_sharps); n_sharps:=-n_sharps; end;
   setName; setIndent; setInitOctave; setOnly(cline[only]);
+  setRange(cline[range]);
   if options_line <>'' then begin
     warning('"Options" is cryptic and obsolescent.',  not print);
     writeln('  Use "Enable" and "Disable" instead.')
@@ -510,10 +545,10 @@ procedure respace;
   begin
      for i:=ninstr downto 2 do
      begin j:=ninstr-i+1;
-	if nspace[j]<>unspec then tex3('\mtxInterInstrument{'+toString(i-1)+
+	if nspace[j]<>unspec then TeXtype2('\mtxInterInstrument{'+toString(i-1)+
 				       '}{'+toString(nspace[j])+'}');
      end;
-     if nspace[ninstr]<>unspec then tex3('\mtxStaffBottom{'+
+     if nspace[ninstr]<>unspec then TeXtype2('\mtxStaffBottom{'+
 					  toString(nspace[ninstr])+'}');
      must_respace:=false;
   end;
@@ -549,6 +584,11 @@ begin  for i:=1 to nclefs do
     c:=clef[i];  if (c='8') or (c='t') then
     putLine('\\mtxTenorClef{' + toString(PMXinstr(i)) + '}\' );
   end;
+end;
+
+procedure insertTeX;
+begin
+  if redefined[tex] then TeXtype2(cline[tex]);
 end;
 
 procedure doPMXpreamble;
@@ -597,7 +637,7 @@ begin
   if texdir='' then texdir := './';
   putLine(texdir);
 
-  pmx_preamble_done:=true;  respace;
+  pmx_preamble_done:=true; insertTeX; respace;
 
   for j:=1 to ngroups do
   writeln(outfile,'\\mtxGroup{'+toString(j)+'}{'

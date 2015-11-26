@@ -54,7 +54,10 @@ begin
         error('   Line does not end at complete bar',print);
       end;
       if pmx_preamble_done and (l>0) and (meternum>0) then
+begin
+      writeln('l=',l,' meternum=',meternum);
       error3(voice,'Short bar with no meter change');
+end
       end
   end;
   if not pmx_preamble_done then

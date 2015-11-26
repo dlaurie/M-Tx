@@ -1,5 +1,22 @@
-   Corrections and enhancements to M-Tx starting from 0.53
-   Newest items at top
+Corrections and enhancements to M-Tx starting from 0.53
+=======================================================
+   
+Newest items at top. You might also want to look at file `MAINTENANCE`.
+
+Version 0.61
+------------
+
+Mainly aids to the programmer.
+
+1.  `TeX` preamble command for Type 2 TeX strings.
+2.  Assertions: Range, Bars.
+3.  User's Manual thoroughly revised.
+4.  Misnamed procedure `tex3` is now `TeXtype2`.
+5.  Page and font macros are included in `mtx.tex`.
+6.  The part of this file above the horizontal line is in Markdown.
+
+
+----------------------------------------------------------------------
 
 Version 0.60f
   notes.pas: {$V-} inserted since otherwise Pascal 2.6.2 regards it as an 

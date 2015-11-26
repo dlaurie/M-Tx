@@ -1,4 +1,6 @@
-% mtx.tex   Dirk Laurie 2001-3-11  Corrections: see mtxtexdate, below.
+% mtx.tex      © 2001–2015 Dirk Laurie     License: MIT (see file LICENSE)
+%    Some code © 2001 André van Ryckeghem  License: GPL
+% Corrections: see mtxtexdate, below.
 
 % All TeX commands put directly into PMX files by M-Tx are defined below,
 %   except the following:
@@ -10,13 +12,15 @@
 % It is therefore possible for a TeXpert to tune the performance
 %   of M-Tx without touching the preprocessor.
 
-% The commands all start with the letters "\mtx" except one:
+% Commands borrowed unchanged from André van Ryckeghem's mypmxdef.tex
+%   have AVR prepended to their names.
+% All other commands start with the letters "\mtx" except one:
 %  "\:" is a short alias for "\relax" to save space on input line length
 
 \ifx\mtxtexversion\undefined\else\endinput\fi 
 
-\def\mtxtexversion{0.60}
-\def\mtxtexdate{16 March 2005}
+\def\mtxtexversion{0.61}
+\def\mtxtexdate{19 November 2015}
 \let\:=\relax
 \message{mtx.tex \mtxtexversion\space<\mtxtexdate>} 
 \message{M-Tx \mtxversion\space(Music from TeXt) <\mtxdate>} 
@@ -33,12 +37,12 @@
 \ifx\assignlyricshere\undefined\message{Your musixlyr.tex is too old}\fi
 
 % M-Tx font definitions
-% Three macros are associated with each lyrics font, e.g.
-%   \mtxmyfont defines \myfont but does not select it
-%   \myfont selects it later
-%   \mtxMyfont (note capital) defines and selects \myfont
-
-\def\mtxInstrfont{\twelvebf}
+% \mtxeightsf etc: defines \eightsf etc by analogy to \eightrm. 
+% \mtxEightsf etc: same, but also immediately does \eightsf.
+% \mtxPalatino: replaces Computer Modern font definitions of
+%    \eightrm, \eightit, \eightbf etc by Palatino
+% \mtxHelvetica: replaces Computer Modern font definitions of
+%    \eightsf etc by Helvetica
 
 \def\mtxeightsf{\font\eightsf=cmss8}
 \def\mtxEightsf{\mtxeightsf\eightsf}
@@ -52,12 +56,42 @@
 \def\mtxtwelvesf{\font\twelvesf=cmss12}
 \def\mtxTwelvesf{\mtxtwelvesf\twelvesf}
 
-% Title fonts are immediately selected
-
 \def\mtxBigsf{\font\Bigtype=cmss9 scaled \magstep2}
 \def\mtxBIGsf{\font\BIGtype=cmss9 scaled \magstep4}
 
-\def\mtxAllsf{\mtxElevensf\mtxBigsf\mtxBIGsf}
+\def\mtxPalatino{
+\font\eightrm=pplr at 8truept
+\font\eightbf=pplb at 8truept
+\font\eightit=pplri at 8truept
+
+\font\tenrm=pplr at 10truept
+\font\tenbf=pplb at 10truept
+\font\tenit=pplri at 10truept
+
+\font\elevenrm=pplr at 11truept
+\font\elevenbf=pplb at 11truept
+\font\elevenit=pplri at 11truept
+
+\font\twelverm=pplr at 12truept
+\font\twelvebf=pplb at 12truept
+\font\twelveit=pplri at 12truept
+
+\font\Bigtype=pplb at 17truept
+\font\BIGtype=pplb at 25truept
+}
+
+\def\mtxHelvetica{
+  \def\mtxeightsf{\font\eightsf=\phvr at 8truept}
+  \def\mtxtensf{\font\tensf=\phvr at 10truept}
+  \def\mtxelevensf{\font\elevensf=\phvr at 11truept}
+  \def\mtxtwelvesf{\font\twelvesf=\phvr at 12truept}
+}
+
+\def\mtxInstrfont{\twelvebf}
+\def\mtxAllsf{\mtxeightsf\mtxtensf\mtxElevensf\mtxtwelvesf\mtxBigsf\mtxBIGsf}
+
+\def\sit\eightit \def\srm\eightrm \def\sbf\eightbf \def\ssf\eightsf
+% \def\elevenpt{\def\rm\elevenrm \def\it\elevenit \def\bf\elevenbf}
 
 % M-Tx music sizes
 
@@ -131,9 +165,40 @@
 %         \lyr%                   post the numbers
 %  \en}
 
+% Commands taken from André van Ryckeghem's mypmxdef.tex
+% Page layout: Letter/A4, A4 only, Letter/A4 centered, A3 
+\def\AVRpagforletaiv{%
+\hoffset=-12.4mm\hsize=210mm\advance\hsize-23mm% A4 10mm margin
+\voffset-15.4mm\vsize=11in\advance\vsize-20mm\advance\vsize-12pt}% letter 10 mm margin
+\def\AVRpagforaiv{%
+\hoffset=-12.4mm\hsize=210mm\advance\hsize-23mm%
+\voffset=-15.4mm\vsize=297mm\advance\vsize-20mm\advance\vsize-12pt}%
+\def\AVRpagforaivc{%
+\hoffset=-12.4mm\hsize=210mm\advance\hsize-23mm%
+\voffset=-7.4mm\vsize=11in\advance\vsize-20mm\advance\vsize-12pt}%
+\def\pagforaiii{%
+\hoffset=-5.4mm\hsize=297mm\advance\hsize-37mm%
+\voffset=-5.4mm\vsize=420mm\advance\vsize-37mm\advance\vsize-12pt}%
+
+% Next command adapted from AVR's code. Use thus:
+%  \footline=\mtxFootLine{P1}{P2}{P3}{P4}{P5}
+% The footline on pages 3 and 4 look like this:
+%     P1 - P2           P3          P4 - P5      3
+%  4  P5 - P4           P3          P2 - P1
+% Each parameter should contain its own font selector, or inherit
+%   whatever was in effect.
+\def\mtxFootline#1#2#3#4#5{\ifodd\pageno%
+{{{#1}{\rm~---~}{#2}} \hfill {#3} \hfill {#4}{\rm~---~}{#5}{\rm ~~~ }{\bf \folio }}%
+\else
+{{\bf \folio}{\rm ~~~ }{#5}{\rm~---~}{#4} \hfill {#3} \hfill {#2}{\rm~---~}{#1}}%
+\fi}
+
 % M-Tx default settings
 
 \sepbarrules
+\mtxPalatino
+\AVRpagforletaiv
+\elevenrm     % this will be the lyrics font unless overridden
 
 \immediate\write10{=== end of mtx.tex ===}
 \endinput

@@ -91,7 +91,7 @@ var  voice_label: array[voice_index] of string;
        bar_no, pickup, nbars, nleft: integer;
      para_len: paragraph_index0;
      xmtrnum0: real;
-     P: paragraph;
+     P, orig_P: paragraph;
      orig_line_no: line_nos;
      infile, outfile, stylefile: text;
      default_duration: char;
@@ -217,8 +217,14 @@ begin setFeature('ignoreErrors',false); error(message,not print) end;
 procedure error(message: string; printline: boolean);
   var j: integer;
 begin 
+  j:=whereInParagraph(line_no); if (j>0) and printline then 
+    writeln(orig_P[j]);
   writeln (message, ': ERROR on line ', line_no);
-  j:=whereInParagraph(line_no); if (j>0) and printline then writeln(P[j]);
+  if (j>0) and printline then
+  begin
+    writeln ('The line has been modified internally to:');
+    writeln(P[j]);
+  end;
   if not ignoreErrors then
   begin if outfile_open then
     begin close(outfile); rewrite(outfile); close(outfile); end;

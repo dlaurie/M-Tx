@@ -1,40 +1,24 @@
 pasfiles = globals.pas mtx.pas preamble.pas lyrics.pas analyze.pas mtxline.pas\
   status.pas uptext.pas prepmx.pas files.pas notes.pas multfile.pas \
   strings.pas utility.pas control.pas
-cfiles = globals.c mtx.c preamble.c lyrics.c analyze.c mtxline.c\
-  status.c uptext.c prepmx.c files.c notes.c multfile.c utility.c control.c
-native = cfuncs.c cfuncs.h 
-hfiles = globals.h mtx.h preamble.h lyrics.h analyze.h mtxline.h \
-  status.h uptext.h files.h notes.h multfile.h utility.h control.h
-ofiles = globals.o mtx.o preamble.o lyrics.o analyze.o mtxline.o \
-  status.o uptext.o files.o notes.o prepmx.o cfuncs.o multfile.o utility.o \
-  control.o
+sfiles =  mtx.tex mtxdoc.tex mtxdoc.pdf Makefile Corrections Bugs MAINTENANCE
 
-prepmx: $(pasfiles) 
-	fpc -g -B -vn -So prepmx
+SYSTEM=LINUX
 
-prepmxc: $(cfiles) $(ofiles)
-	cc $(ofiles) -o prepmx
+prepmx: $(pasfiles)
+	fpc -g -B -vn -So prepmx -T$(SYSTEM)
 
-multfile.c: multfile.pas
-	p2c -a -LTurbo multfile.pas -o temp.c
-	sed -e "s/Malloc/malloc/" < temp.c > multfile.c
-	rm temp.c
-	
-%.c: %.pas 
-	p2c -a -LTurbo $*.pas
- 
+commit: $(pasfiles) $(sfiles)
+	git add $(pasfiles) $(sfiles)
+	echo Now type: git commit -m \"DESCRIPTION OF_CHANGES\"
+
 clean:
 	- rm *.o *~ *~ core *.pmx *.pml *.log *.dvi 
 
 bare: clean
-	- rm $(cfiles) $(hfiles) prepmx *.ppu
+	- rm prepmx *.ppu
 
 Pzip:
-	zip -ju mtxP`./version` version $(pasfiles) pmxword.pas mtx.tex $(native) \
- Makefile Corrections Bugs README MAINTENANCE
+	zip -ju mtxP`./version` version $(pasfiles) $(sfiles) README.*  
 
-Czip: $(cfiles)
-	zip -ju mtxC`./version` version $(cfiles) $(native) $(hfiles) mtx.tex Makefile \
- Bugs Corrections README
 

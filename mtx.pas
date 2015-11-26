@@ -94,7 +94,9 @@ begin
     newOctave(voice,code); removeOctaveCode(code,note); code:=octaveCode(note)
   end;
   if code<>' ' then error3(voice,'You may have only one absolute octave assignment');
-  insertOctaveCode(octave(voice),note); resetOctave(voice)
+  insertOctaveCode(octave(voice),note); 
+  checkRange(voice,note);
+  resetOctave(voice)
 end;
 
 procedure markDebeamed(voice: voice_index; var note: string);

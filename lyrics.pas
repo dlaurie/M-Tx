@@ -127,9 +127,9 @@ begin  if not doLyrics then exit;
     ' has lyrics headed ',first);
     for i:=1 to nother do  write('=',other[i]);  writeln;
   end;
-  tex3(comment+' Paragraph '+toString(paragraph_no)+' line '+
+  TeXtype2(comment+' Paragraph '+toString(paragraph_no)+' line '+
      toString(line_no)+' bar '+toString(bar_no));
-  tex3('\mtxSetLyrics'+first+'{%');
+  TeXtype2('\mtxSetLyrics'+first+'{%');
   for line:=2 to para_len do
   begin  lyrTranslate(P[line],numbered);  
     if numbered then if (line>2) then  warning(
@@ -150,7 +150,7 @@ begin  if not doLyrics then exit;
     else if pmx_preamble_done then putLine('}\')
         else putLine('}')
   end;
-  for i:=1 to nother do tex3('\mtxCopyLyrics'+first+other[i]);
+  for i:=1 to nother do TeXtype2('\mtxCopyLyrics'+first+other[i]);
 end;
 
 function songraise(voice: voice_index): string;

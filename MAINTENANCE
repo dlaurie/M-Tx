@@ -1,8 +1,8 @@
 Notes for maintainers of M-Tx
 =============================
 
-This file is for someone who wishes to fix a bug, without actually
-being willing to master the whole program of 4400 lines spread over
+This file is for someone who wishes to fix a bug, without actually being 
+willing to master the whole program of well over 4000 lines spread over 
 16 files.
 
 1. Quick start
@@ -10,9 +10,8 @@ being willing to master the whole program of 4400 lines spread over
 
 The main program is `prepmx.pas`. The other files are units.
 
-There are three places in each file that give a lot of useful
-information. When you have a spare moment, look at those. It will save
-time later.
+There are three places in each file that give a lot of useful information. 
+When you have a spare moment, look at those. It will save time later.
 
 1.  Immediately after the first line, there should be a comment
     containing a short description of what is in the file.
@@ -23,16 +22,16 @@ time later.
     listing the further units needed in order that the implementation
     (the equivalent of a C code file) can be defined.
 
-Instead of some dull generalities, here is a blow-by-blow account of
-how an actual bug reported by Wojtek Chemijewski on the Werner Icking 
-Music Archive mailing list `<tex-music@tug.org>` on 2014-01-29 was
-found and "corrected".
+Instead of some dull generalities, here is a blow-by-blow account of how an 
+actual bug reported by Wojtek Chemijewski on the Werner Icking Music Archive 
+mailing list `<tex-music@tug.org>` on 2014-01-29 was found and "corrected".
 
 2. Case study
 -------------
 
-I'm doing this from a command line in Ubuntu Linux. It will be much
-the same on a Mac. On Windows, you need to have Cygwin installed.
+I'm doing this from a command line in Ubuntu Linux, so I use `grep`.
+Any other tool that can search for text in the Pascal source files
+will do equally well.
 
 In M-Tx 0.60, the following behaviour was considered to be a bug:
 
@@ -40,7 +39,7 @@ In M-Tx 0.60, the following behaviour was considered to be a bug:
 of the pickup is only recognized as terminating a pickup when it is 
 a plain bar line `|`, not when it is a left repeat `|:`.
 
-There are workarounds for this, the best one being to use plain bar
+There are workarounds for this, the best one being to not use plain bar
 lines but to use the PMX command `Rl` in the lowest voice (which becomes
 the first voice in PMX). That is not the point. We want M-Tx to do this
 right.
@@ -193,8 +192,7 @@ The change is enough to cure the reported bug, so we document it at the
 top of `prepmx.pas` and in `Corrections`, changing the version number to
 `0.60e`.
 
-It was not a bug
-----------------
+### It was not a bug
 
 After carrying out the above exercise, I carefully reread the M-Tx
 manual and found:
@@ -209,3 +207,72 @@ manual and found:
 
 Be warned, therefore, that M-Tx 0.60e is a dead end. The next version
 of M-Tx will branch from 0.60d again. 
+
+3. Adding a preamble command
+----------------------------
+
+In M-Tx 0.61, the `TeX` preamble command was added. Obviously we start
+in `preamble.pas`. There are some pretty obvious lists contained in 
+`type` and `const` statements.
+
+The name lower-case name `tex` is inserted in the list of names 
+`command_type`, the upper case version `TEX` in the corresponding 
+position in `commands`, a default empty value in `cline` and an
+extra `false` in `redefined`. This is enough to get the `TeX` command
+recognized, to save the value given, and to record the fact that there
+was a change.
+
+We want the TeX string to appear immediately after `readmod`. If you
+examine a `.tex` file made by PMX from source coded by M-Tx, you will
+see that `\mtxInterInstrument` is there. The only line containing that
+word is in `preamble.pas`:
+
+    if nspace[j]<>unspec then TeXtype2('\mtxInterInstrument{'+toString(i-1)+
+
+I.e. it was inserted as a "Type 2 TeX string". The line in question is 
+inside the function `respace`, which we see is executed immediately 
+after the statement `pmx_preamble_done:=true;`. We need to squeeze 
+in between, adding a call
+
+    insertTeX; 
+
+At some respectable point before that, we define this procedure.
+
+    procedure insertTeX;
+    begin
+       if redefined[tex] then TeXtype2(cline[tex]);
+    end;
+
+Test it; it works. However, if we issue more than one `TeX` command,
+only the last one takes effect, whereas the user will want all.
+Looking for assignments into `cline`, we find in procedure `doCommand`
+the statement:
+
+    cline[last_command]:=line;
+
+The entire loop containing that statement needs a bit of reorganization,
+since we must not only allow for appending new text but also bypass the
+test for redefinition warnings. First we supply a function
+
+    function mustAppend(command: command_type): boolean;
+    begin mustAppend := command=tex end;
+
+which allows for possible future preamble commands that also append
+rather than redefine. The new code of the loop starting with
+
+    if mustAppend(last_command) and redefined[last_command] then
+
+is straightforward, almost. Do we put in `LineEnding` when we append?
+If we don't, we may run into problems with `PMXlinelength` which is
+only 128. If we do, `TeXtype2` needs to be made a little smarter,
+i.e. able to re-split the lines. Actually, in that case an explicit 
+`#10` is better, since on some systems `LineEnding` has two characters.
+
+`TeXtype2` is in `files.pas`. There is a line
+
+    else if first_paragraph then putLine('\'+s+'\')
+
+that we replace by a call to a routine `putTeXlines` which does
+the necessary.
+
+
