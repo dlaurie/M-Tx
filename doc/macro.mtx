@@ -1,0 +1,15 @@
+Style: Woodwind Violins
+Woodwind: Voices FlObCl; Clefs G
+Violins: Voices Violini; Clefs G
+Flats: 1
+Meter: C
+Enable: countMacro
+
+MS1 c8+ za zf zc M [u MP1 MP1 MP1 MP1 ] [u MP1 MP1 MP1 MP1 ]
+r2 r4 r8 b1n d 
+
+[u MP1 MP1 MP1 MP1 ] [u MP1 MP1 MP1 MP1 ] 
+c8 b1n d c8  b1 d c4.a    
+
+[u MR3 c8+ zb zg ze zc M MP3 MP3 MP3 ] [u MP1 MP1 MP1 MP1 ]
+a1 g g a b8 g1 a1 f4d r8

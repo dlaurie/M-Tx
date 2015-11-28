@@ -1,0 +1,108 @@
+%  mtxdoc.sty: macro package for writing documents with music examples  
+%  Some comments on usage appear at the bottom
+
+%  Thanks to Daniel Taupin whose 'musixdoc.sty' is the source 
+%  for some of these
+
+%  Fonts and mark-up 
+
+\newfont{\mflogo}{logo10 scaled 1200}
+\font\tentt=\fontid tt10
+\def\ital#1{{\sl #1\/}}
+\def\textbs#1{\textbf{\textsl{#1}}}
+
+%  Characters
+
+\def\Bslash{\tt\char'134}
+\def\lquote{{\tt\char'140}}
+\def\rquote{{\tt\char'047}}
+\def\squote{{\tt\char'015}}
+\def\dquote{{\tt\char'042}}
+\def\|{{\tt\char'174}}
+\def\LBR{{\tt\char'173}}
+\def\RBR{{\tt\char'175}}
+\def\snake{{\tt\char'176}}
+\def\atsign{{\tt\char'100}}
+\def\less{{\tt\char'074}}
+\def\more{{\tt\char'076}}
+\def\underscoreSymbol{\leavevmode \kern.06em \vbox{\hrule width.3em}}%
+
+%  Logos
+
+\def\mutex{M\raise\tw@\p@\hbox{\kern\m@ne\p@ u\kern\m@ne\p@}\TeX}
+\def\MF{{\mflogo METAFONT}}
+\def\unix{{\sc unix}}
+\def\ABC{\textbf{\texttt{ABC2M\TeX}}}
+
+%  Making an index
+
+\long\def\theindex{\renewcommand{\thesection}{}\section{Index}\parindent\z@
+  \parskip\z@ plus.3\p@\relax \let\item\@idxitem \columnseprule\z@
+  \columnsep35\p@ \begin{multicols}{2}}
+\def\endtheindex{\end{multicols}}
+\def\keyindex#1{\leavevmode
+ \hbox{{\color{red}\Bslash #1}}\index{#1@{\protect\Bslash #1}}}
+\def\zkeyindex#1{\index{#1@{\color{red}\protect\Bslash #1}}}
+\def\indexed#1{{\color{green}#1}}
+\def\ixem#1{\indexed{#1}\index{#1}}
+\def\itxem#1{\indexed{\ital{#1}}\index{#1}}
+\def\ttxem#1{\indexed{\tt #1}\index{#1@{\tt #1}}}
+\newcommand{\ttxi}[1]{\item{\ttxem{#1}}}
+\def\ibxem#1{\indexed{\bf#1}\index{#1}}
+\def\dotxem#1{\indexed{\tt .#1}\index{#1@{\tt .#1}}}
+\def\mark#1{\underline{\ttxem{#1}}}
+\def\printindex{\@input{\jobname.ind}}
+
+%  Version highlighting
+
+\def\current{ \version}
+\def\newfrom{0.0}
+\def\NEW#1{\ifdim#1 pt<\newfrom pt\else%
+\index{NEW!\textsf{#1}}\marginpar{\fbox{\textsf{#1}}}\fi}
+
+%  Paper size
+
+% A4
+\newcommand{\paperAfour}{
+\immediate\typeout{A4 paper size}
+\global\textheight 240mm
+\global\textwidth 160mm
+\global\topmargin -16mm
+\global\oddsidemargin 0mm}
+% US Letter
+\newcommand{\paperUS}{ 
+\immediate\typeout{US paper size}
+\textheight 9.2in 
+\textwidth 6.5in
+\topmargin -0.84in 
+\oddsidemargin 0mm
+}
+
+%  If there is no file 'mypaper.tex' then \paperA4 is the default paper size. 
+%  Historically 'mypaper.tex' was used to select paper size only.
+%  It can of course contain any TeX macros suitable for the preamble.
+\newread\mypaper
+\openin\mypaper mypaper.tex\relax
+\ifeof\mypaper\paperAfour\else\input mypaper.tex\fi\closein\mypaper
+
+\endinput
+
+=======================================================================
+
+The macros  \example  and  \fullExample  are designed to let the
+music appear side by side with some verbatim code.
+
+\fullExample{basename} takes the input from file  basename.tex  and
+  puts the source from file  basename.mtx  next to it.  The right-hand
+  minipage is centered because the source is expected to be taller than 
+  the music.
+
+\example{basename} takes the input from file  basename.tex  and
+  puts the source from file  basename.mtb  next to it.  In the
+  case of the M-Tx manual,  basename.mtb  is part of  basename,mtx,
+  but of course one could put anything in the file.  The right-hand
+  minipage is bottom=aligned ed because the source is expected to be 
+  not taller than the music.
+ 
+There are some small differences in dimensions between the two macros,
+which are intended to make them look just right when used together.

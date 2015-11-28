@@ -1,0 +1,13 @@
+Title: Sanctus
+Composer: Jacobus Clemens non Papa
+Flats: 1
+Meter: C
+Style: Singer
+Systems: 2
+Size: 20
+%% \hidebarrule1
+
+U: !bf 1 | | 2 | | 3 | | 4 | | 5
+(~ c4+.b a of g f e d2 )~ { c2 c4 } of (~ c4 f g a g8 f g2 )~ f4 of (~ c+ d c2 b8 a b4 g cd of b8 a4 g2 { f4 f } e )~ fd of (~ g8 a b c4 )~ f2-
+L: Sa-nctus, sa-nctus, sa-nctus, sa-nctus.
+

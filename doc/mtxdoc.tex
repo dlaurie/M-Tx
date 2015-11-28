@@ -1,0 +1,2085 @@
+\documentclass[11pt]{article}
+% mtxlatex and mtxdoc must be loaded before any font-defining packages
+% like charter, bookman etc
+\usepackage{color,mtxlatex,mtxdoc} 
+\paperAfour
+% You might like to put \paperUS here
+\usepackage{verbatim,charter}
+% \renewcommand{\ttdefault}{cmtt}  
+% Some such font packages override cmtt with wider fonts like 'courier', 
+% and then 80-character lines don't fit
+\mtxlatex
+\newcommand{\delete}[1]{\relax}
+\newcommand{\archiveSite}{
+ \texttt{http://icking-music-archive.org}
+}
+\newcommand{\scoreSite}{
+ \texttt{http://imslp.org}
+}
+\newcommand{\mailingList}{
+\texttt{tex-music@tug.org}
+}
+\newcommand{\repository}{
+\texttt{https://github.com/dlaurie/M-Tx}
+}
+
+\def\versionname{0.61}
+\def\version{0.61}
+\def\newfrom{0.61}
+\date{4 August 2015}
+\title{\Huge \textbf{\MTx: Music from Text \\ \LARGE Version\current} \\
+  User's Guide \vfill}
+\author{\LARGE Dirk Laurie\\ \texttt{dirk.laurie@gmail.com} }
+
+\makeindex
+\begin{document}
+
+
+\vfill
+\maketitle
+\vfill
+\begin{center}  
+  \framebox[5in]{\parbox{3.6in}{
+    \begin{mus} \input title.tex \bigskip \end{mus}
+  }}        
+\end{center}
+\vfill\vfill\vfill
+\thispagestyle{empty}
+
+\pagebreak
+\pagenumbering{roman}
+\tableofcontents
+\pagebreak
+\pagenumbering{arabic}
+\section{Music from Text}
+  Written music has a distinctive appearance, very unlike written text.
+But if we want to enlist the aid of the computer to print our scores, we 
+either need a sophisticated graphical interface, or we must describe 
+music in terms of what we are able to type.   Text input is not going to 
+look much like printed music, but we would like it to resemble printed 
+music closely enough that we can see the correspondence. 
+
+\MTx~is a language for typed music aimed at people who are not experts.
+Later in this document a full description of \MTx~is given, but to start 
+with, here is a sample of what \MTx~input looks like.
+\verbatiminput{mozart0.mtx}
+Before showing you how it comes out, let's observe and discuss it.
+There are two lines of input, which means that there are two voices 
+of music, one for each line.  (Line boundaries are important in \MTx.)
+The lines read from top to bottom as printed music reads from top to 
+bottom.
+
+Each voice contains a number of `words' separated by blanks.   In this 
+example, each \ixem{word} stands for either a note or a bar line.  Bars are 
+also important in \MTx, although the example is simple enough that I 
+could have omitted them.  For greater readability, I have typed extra 
+blanks so that notes and bars that are aligned in the printed version 
+also line up here, but that is not necessary.  What is necessary, 
+though, is that each line ends at the end of a complete bar.
+
+The \ixem{notes} are written in the \PMX\ language designed by Don Simons.  
+Each note starts with one of the letters \texttt{a} to \texttt{g}, which mean 
+exactly what you think.  Lower case is easier than capitals, because it is 
+quicker to type.  Some notes have suffixes after them.  A digit indicates the 
+duration (1/\mark2, 1/\mark4, 1/\mark8, 1/\mark16, 1/\mark32, 1/\mark64).\footnote{Yes, it is more 
+logical to think \texttt{1} should mean a whole note, but we don't want to 
+type two digits for something so common as a semiquaver.  A whole
+note is denoted by \ttxem{0}, which looks a bit like a printed semibreve.}  
+When a note has 
+no digit, it means that the \ixem{duration} is the same as that of the 
+previous note in the same voice.  Some note names have a \ttxem{+} or 
+\ttxem{-} after them, which means that it is not the nearest note of that 
+name, but that there is a \ixem{jump} of at least a fifth up or down from the 
+previous note.  One note is dotted, \index{notes!dotted} which is indicated 
+with a \ttxem{d}.  It cannot be confused with a note name, because it is not 
+the first letter of its word. A double-dotted note\NEW{0.51}
+would have \texttt{dd}. 
+
+The first note in each voice of the piece doesn't have a previous note.  
+Since you haven't specified anything else, it is assumed that the top 
+line is in the treble clef and its notes come in the \ixem{octave} running from 
+middle C upwards; and the bottom line is in the bass clef and its notes 
+come in the octave just below the one for the treble clef.  The first 
+note of the top voice is the C above middle C, so we need a \texttt{+} 
+for it.   \NEW{0.30}  If ever again you prefer the initial octave of a voice to wherever
+the previous note puts you, use a \ttxem{=} after the note name. This
+can be combined with \ttxem{+} or \ttxem{-}.
+
+Here is the printed version of the above excerpt.
+
+\vskip-5mm\hskip -18mm
+\begin{mus}
+\input mozart0.tex
+\end{mus}
+
+Do you think this looks good?  Much better than handwritten?  You are 
+right, but look at the following version:
+
+\begin{center}
+\begin{mus}
+\input mozart.tex
+\end{mus}
+\end{center}
+
+There is a \ixem{heading}, the notes are not stretched out so much, and the two 
+staves of the piano are grouped together.  To achieve this, the input looks
+as follows:
+\verbatiminput{mozart.mtx}
+The notes are exactly the same as before, but there is an introductory 
+paragraph, or \ixem{preamble}, that specifies what to do with them.  A 
+\ixem{paragraph} in \MTx~is a group of consecutive lines set apart by 
+one or more blank lines.  Most of the paragraphs contain notes, but the 
+printed music will not necessarily be broken at the same places as 
+the paragraphs. 
+
+Only in the simplest cases (every music line in the paragraph starts with
+what might be a note) are you allowed to omit the preamble.  
+
+The preamble lines in this example are self-explanatory. The one 
+mysterious line is the one starting with \ttxem{\%\%}at the top of 
+the music paragraph.  The present 
+implementation of \MTx~acts as a front end to the \PMX\ program.  
+Things that 
+can be done easily in \PMX\ are not re-invented, but instead the \ttxem{\%\%} 
+facility is  provided to pass information directly to \PMX. The \PMX\ command 
+\texttt{w120m}  means `width 120 millimetres'.  A short tutorial on \PMX\ 
+appears in Appendix \ref{pmx}. 
+
+A few words on technical terms, to make sure that we know what we are 
+talking about:
+\begin{itemize}
+  \item  A \ibxem{line} is a text line of typed music.
+  \item  A \ibxem{word} is a string of consecutive non-blank characters,
+separated by blanks from other words on the same line.
+  \item  A \ibxem{stave} is the familiar group of five closely spaced 
+parallel lines on which music is written.
+  \item  A \ibxem{voice} is a melodic strand of music, of which there 
+may be either one or two per stave.\footnote{Experienced \PMX\ users 
+please note: the \PMX\ manual uses `voice' as a synonym for `stave',
+and `line of music' for what I call a `voice'.}
+  \item An \ibxem{instrument} corresponds either to a single stave or to a 
+group of two or more adjacent staves linked together with a brace
+\verb'{', usually representing a single instrument like a piano. 
+  \item  A \ibxem{system} is a group of staves for the various 
+voices that are heard at the same time.
+\end{itemize}
+
+
+
+\subsection{Lyrics}
+
+I wrote the \MTx\ converter because \ixem{lyrics} are not part of the \PMX\ 
+design.   It used to be\footnote{I.e.. before Rainer Dunker's \texttt{musixlyr} package, on which \MTx\ depends, became \PMX-aware.}
+a major effort to obtain pretty output like the 
+following:
+\vskip 12pt \hskip -20mm
+\begin{mus}
+\small
+\input netfirst.tex
+\end{mus}
+
+The lyrics are in \ixem{Afrikaans}, which maybe looks incomprehensible, but 
+knowing as much as you do already, it 
+should be quite easy to understand the following input:
+\verbatiminput{netfirst.mtx}
+There are a few new things: \ttxem{Style}\texttt{: }\ttxem{SATB} to 
+indicate four-voice choral music on two staves, \ttxem{Sharps} for the key 
+signature (of course there is \ttxem{Flats} available too), \ttxem{Meter} 
+for the time signature, and \ttxem{Space}\texttt{:~9} to 
+indicate that there should be nine interlines of extra space between the 
+staves.\footnote{One \ixem{interline} is the distance between two lines in 
+a stave.  The normal distance between staves is five interlines, but 
+sometimes extra space on a page is distributed between the staves: you may 
+need to experiment.}  If there are more than two staves, you can prescribe 
+a different extra distance for each on the \texttt{Space} line.  This is 
+the one preamble command that may also appear later in a music paragraph. 
+
+Among the notes, you notice suffixes \ttxem{s} and \ttxem{n} for 
+`\mark sharp' and `\mark natural', and \ttxem{r} for `displace 
+notehead to the \mark right'. 
+
+But the main novelty is the lines of lyrics.  The rule is: each lyrics 
+line is identified by the \ixem{label} \ttxem{L:}, followed by lyrics of the 
+verse in question.  Syllables are indicated by hyphens, and you don't 
+use bar lines on lyrics lines.  If more than one note belongs to a 
+\ixem{syllable}, you need not worry, as long as the notes in question have been 
+slurred or beamed together ---  each lyrics line is synchronized to the
+immediately preceding voice.  There may be a set of lyrics lines for 
+each stave in the score: if a stave has two voices, only one of
+them can have lyrics specified by \texttt{L:} --- see Section
+\ref{More lyrics} for a feature that allows both voices to have lyrics.
+
+Note the \ixem{verse numbers}.  The rule is: 
+if you code a number followed by a point and a blank at the 
+start of a lyrics line, this number will not be treated as a syllable but 
+will be printed to the left of the first lyrics syllable: the position of that 
+syllable will be the same as if the number was not there.  This may not be
+just what you want: see the \musixlyr\ reference manual (Section
+\ref{help}) for commands that can modify this behaviour.
+
+\subsection{Bars and meter changes}
+
+The notation for bars is taken from Chris Walshaw's \ABC\ music 
+language, with one small modification.  
+\vskip 1ex
+\begin{tabular}{ll}
+\ttxem{\|} & Normal bar line \\
+\ttxem{\|]} & Thin-thick double bar line (as at the end of a piece) \\
+\ttxem{\|\|} & Thin-thin double bar line (to separate sections) \\
+\ttxem{:\|} & Left repeat \\
+\ttxem{\|:} & Right repeat \\
+\ttxem{:\|:} & Left-right repeat 
+\end{tabular}
+\vskip 1ex
+
+Bar lines make life easier, but are normally optional.  Only the
+normal bar line actually implies a bar separation: the double line and
+\ixem{repeat} signs may appear in mid-bar.  The fancy bars must appear
+in the bottom voice and are optional elsewhere.
+  \begin{itemize}
+    \item  If you do put them in, \MTx\ will check that there are no shorter 
+bars than the currently defined one.   If a too-short bar occurs at the end of 
+the final paragraph, \MTx\ assumes you know what you are doing, and 
+automatically redefines the meter without printing a new time signature.  If 
+it appears elsewhere, it is an error. 
+    \item  If your piece starts with a \ixem{pickup}, it is defined by a bar 
+line at the end of ``bar 0'', i.e.~the incomplete bar containing the pickup. 
+Even when there is a repeat sign after the pickup, so that you don't actually 
+see a bar line in the printed music, you still need a bar line before the 
+repeat sign, otherwise \MTx\ cannot know where the pickup stops.  The bar line 
+defining the pickup is compulsory in the first voice found, and optional but 
+recommended in the others.      When there is a pickup, the meter is not 
+redefined. 
+    \item   If you do not explicitly end the piece with 
+one of the other types of bar line, a thin-thick bar line is 
+automatically provided: you don't need to code it. 
+    \item  \PMX\ allows you to put two voices on a single stave by
+giving the notes of the lower voice first, followed by \ttxem{//} and the 
+notes of the upper voice.  This construct works in \MTx\ too when only
+one voice for the stave was specified in the style, but for just 
+one bar at a time; such a bar \emph{must} be terminated by a bar line. 
+Use it only for very short stretches.  You will probably need to
+set the octave in the first note using \verb"=".
+  \item  If you are using \PMX\ features that are not recognized by \MTx\ but 
+simply passed through, you may need a bar line to tell \MTx\ to which bar 
+they belong.  
+ \end{itemize} 
+
+Apart from the final `blind' meter change that is automatically made if 
+required, you can also define other meter changes.  \index{blind!meter~change}
+The rules are:
+  \begin{itemize}  
+  \item  The \ixem{meter change} may only occur at the \emph{very} beginning 
+of a bar after 
+a full bar of the meter previously in effect, and must be made in all 
+voices.  In particular, any key change, volta indication etc.\ must come
+\emph{after} the meter change; also, the bar following the pickup may
+not contain a meter change but must have the length specified in the
+preamble.
+  \item  The normal meter change word looks like a fraction, 
+e.g.~\ttxem{3/4}.  This always gives a visible meter change.
+  \item  If the printed meter symbol looks different from the logical one (you 
+want a big `C' instead of `4 over 4', for instance), you may use a \PMX\ 
+formatted meter change word. \NEW{0.30}  
+E.g.~\ttxem{m3/4/0/0} gives a blind meter change 
+--- one that takes effect but is not printed.  See the \PMX\ manual.
+This is also legal in the preamble \ttxem{Meter:} command. 
+You may not introduce a meter change directly to \PMX\ via a \verb"%%"
+command --- \MTx\ must know about it too.    
+  \end{itemize}
+
+\subsection{Beams and \ixem{slurs}}  \label{beamslur}
+
+Thanks to \PMX, \ixem{beams} in instrumental voices are automatic. \MTx~does, 
+however recognize that it is customary in vocal music to use beams only 
+when the notes in question are sung to the same single syllable.  So if you 
+select a style like \ttxem{SATB} or \ttxem{Singer} that involves 
+voices, notes will normally appear unbeamed, except those that appear 
+under slurs. To override this, you need to use the \PMX\ ``forced beam'' 
+feature, e.g. \verb"[ c d ]", or disable the 
+\ttxem{unbeamVocal} feature (Section \ref{customize}).  \index{beam!forced}
+See Section \ref{beam&slur} on how to 
+fine-tune beams, and Appendix \ref{melisma} for some examples involving
+lyrics.  
+
+The slur notation is similar to forced beams, but uses parentheses.
+Look at the second system of the same song: 
+
+\hskip -20mm
+\begin{mus}
+\small
+\input netsoos1.tex
+\end{mus}
+Omitting the preamble and \PMX\ lines, this is coded 
+as:\footnote{The coding is for this 
+morsel only, not an extract out of the coding for the whole piece.  The 
+octave of the first note here is the default, not deduced from a 
+previous note.} 
+\verbatiminput{netsoos1.mtb} 
+Apart from \ttxem{f} for `\mark flat' you should notice the left 
+parenthesis \ttxem{(} to start a slur and the right parenthesis 
+\ttxem{)} to close it.  So 
+\MTx\ knows that e.g.~the \texttt{c} in the top voice falls under the 
+slur, and does not use up a syllable of lyrics.  The default direction
+\index{slur!direction}
+of a slur is up for the upper and down for the lower voice in a stave, 
+but you can override that: see Section \ref{beam&slur}.
+
+You are allowed to have a slur under another slur, \index{slur!nested} 
+e.g.~\verb"( c8 d e ( f g ) f d b ) c2".
+
+Occasionally a slur ends at a note and the next one starts 
+immediately.  \NEW{0.30} For such a slur continuation \index{slur!continuation}
+you code \ttxem{)(} as a single word after the note.   
+
+If you want a tie rather than a slur, \NEW{0.55}
+use braces \ixem{\LBR} \ixem{\RBR} instead of parentheses.  
+A continuation tie is of course \ixem{\RBR\LBR}.
+
+In obscure situations you may want absolute control over slur stops and
+starts.  To do this, put an identifier, which must be a non-zero digit
+or a capital letter, immediately after the slur parenthesis or brace,
+before any adjustments.  Of course, any labelled slur of either kind
+that you open must be closed again by its exact partner.  If you really
+must have interlocking slurs,  \verb"(1 c8 d e (2 g g )1 f d b )2 c2"
+is the way to get them.  \delete{Labelling slurs in this way is also the only way
+of getting more than two levels of slurs.}
+
+It may happen that you do not wish \MTx\ to put more than one note to a 
+syllable even though the notes are under a beam or slur.  
+For example, you 
+may wish to use \ixem{phrase marks} that only look like slurs, or you may be 
+writing music that has so many consecutive short notes that the beat 
+becomes difficult to follow without beams.   \NEW{0.30}The way to do
+this is to double the first symbol of the word starting the forced beam
+or slur.  E.g.  \verb"{{+10" \index{\LBR\LBR} or \ttxem{((} may be used
+to start a phrasing slur, and \ttxem{[[} may be used to start a forced
+beam \index{beam!forced} that will still keep one note to a syllable.
+The terminator for the beam or slur should not be doubled.  A variation
+of this feature occurs mainly when you have multi-verse lyrics and
+\NEW{0.43} there should be a slur in one verse but not in another.
+Start the slur with \ttxem{(\dquote} or \ttxem{\LBR\dquote} to get 
+the same effect as  
+\verb'((' or \verb'{{', except that the slur symbol itself is no longer
+solid, but broken like a dotted line.  \index{slur!broken}
+\NEW{0.54} Synchronize lyrics by using void syllables and extension rules, e.g.
+
+\bigskip
+\example{dwoman}{mtb}{80mm}{\fill}{72mm}{-10mm}{c}{5mm}
+\bigskip
+
+The trailing underscore on ``heart'' takes the place of a
+syllable of lyrics, and on a longer note would
+produces a lyrics rule that extends to the end of the melisma.
+You can use as many underscores as required; for very long melismas,
+you can code e.g.\ \verb"Ah_6" instead of \verb"Ah______".
+ 
+The converse of this situation is that you want \MTx\ to
+make a melisma, but you don't want a visible slur.  \NEW{0.42}
+Code
+the slur beginning as \ttxem{(\snake} or \ttxem{\LBR\snake} and 
+the slur end as \ttxem{)\snake}
+or \ttxem{\RBR\snake}.  This gives a ``blind'' slur: invisible, but having the
+same effect on lyrics as a normal slur.  \index{blind!slur} Blind slurs
+should not have any other tuning marks.
+
+\subsection{More complicated lyrics}  \label{More lyrics}
+
+Lines of lyrics that start with \ttxem{L:} are set in the middle 
+between two staves (or below the bottom stave) and are aligned with the 
+notes of the voice under which they appear in the input file (in this 
+case, the alto).   Such lines are referred to as \emph{normal} lyrics
+lines.  \index{lyrics!normal}
+
+Sometimes different words apply to different voices, as in the last line 
+of the song: 
+
+\hskip -20mm
+\begin{mus}
+\small
+\input netsoos2.tex
+\end{mus}
+\vskip 12pt
+This is coded as:
+\verbatiminput{netsoos2.mtb}
+Some interesting \PMX\ features in this piece are \ttxem{of} for 
+`\mark ornament: \mark fermata' and \NEW{0.43}
+\ttxem{rp+6} (\mark rest: 
+\mark pause) for a full-bar rest moved up six interlines.  
+For the meaning of the \verb'@...' words, see the next section. 
+
+The label \ttxem{LT:} (\mark Lyrics: \mark Tenor) marks the line as 
+belonging to a particular voice.  Such a line is referred to as an 
+\emph{auxiliary} \index{lyrics!auxiliary}
+lyrics line, and may only appear on a stave that
+already has a normal lyrics line.  Labels for voices are defined in the 
+\ttxem{Style}, or may simply be numbers: the voices are numbered 
+1,2,\ldots\ from the top line downwards. Auxiliary lyrics for the top voice 
+on a stave (soprano and tenor) will be set above the stave, and those 
+for the bottom voice (alto and bass) below. Their input lines may appear 
+anywhere in the paragraph, since the labels show where they go. 
+
+You can also use voice \ixem{labels} without a leading \texttt{L} to identify 
+the voice lines.  This is necessary if some voice is omitted from the 
+paragraph (\MTx\ will fill its stave with rests) or if you prefer to 
+have the voices in a different order (e.g.~bottom-up) than top-down.  
+You need only label a voice line if it does not belong to the voice 
+immediately following the previous one. 
+
+\subsection{Preamble commands}
+
+Here is a complete list of built-in \ixem{preamble} commands, with examples and 
+explanations.  Case in preamble commands is immaterial: all command and 
+style names are translated to uppercase internally.
+\vskip 1ex  
+\begin{tabular}{ll}
+\verb"Part: Recorder" & Part name (set flush left above title) \\
+\verb"Title: Clarinet Quintet" & Title of piece. \\
+\verb"Composer: Mozart" & Name of composer (set flush right below title) \\
+\verb"Poet: Rellstab" & Name of poet (set flush left below title)  \\
+\verb"Meter: C/" & \textit{Alla breve} meter: another notation for \verb"2/2". \\
+\verb"Flats: 3" & Key signature has three flats. \\
+\verb"Sharps: 2" & Key signature has two sharps. \\
+\verb"Space: 6 0 3" & Extra interlines of space below staves. \\
+\verb"PMX: h10i" & \PMX\ command in preamble. Rather like \verb"%%" feature.\\
+\verb"Options: x" & Forces the \texttt x option to be in effect, despite the command line. \\
+\verb"Enable: pedanticWarnings" & Enables the \texttt{pedanticWarnings} feature. \\
+\verb"Disable: unbeamVocal" & Disables the \texttt{unbeamVocal} feature. \\
+\verb"Pages: 2" & Set the piece over two pages. \\
+\verb"Systems: 11" & Use a total of eleven systems. \\
+\verb"Bars/line: 4" & Try to use on the average four bars to a line. \\
+\verb"Size: 16" & Size of music in points: default is 20. \\
+\verb"Style: Singer Piano" & 
+  The piece is for a singer with piano accompaniment. \\
+\verb"Name: Dietrich Gerald" & Names of instruments, performers etc. \\
+\verb"Indent: 0.10" & Indent first system by 10\% of the music width. \\
+\verb"Start: @+1;@-3" & Put specified items at the start of voice lines\\
+\verb"Octave: 4 4 3 3" & Specify \indexed{initial octaves} for each stave \\
+\verb"TeX: \elevensf" & Type 2 TeX code (see Appendix \ref{expert})\\
+\end{tabular}  \NEW{0.54}
+\vskip 1ex
+The \ttxem{Bars/line} command should only be used when you do not yet 
+know what \ttxem{Pages} and \ttxem{Systems} should be.
+
+The style line may contain several style elements (instruments etc.).
+\index{style!elements}
+At present, \MTx\ knows the following style elements:
+\begin{verbatim}
+SATB:    Voices S,A T,B; Choral; Clefs G F
+SATB4:   Voices S A T B; Choral; Clefs G G G8 F
+SINGER:  Voices S; Vocal; Clefs G
+PIANO:   Voices RH LH; Continuo; Clefs G F
+ORGAN:   Voices RH LH Ped; Continuo; Clefs G F F
+SOLO:    Voices V; Clefs G
+DUET:    Voices V1 Vc; Clefs G F
+TRIO:    Voices V1 Va Vc; Clefs G C F
+QUARTET: Voices V1 V2 Va Vc; Clefs G G C F
+QUINTET: Voices V1 V2 Va Vc1 Vc2; Clefs G G C F F
+SEXTET:  Voices V1 V2 Va1 Va2 Vc1 Vc2; Clefs G G C C F F
+SEPTET:  Voices V1 V2 Va1 Va2 Vc1 Vc2 Cb; Clefs G G C C F F F
+\end{verbatim}
+\ttxem{Voices}  gives the labels of the voices, later used to identify 
+lyrics lines and out-of-sequence music lines.  You should not use labels
+like \texttt{L}, \texttt{U}, \texttt{C}, \texttt{1} or \texttt{L1} 
+that conflict with \MTx's use of labelled lines for chords, lyrics etc.
+Labels separated by
+blanks belong to voices on different staves; labels separated by a comma, 
+to voices on the same stave.  \ttxem{Clefs} define the clefs, one for each
+stave.  You can use any PMX-supported clef symbol in addition to G and F
+--- see Appendix \ref{ornaments}.
+The symbol \verb'8' or \verb'G8' indicates music written in the treble clef 
+\NEW{0.49} but sounding an octave lower, as is usual for the tenor voice in 
+choral music.
+
+\ttxem{Vocal} means that the voices will be treated as vocal for the 
+purpose of beams and lyrics, and \ttxem{Continuo} means that the staves 
+belong to 
+a single instrument, and will be grouped together by a \ixem{brace}. 
+You may not have too many voices or staves --- see Appendix \ref{limits}.
+
+\ttxem{Choral} means that the voices form a choir.  This implies that each
+voice is vocal, and their staves will be grouped together by a bracket.  
+You can get the \ixem{bracket} for instrumental voices too, by using
+\ttxem{Group} instead of \texttt{Choral}.
+
+You may define your own style elements, \index{style!elements}
+e.g.: \\
+
+\texttt{Honky-Tonk: Voices R L; Clefs G F; Continuo} \\
+
+The whole preamble is read, and new style elements saved, before any of the 
+commands is interpreted.  So it does not matter in which order the commands 
+come.  The preamble may be spread over more than one paragraph. \NEW{0.49}  
+But if you issue a command more than once, only the last instance counts. 
+
+The \ttxem{Start} command is mildly convenient when you are experimenting with 
+fine-tuning, since it allows small additions affecting the beginning of 
+each voice to be collected in one place.  It comes into its own when
+combined with the multi-score option (see Section  \ref{multiscore}).
+\NEW{0.42}  Items for each voice are separated by semicolons and may contain
+blanks.  These are prepended to the corresponding line of the first
+paragraph, so the \emph{combined} length of the starting item and the
+line in question should not be too long (see Section \ref{limits}).
+
+You don't normally need to specify \NEW{0.54} \ttxem{Octave}, 
+\index{octave@octave!defining initial}
+since most of the time the octave implied by the clef is correct.
+
+\ttxem{TeX} \NEW{0.61} should be used for last-minute overrides
+of commands that come from system \TeX\ files like \verb`mtx.tex`
+and \verb`pmx.tex`.
+
+\subsection{Customizing \MTx} \NEW{0.55} \label{customize}
+
+You have a lot of control over how \MTx\ does its translation.  The old way
+of customizing \MTx\ was by compiler options and the \ttxem{Options:}
+preamble command.  That method uses one-character switches, which is
+only slightly mnemonic and anyway the letters get used up.  
+The new way is to use the \ttxem{Enable:} and \ttxem{Disable:} 
+preamble commands to select the features you want.  
+
+	Here is a list of switchable \MTx\ features that are 
+enabled by default:
+
+\begin{description}
+  \ttxi{splitShortcut}  Separate 2:1 and 3:1 shortcuts into two words, and
+   explicitly code their durations.
+  \ttxi{newWordShortcut}  Allow 2:1 and 3:1 shortcuts to be entered as 
+    separate words.
+  \ttxi{multiFile}  Take \texttt{Include:} lines into account, otherwise
+    ignore them.
+  \ttxi{doChords} Take \texttt{C:} lines into account, otherwise ignore them.
+  \ttxi{doUptext} Take \texttt{U:} lines into account, otherwise ignore them.
+  \ttxi{doLyrics} Take \texttt{L:} lines and inline lyrics changes into
+    account, otherwise ignore them.
+  \ttxi{unbeamVocal} Unbeam non-melismatic notes in vocal lines.
+  \ttxi{hideBlindSlurs} Hide \verb"{~" and \verb"(~" slurs.
+  \ttxi{interpretSlurs} Translate slur signs to PMX \texttt{s} and \texttt{t}
+    slurs.
+  \ttxi{uptextOnRests} Synchronize uptext with notes and rests, not only with
+    notes.
+  \ttxi{checkAssertions} Interpret certain comments as assertions (see Section 
+   \ref{debugging-aids}.
+\end{description}
+
+Here is a list of switchable \MTx\ features that are 
+disabled by default:
+
+\begin{description}
+  \ttxi{solfaNoteNames} Use \ixem{tonic sol-fa} 
+  note names \texttt{d r m f s l t} (for \emph{do, re, mi, fa, sol, la, ti}).
+  This will be translated to the usual note names \texttt{c d e f g a b} 
+  in C major.  Use the \PMX\ transposition feature to obtain the desired
+  key.  Only the basic note names are supported: you should not use the 
+  sol-fa chromatic note names (e.g.\ \emph{re, ma,}) but the basic sol-fa
+  note names with \PMX\ accidentals (e.g.\ \texttt{ds}, \texttt{rf}).  
+
+  This feature conflicts in some cases with other uses of these letters.
+  To retain the standard meaning in sol-fa mode, precede the word with a 
+  \verb'"', e.g.\ use \verb'"r' for a rest since \verb'r' translates to
+  a \verb'd'.
+
+  \ttxi{pedanticWarnings}  Suppress pedantic warnings, i.e.\ cases where
+you omitted something but the default action is probably what you want.
+  \ttxi{ignoreErrors} Do not stop on the first error.   
+(Errors are messages clearly marked with \ttxem{ERROR} --- 
+any other message printed is informative or a warning only.)
+
+  \ttxi{instrumentNames}  Indent first system and print default 
+   instrument names.
+  \ttxi{beVerbose} Verbose progress report.  Default behaviour is 
+to print out errors, warnings, and very little more.
+  \ttxi{debugMode}  Give messages that may be helpful in finding bugs
+in the \texttt{prepmx} program.
+\end{description}
+
+You can put as many features as you like on the \texttt{Enable:}
+and \texttt{Disable:} lines, just separate them by spaces.  You can 
+also have as many \texttt{Enable:} and \texttt{Disable:} lines as you want.
+For example, to imitate the way \MTx\ 0.54c did things, put
+\begin{verbatim}
+Enable: interpretSlurs
+Disable: newWordShortcut multiFile checkAssertions
+\end{verbatim}
+
+\section{Fine-tuning the printed output}
+
+The decisions made by \PMX\ represent a good compromise in the majority 
+of cases, but sometimes the first printout is disappointing.  You can 
+influence the details of the layout in various ways.  You will probably 
+need to look at the first draft, make fine-tuning changes, look at the 
+second draft, \dots several times, if you are a real perfectionist.
+
+\subsection{General vertical and horizontal spacing}
+
+It is best to use \ttxem{Bars/line} in the preamble for the first draft.  
+You can then decide how many systems in total are required for proper 
+horizontal spacing, and over how many pages they need to be spread for 
+proper vertical spacing.  On the later drafts you will therefore use 
+\ttxem{Pages} and \ttxem{Systems} in the preamble. 
+
+There are \PMX\ commands to put line and page breaks where you like --- 
+see Appendix \ref{pmx}. 
+
+You can use \ttxem{Space} to control the vertical space between the
+staves.  There may be a number for every stave: the last number is
+interpreted as extra space below the bottom stave.   You will probably
+need to specify it if you have lyrics or very low notes down there.
+This command can be issued in any music paragraph, not only in
+the preamble.  It will take effect at the start of the next system.
+See Appendix \ref{voltas} for an example of how this command interacts
+with lyrics adjustments.
+
+You can specify different sizes for the instruments, 
+e.g.\verb" "\ttxem{Size:}\verb" 13 16 "  \NEW{0.30}
+might be appropriate for the main score
+of a violin sonata, with the notes of the violin smaller than those
+of the piano.  Valid sizes are 13, 16, 20, 24 and 29. 
+Size is a delicate issue: see Appendix \ref{sizes}.   
+
+You should be aware of what the \PMX\ manual calls a ``benign bug''.
+Pages more than approximately half full get filled out by distributing
+the vertical space among the staves.  This means that the appearance of
+the score may drastically change when you add one more stave.  For this
+reason it is best to leave space adjustments till last, when you already
+know what values to give for \ttxem{Systems} and \ttxem{Pages}.
+
+Occasionally \PMX\ underestimates
+the total height of a page and you end up with one system less than
+you wanted, which then appears by itself on a page of its own.  This
+is particularly likely if you asked for extra space between the
+staves, or are using different-sized staves.  A dirty 
+trick that fixes this problem is to specify a little more height
+directly to MusiX\TeX\ than you told \PMX: see Appendix \ref{pmx}.
+
+\subsection{Lyrics placement}  \label{fine-tune-lyrics}
+
+Sometimes the default position for placing lyrics causes ugly clashes 
+with note stems, beams, slurs etc.  
+You can move lyrics up or down by 
+inserting a word starting with \ixem{\atsign} in the music line to which that
+lyrics line is attached.   For example, \verb"@-2" (`at minus two') 
+indicates that the lyrics should be moved down two internotes.  One 
+\ixem{internote} is the vertical distance between e.g. a B and a C, i.e.~half 
+of one interline.  The change takes effect at the start of the bar 
+in which it appears, and remains in effect until further modified 
+by another shift.  Each voice has its own associated shifts: one for
+normal lyrics and a different one for auxiliary lyrics.  
+\index{lyrics!auxiliary}
+
+You can also say \verb'@^-2' (``put the lyrics above the stave at
+two internotes below the default position'') or \verb'@v'  (``put the 
+lyrics below the stave at the default position'').   These commands 
+discard any shift that may have been in effect for that set of lyrics before.
+
+Be warned that the default position itself is not fixed relative to the 
+stave but depends on the general vertical layout.  So if you change a 
+layout parameter after having placed the lyrics `perfectly', they may 
+need a further adjustment. 
+
+\NEW{0.30}Occasionally you need a syllable spanning two words.
+You can code a \ixem{hard blank} to string the words together,
+e.g.  \verb'Egit-to~ad I-si-de', but it also looks good to use an
+underscore which will be translated to a link, \index{lyrics!link}
+e.g. \verb'Egit-to_ad I-si-de' will become: Egit-to\lyrlink ad I-si-de.
+If the link gets in the way of letters with descenders, you can lower
+it,  e.g.  \verb'pretty\_and smart' becomes: pretty\lowlyrlink and smart.
+
+\subsection{Beam and slur placement}  \label{beam&slur}
+
+The decisions made by \PMX\ in choosing the height and direction of 
+beams and slurs may differ from what you would like.  The slur start 
+character may have the suffixes \mark up, \mark down or \mark lower (the 
+last two mean the same) to control the direction of the slur, and a 
+suffix \verb"+#" or \verb"-#" to raise or lower the start of the slur by 
+\verb"#" internotes.  The slur end character may also have an adjustment 
+suffix.  Remember to fine-tune both end points when you wish to move the 
+whole slur up or down!  
+
+It is also possible to fine-tune the horizontal position. The most common case 
+occurs when two notes on the same pitch are linked by a\NEW{0.51} tie.  In 
+that case \verb"{"\ldots\verb"}" give a neater result than \verb"("\ldots\verb")".  
+See the \PMX\ user's manual for details on other horizontal adjustments. 
+
+In the case of a slur continuation you should code the height adjustment 
+\emph{between} the two parentheses, e.g.~\ttxem{)-3(}.  You must not have two 
+adjustments. 
+
+Fine-tuning beams is all done on the beam start character.  It may have
+the suffixes \mark upper or \mark lower for direction, and up to 
+three \verb"+#" or \verb"-#" suffixes.  The first raises or lowers the 
+beam by so many internotes, the second makes the beam more or less 
+steep, and the third also raises or lowers the beam, but this time in 
+units of beam thickness.
+
+\subsection{Instrument names} \NEW{0.40}  \label{stavename}
+
+Some scores have indications like \textbf{Violin} to the left of the
+first system.  The easiest way to do this is to enable the \ttxem{instrumentNames} feature, 
+which uses the line labels as names, but you may not like the result.
+
+To do it yourself, use the \ttxem{Name:} command in the preamble,
+e.g. 
+\verb"Name: Violin Piano".
+The names can be any valid \TeX\ expressions that have no spaces, such as
+\verb"{\it{French~Horn}}".
+Remember, it's one name per instrument, not one name per stave.  If you
+have too few names, the remaining instruments will not be named.
+You can
+also use a single hard space (\verb"~") when some instrument in the middle 
+should not have a name.
+
+You will probably also need the \ttxem{Indent:} command to specify the
+indentation required to provide space for the names.  
+E.g.\ \verb"Indent: 0.12" says the indentation should be 12\% of the music
+width.  
+
+
+\section{Shortcuts}
+
+This section introduces \ixem{shortcuts} for things that are perfectly
+possible in other ways, but a little clumsy.
+
+
+\subsection{Chords}  \label{chords}
+
+An isolated \ixem{chord} in the middle of a melodic line is best treated
+by the \PMX\ construction of chordal notes with the \ttxem{z} prefix, e.g.
+\verb"c ze zg zc" 
+for a C major chord.  Sometimes a whole string of successive chords appears,
+as in the introduction to Schubert's song \textit{Der Tod und das M\"adchen.}
+You can see that the coding for this can become quite cumbersome.
+Therefore \MTx\ allows you to put the chordal notes on a second line,
+as shown below.  
+
+\hskip -18mm
+\begin{mus}
+\input dertod.tex
+\end{mus}
+\vskip 12pt
+\verbatiminput{dertod.mtx}
+\begin{itemize}
+  \item  There is a basic melodic line, with a separate line for the chordal
+notes, labelled like a lyrics line, but with \ttxem{C} instead of \verb'L'.  
+\index{line!melodic}
+  \item  For each chord there is one word on the \indexed{chord line}.  
+\index{line!chord} \index{chord} If the
+chord contains more than one \indexed{chordal note}, \index{note!chordal} 
+the notes follow with no spaces
+in between.  The notation is the usual \PMX\ notation, with two changes: 
+fla\mark t and notehead \mark left.  These changes are used only on chord 
+lines, and are unavoidable because \ttxem{e} and \ttxem{f} are needed for 
+note names.   
+  \item  The note chosen as melodic note \index{note!melodic}
+on the main music line must not
+be a shifted note (i.e. one with displaced notehead): 
+all shifted notes must be on the chord line.  
+  \item  The stem direction of the chord is what that of the melodic
+note would have been in the absence of chordal notes.
+  \item  Pitch on the melodic line (i.e.~the choice of the closest note 
+with the given name) is not affected by the chordal notes. Each chord has 
+its own local frame of reference, starting anew from its melodic note. This 
+differs from the \PMX\ \texttt{z\dots} notation, where the pitch of each 
+note is determined by the previous note, whether chordal or not.
+\index{pitch!of chordal note} 
+  \item  Sometimes in the middle of a chordal passage there might be an 
+isolated melodic note that does not have any chordal notes. To indicate this, 
+the chord line must contain a \ixem{spacer}, which is a one-character word 
+containing just a tilde (\ttxem{\snake}). 
+  \item  Sometimes you only need a few isolated chords.  A one-character
+word consisting of a bar symbol
+\ttxem{\|} on a chord line indicates that no more chords appear in the
+current bar even though one or more melodic notes are still left.  
+In that case you do not need a \ttxem{\snake} for the `missing' chords.
+Don't use bar symbols on a chord line just to separate bars when there
+are no missing chords.
+
+Two or more consecutive such words indicate one or more bars with no chords.
+If the very first word on a chord line is a bar symbol, the first bar has no 
+chords.  
+  \item  You can get an \ixem{arpeggio} sign (wavy line) in front of the whole chord 
+including the melodic note by starting the chord word with a question mark, 
+e.g. \verb'?ad' instead of \verb'ad' in the first chord above would have put 
+an arpeggio sign in front of all three notes.  For more complicated
+arpeggio constructions, you need to put \ttxem{?} signs on the music lines 
+themselves: consult the \PMX~manual.         
+
+\item You can tie notes in chords.  \NEW{0.60}  The notation is more compact
+than ties in the music line itself: put a \verb'{' before each note that should
+be tied, no blanks, but don't put anything to close the tie.  It is an error
+if you open a tie and there is no note at that pitch in the next chord.
+All the notes in that chord that close ties should appear before
+all the notes that open ties, e.g.\ \verb"{c c{e" is OK but
+\verb"{c {ec" is not.
+
+
+\hskip -18mm
+\begin{mus}
+\input chord.tex
+\end{mus}
+\vskip 12pt
+\verbatiminput{chord.mtx}
+
+
+\end{itemize}
+
+\subsection{Expression marks and other annotations}
+
+Annotations and interpretation marks ({\ppff p}, {\ppff f}, \textit{rit.}, 
+\textit{cresc.} and so on) are inserted using lines like lyrics lines, but 
+with \ttxem{U} (for \mark Uptext) instead of \verb'L'.   
+Note, though, that uptext lines are synchronized with rests as well as
+notes, whereas lyrics are synchronized with notes only.
+
+The normal position 
+for an \ixem{uptext} line is \emph{above} the music line to which it applies: 
+if it appears anywhere else, the \ixem{label} must include the voice name or 
+number. I'll speak of an \emph{uptext voice} \index{uptext!voice} to refer to 
+the totality of uptext lines (no more than one per paragraph) 
+associated with a particular voice. 
+ \begin{itemize}
+ \item Spacers \ttxem{\snake} and bar symbols \ttxem{\|} work for uptext in 
+exactly the same way as for chords --- see Section \ref{chords}.  
+\index{spacer} 
+ \item Vertical adjustment signs starting with \ixem{\atsign}
+like {\verb"@^"} \verb"@v" \verb"@=4" 
+\verb"@+4" \verb"@-4" may appear 
+in uptext lines, and have the same effect on the position of the uptext as in 
+the fine-tuning of lyrics --- see Section \ref{fine-tune-lyrics}.  The only 
+difference is that these signs appear in the uptext line itself, whereas the 
+lyrics adjustments appear in the corresponding music line. A line starting 
+\verb"U: @v " is actually a downtext line!  Each uptext voice retains its own 
+adjustments which remain in effect even after the paragraph in which they 
+appear.                                     
+
+ \item Uptext lines may also have horizontal adjustment signs, namely 
+\ixem{\atsign\less} and \ixem{\atsign\more}.  There are three possible 
+positions for aligning uptext to a note: left, right and centre.  The 
+default position is to align to the right, but the horizontal adjustment 
+shifts the position in the indicated direction, e.g. one \verb"@<" causes 
+centred uptext and another \verb"@<" causes uptext extending to the left of the 
+note.  Yet a third \verb"@<" will be ignored.  Here, too, each uptext 
+voice retains its own adjustments which remain in effect even after the 
+paragraph in which they appear.                                
+
+  \item Uptext lines are useful for indicating \ixem{guitar chords}.  
+To make this
+easier, the sharp character \ttxem{\#} may be used on an uptext line as a 
+normal text character (usually in \TeX\ you need \verb'\#' to get it)
+and the \ttxem{\%} character is used to indicate a 
+\indexed{\mtxFlat}. \index{\Flat@\mtxFlat} 
+  \item The preprocessor tries to guess whether the word is a dynamic 
+indication like {\ppff mp}, {\ppff sf}, {\ppff rfz} etc.\ and will use the 
+MusiX\TeX\ \keyindex{ppff} font for it.  The current algorithm is highly 
+unsophisticated: if all the letters in a word come from the list 
+\verb'fmprsz' it is diagnosed as a dynamic indication.
+  \item A more permanent \indexed{font} \index{uptext!font} 
+change is indicated by a word like \verb"!bf" or  \verb"!it" (no
+backslash --- the \texttt{prepmx} program will put it in).  
+Every word of that uptext voice (except \verb"\ppff" words) will be set in the 
+indicated font.  Each uptext voice retains its own font which remains in 
+effect even after the paragraph in which it appears. 
+  \item  You can indicate \ixem{crescendo} and
+\ixem{decrescendo} signs in uptext by two methods:
+ \begin{enumerate} 
+  \item Put \verb'<' or \verb'>'
+where the sign starts, and \verb'<.' or \verb'>.' where it ends.
+This feature gives unpredictable results when you try to use it
+in more than one voice at the same time.  
+  \item  
+Put e.g.~\verb"<18" or \verb">7" where the sign starts.   
+\NEW{0.42}  The number gives the length of the crescendo in elementary 
+skip units or
+``elemskips''.\footnote{It is quite technical to define precisely how
+long an \ixem{elemskip} is.  The important thing about them is that they
+stretch or shrink with spacing of the notes, so that if say a half-note
+is followed by two elemskips in one place, it will be followed by two
+elemskips everywhere.}
+ \end{enumerate}
+  
+\end{itemize} 
+
+\subsection{Lyrics paragraphs}
+
+You may prefer to have all the lyrics for a particular voice together
+in one paragraph.  To do this, the first line of the paragraph consists
+of a name for the group of lyrics in braces, e.g.~\verb'{verse1}'.
+
+When you later wish to use these lyrics, you put a list of names on a lyrics
+line where you would normally have put the lyrics, e.g. 
+\verb'L: {verse1,verse2}' replaces:
+\begin{verbatim}
+L: Lyr-ics for the first verse
+L: Lyr-ics for the second verse
+\end{verbatim}
+You do not repeat this instruction in the next paragraph, but if the voice 
+concerned no longer has lyrics attached to it, you should indicate that by a 
+blank lyrics line, i.e.~\verb'L:' by itself. 
+
+A particular lyrics paragraph name should not be used in more than one 
+place.  If two voices have exactly the same lyrics, you need only one lyrics 
+paragraph, but more than one name.  E.g.~\verb'{soprano}={bass}' makes two 
+identical sets of lyrics, one to be used by \verb'L: {soprano}' and the 
+other by \verb'L: {bass}'. 
+
+One useful property of lyrics paragraphs is to allow you to
+switch lyrics in the middle of a line instead of between music paragraphs.
+\NEW{0.40}
+This is only allowed if the voice in question already possesses lyrics:
+it cannot be used to replace the \texttt{L:} line.  E.g.  
+ \verb"a b {chorus} c d"  
+means that starting at the note \texttt{c} lyrics will be taken
+from the lyrics paragraph labelled \verb"{chorus}", and 
+ \verb"a b {} c d" 
+means that lyrics are switched off at that point.
+
+\subsection{Long/short note combinations} \label{longshort}
+
+Passages containing dotted notes \index{notes!dotted}
+require duration changes for every note:
+
+\verb"c8d g1 c8d g1 c8d g1 c8d g1 c4"  \\
+There is a shorthand notation for this, namely:
+
+\verb"c8.g c.d c.g c.d c" \\
+The first note in a dotted group may have an explicit duration, which then 
+becomes the default duration, but the second must not.  There is a similar
+shortcut\NEW{0.51} \verb"c..d" for double-dotted notes.
+
+When the dotted note appears not in a group but on its own, as in triple and 
+compound time (3/4, 12/8 etc.), you must use a \ttxem{d} to indicate the 
+dot, not a period. 
+
+Similarly, in compound meter passages containing long and short notes
+require frequent duration changes:
+\verb"6/8 c8 g1 c8 d1 c8 g1 c8 d1 c8d"  
+The shorthand notation for this reads:
+\verb"6/8 c8,g c,d c,g c,d cd" 
+
+\subsection{Barless music}   \NEW{0.40}
+
+Many old hymn tunes do not fit into the modern pattern of regular bars.
+You could get this effect by carefully counting the length of each music
+line and issuing your own blind meter \index{blind!meter~change}
+change instructions.
+
+Instead, specify in the preamble that you have zero beats per bar.  
+E.g.~\verb"Meter: 0/4" means that each paragraph of music
+should be treated as a single bar, and that the basic counting unit is
+a quarter-note.  You need not issue any other meter change instructions.
+\MTx\ will check that each of the lines in the paragraph have the same total 
+duration, which must a multiple of the specified counting unit.
+
+\subsection{Sticky ornaments and suffixes}
+
+You may need to mark a whole run of notes as staccato.  To do so,
+put \verb'o.:' instead of \verb'o.' after the first staccato note and
+\verb'o:' after the last one.  This method also works with tenuto
+and all the other \ixem{ornaments} in \ref{ornaments}.  
+The stickyness of ornaments lasts only till the end of the bar.
+
+On notes and rests there are many possible suffixes, some of which you have 
+already encountered and some of which are given in Appendix \ref{pmx}.  There 
+are situations where you might wish to have several consecutive notes or rests 
+with the same attribute.  The method is similar: put a colon (\texttt{:}) 
+after the letter involved on the first note of such a sequence,  leave out the 
+letter on all the notes except the last,\NEW{0.50} on which you again put the 
+letter.  For example, in \verb'12/8' meter you might have a passage moving at 
+four beats to the bar, normally coded \verb"c4d cd ed ed gd gd c2d", which 
+becomes \verb"c4d: c e e g g c2d" when you use this shortcut.  The stickyness 
+of note and rest suffixes lasts until cancelled. 
+
+Each voice is treated on its own, and notes and rests are considered 
+independently, so if you make the \verb'd' sticky on a note it will not affect 
+rests.  My favourite application of this feature occurs in homophonic music 
+with two voices per stave: I prefer to have only one rest per stave rather two 
+rests, one on top of the other, and so I make all the rests in one of the 
+voices blank by marking the first rest of that voice. 
+
+\subsection{Multi-bar rests}   \label{rests}
+
+\NEW{0.40}It may happen that all the instruments in your score
+simultaneously have a rest of two or more bars.  In that case a succession
+of empty bars may be difficult to count, and the conventional notation
+is to put all the rests in a single bar, with the total number of
+bars printed above them.  The word for a \mark multi-bar rest is e.g.\
+\texttt{rm8} for a rest of eight bars.  You code this for one voice only,
+and there may be no other notes or rests on that line.  The same rest
+will be printed on all staves.
+
+
+You can tune the appearance of the rest by appending a signed integer
+to the word, e.g.\ \texttt{rm19+18}.   \NEW{0.41}Roughly speaking,
+this moves the front end of the rest to the right by 18 points. Since
+multibar rests can have several shapes and may even contain as many as
+three separate symbols (in the case of \texttt{rm7}) it is difficult to
+describe precisely what happens and you are advised to experiment.
+
+\subsection{Skipping and including portions of a score}   \label{multiscore} 
+
+To read in another file at the start of a paragraph, \NEW{0.55}
+use the \ttxem"Include:" directive, e.g.\ \verb"Include: mylayout.mti".
+The effect is exactly the same as if those lines had been part of the original
+input file.  The file thus included may also contain "Include:"
+directives; there is no restriction on the number of levels.  You may
+re-include a file that was included before, but you may not include any
+file that has already been included but has not yet been fully read. 
+
+You may have various reasons for wanting \MTx\ to omit one or more lines of 
+your score.  There are several ways to do so, of which the simplest is the 
+comment symbol \verb'%' that you have met before, which skips that one line.  
+
+A line starting with \ttxem{SUSPEND} all in capitals, at the start of a
+paragraph, tells \MTx\ to discard all following paragraphs until a line 
+starting with \ttxem{RESUME} all in capitals is found at the start of a
+paragraph.  The material in between must still be organized into paragraphs
+that are not too large (see Appendix \ref{limits}) but need not in any other
+way conform to \MTx\ input rules.
+
+A line starting with \ttxem{Only:} defines a subset of line numbers, 
+e.g.~\verb"Only: 1,3-7,9" defines the set \{1,3,4,5,6,7,9\}. \NEW{0.43} Only 
+the corresponding lines from all non-lyrics paragraphs after the paragraph 
+containing the \texttt{Only} are processed until another \texttt{Only} is 
+found.  Any paragraph containing an \texttt{Only} is always fully taken into 
+account: it is not subjected to the masking action of any \texttt{Only}. 
+\emph{WARNING: this feature is deprecated and may behave differently in 
+or even be omitted from future versions.}
+
+You can also conditionally ignore portions of the score depending on a 
+compiler variable.  \NEW{0.42} The compiler options \texttt{0} to \texttt{9} 
+identify ten special cases of a score.  Together with the basic unnumbered 
+version of the score, you can therefore have up to eleven versions. A line 
+starting with \ttxem{Case:} at the start of a paragraph gives a list of those 
+cases that include the paragraph in question,  e.g. \verb"Case: 137" 
+identifies a paragraph that is only included when one of the options 
+\texttt{1}, \texttt{3} or \texttt{7} was selected, either as a command option 
+or on and \texttt{Options:} line.  
+
+All paragraphs headed by \texttt{Case:} occurring \emph{before} the first 
+music paragraph are treated as extensions of the preamble.  The very first 
+music paragraph may therefore not start with \texttt{Case:}. 
+
+For example, the score \texttt{cervus.mtx} of Palestrina's four-part
+setting of Psalm 42 (see the \texttt{source} directory in the \MTx\
+distribution) is set up to give by default a score for the conductor with all 
+voices in 16-point type.   When one of the \texttt{1}, \texttt{2}, \texttt{3} 
+or \texttt{4} options is specified, you get a score with one voice in 20-point 
+type and the others in 13-point.  When the \texttt{0} option is given, 
+20-point is used throughout and the score is spread over three pages. 
+
+%A combination of \texttt{Case} and \texttt{Only} allows you to make parts from 
+%a score in a flexible way, e.g.~only the chorus parts, or both flutes 
+%together, etc.  The \texttt{Case} command can never be masked out by a 
+%previous \texttt{Only.} 
+
+\subsection{Macros}  \NEW{0.60}
+
+\MTx\ offers limited support for the \PMX\ macro feature, which is 
+a shorthand notation for pieces of text that appear often in your input.
+In \PMX, you define macro number $i$ by \texttt{MS}$i$ and end it by \texttt{M},
+each a separate word, where $i$ is a number from 1 to 20.  
+Everything in between (which may not contain
+any word starting with \texttt{M}) is not acted on, but only stored, 
+but when you later ``play'' the macro by the single word \texttt{MP}$i,$ 
+the effect is the same as if you had typed the text you defined earlier.
+In other words, a \PMX\ macro works as a purely literal text insertion.
+You can also start a macro definition by \texttt{MR}$i:$ this has the effect
+of immediately playing the macro, not just storing it.
+
+The default behaviour in \MTx\ is to pass along such \texttt{M}-words
+without looking at them, which in expert hands can be quite effective,
+but for the rest of us is simply a disaster.
+The problem is that in that case \MTx\ does not know that notes 
+are being inserted, let alone what their duration is.  It is in the
+position of a musician who has lost count.
+
+\MTx\ offers two solutions to this problem, either of
+which you can \texttt{Enable} in the preamble.  In both cases, macros 
+may only appear on music lines.
+\begin{description}
+  \ttxi{expandMacro}  All macros are fully expanded at the \MTx\ level.
+The \PMX\ file will not contain any macros.  If you use this feature,
+you can have macros numbered from 1 to 99, and macro definitions
+may contain plays of other macros.  Error messages apply to the expanded
+text and may be difficult to understand.
+  \ttxi{countMacro}  \texttt{M}-words are still passed along,
+but when a macro is defined, \MTx\ determines its duration
+and counts correctly when it is played.  
+\end{description}
+
+If you have enabled \texttt{countMacro}, there is one unavoidable
+restriction:  a macro definition or play may not spill over into
+the next bar.   Hence the total duration of a macro may not be more 
+than what remains of the current bar.  
+
+A word of caution: because you cannot see the macro 
+definition when you play it, it is easy to lose track of duration and octave.  
+It is therefore just sound common sense
+to set duration and octave at the first note in the macro definition, 
+and at the first note after the macro play, to avoid mistakes.
+
+\hskip -18mm
+\begin{mus}
+\input macro.tex
+\end{mus}
+\vskip 12pt
+\verbatiminput{macro.mtx}
+
+If you used \texttt{expandMacro} instead, the first music line
+could have read \\
+\verb"     MS1 c8=+ za zf zc M MR2 [u MP1 MP1 MP1 MP1 ] M MP2" \\
+in which case the first line of the second bar would only be \verb"MP2 MP2".
+This is shorter for you to code, and in this case it works.
+It is not always feasible to use macros within macros: 
+\texttt{expandMacro} works
+by actually inserting the strings into \MTx\ input lines, which
+may not be longer than 255 characters.  Too many macro expansions,
+and you hit your head against the ceiling.
+
+\section{Debugging aids} \NEW{0.61}
+
+The very compactness of \PMX\ music notation works against you
+when debugging. One music paragraph looks very much like another.
+Notes inherit pitch and duration from context, and when there is 
+a mistake, it is not easy to see where in a long music line that 
+context comes from. 
+
+Octave mistakes have a way of accumulating, but only show up when 
+you see a typeset score full of leger lines way above or below the 
+stave.
+
+Left to itself, \MTx\ can and does check that all music lines end 
+at a bar ending, and that lines from the same paragraph have the 
+same length. But it cannot tell that which of two lines is wrong, 
+only that they are different.
+
+Many programmers use commenta lines \verb`% -- Bar 40 --` to help 
+them keep track of where they are in a score. This practice has
+now been formalized as a debugging aid.
+
+Certain comments can be recognized by \MTx\ as assertions, allowing
+additional correctness checks can be made. Apart from the comment
+sign, they look like preamble commands, but are normally placed in
+the music paragraph to which they apply.
+
+\begin{tabular}{ll}
+
+\verb"% Range: S=4d-5d, A=3b-4g" & Requests range checking for the specified voices. \\
+\verb"% Bar: 30-31" & If only one bar, give just one number.
+
+\end{tabular}
+
+The format used here for \ttxem{Range} checking puts the octave
+ before the note, e.g. \verb`4f`, to avoid confusion with \verb`f4`
+in which the digit indicates duration. The error messages
+use the same notation.
+
+Either of these comments may also appear in a preamble paragraph,
+in which case they apply to the entire score. 
+% {-- Maybe later --} The first number in such a global \verb`Bar` 
+% is used to initialize the printed bar count.
+
+\subsection{Error messages}
+
+Most error messages will give a line number and say approximately
+where the error was found. In that case, the original line is printed
+with a marker at that point. Also printed is what has happened to that
+line in the meantime, mostly explicit duration indications on every
+note.
+
+If there is no line number (this mostly happens in the preamble)
+the message in most cases deals with something that you should have
+supplied.
+
+Sometimes the actual error may be on another line, e.g.\ when it is 
+found that music lines have a different duration, the first line 
+processed may be the one that is wrong, but the discrepancy is only 
+found later.
+
+Error messages generated by assertions can be a lot more informative
+than others, and you are urged to exploit these. To find out what life
+would have been like without them, you can always issue 
+`Disable: checkAssertions` in the preamble.
+
+\section{Acknowledgments} 
+
+% In DPL-DOS/huis.tgz
+
+I still have the 
+\texttt{.tex} and \texttt{.dvi} files of my first attempt (in October 1992)
+at setting music (Bach, no less) with the \mutex\ package of Andrea Steinbach 
+and Angelika Schofer.  The first phrase goes: 
+\begin{verbatim} 
+\4\,\F\~\B\.\c\|\2\A\.\|\4\B\,\E\E\| \2\group{\\\E\\\d}{\\0\\{-1}}\lslur12\go\| 
+\end{verbatim} 
+In \MTx\ that would be                        
+
+\verb"f bd c8 | a2d | b4 e- e | ( e2 d4 )" \\
+A tantalizing glimpse of a preprocessor appeared in the \mutex\ 
+documentation, but the software for it was never released.  
+
+None of this would have been possible without the late Daniel Taupin, 
+who was the first to emphasize that printed music has a fundamentally 
+two-dimensional layout, and whose MusiX\TeX\ package is the engine that 
+actually performs the typesetting.
+
+I made a previous attempt to implement something like \MTx\ as a direct 
+preprocessor to Music\TeX\ (Daniel's first package).  My lack of 
+expertise caused that project to die.  The appearance in January 1997 of 
+\PMX\ 1.1 inspired me to resurrect the idea --- thanks to Don Simons. 
+Don has also made some comments which helped me to improve the \MTx\ 
+input language.  Some \MTx\ features that are implemented by using \TeX\ directly, 
+such as multi-bar rests in scores with more than one stave, make use of
+MusiXTeX code written by Don.
+
+Since version 0.21, \MTx\ uses Rainer Dunker's \ttxem{musixlyr} package.  
+This gives much neater horizontal spacing of lyrics than the manual system 
+used in previous versions, and virtually eliminates the need for 
+horizontal tuning. 
+
+Chris Walshaw's \ABC\ provided the repeat notation.  
+
+The layout of \MTx\ bears some resemblance to a language developed by 
+Miguel Filgueiras, published in 1998 in \textit{Software Practice and
+Experience}, although I did not consciously borrow his ideas. I have
+been unable to find an implementation on the Internet.
+
+I had some enlightening e-mail correspondence with the developers of 
+MPP, Jan Nieuwenhuizen and Han-Wen Nienhuys. 
+This package (no longer maintained, unfortunately) was the first 
+music package which made me believe that one could write good-looking 
+scores in a reasonable amount of time. 
+
+Eric Petersen, Reenen Laurie, Kestell Laurie and Joel Hunsberger found
+several bugs in earlier versions of \MTx.  Christian Mondrup did this for 
+\MTx\ 0.50 and later.  
+
+The subscribers to the discussion list \mailingList\ --- 
+too many to name --- found many more and contributed to the development by 
+requesting new features.  Details of these contribution are given in the
+\ttxem{Corrections} file distributed with the \texttt{prepmx} code.
+
+The success of public domain music publishing owes an incalculable debt
+to the late Werner Icking.  He maintained an online archive for music
+software and sheet music, set
+standards for music typesetting, tested software packages, gave 
+genuinely expert advice to would-be experts, and encouraged newbies
+with patience and understanding.  When he died unexpectedly at a
+comparatively young age, each of the small but globewide community of users
+of MusiX\TeX\ lost a personal friend and mentor.  
+% His music archive as it was at the time of his death can still 
+% be accessed at \texttt{ftp://ftp.gmd.de/music} or 
+% \texttt{http://www.gmd.de/Music}.
+
+Werner's work is still being carried on: the software is at the Werner 
+Icking Music Archive (\archiveSite), the mailing list is at the \TeX\
+Users Group (\mailingList), and the scores have been merged into the 
+Petrucci Music Library (\scoreSite).
+ 
+My wife, Trienke, had to suffer many effectively husbandless evenings
+and weekends while I hammered the program and documentation into good 
+enough shape to be able to offer it around.
+
+\appendix
+\setcounter{page}{1}
+\renewcommand{\thepage}{A-\arabic{page}}
+
+\section{Where to find help}  \label{help}
+
+ \MTx\ is the tip of an iceberg.  Things can go wrong at many levels.
+Fortunately, here are many ways to get information and help.
+\begin{itemize}
+  \item  Consult the Table of Contents and \emph{index} in search of
+         a likely-looking topic.  
+  \item  The annotated examples might be useful.
+  \item  There is a file \texttt{FAQ} in the distribution that contains
+         the sort of questions that new users often ask.
+  \item  The packages on which \MTx\ relies all have their own reference
+         manuals.  Look for the following files:
+    \begin{description}
+      \item{\PMX:~} \texttt{pmx270.pdf}, \texttt{ref270.pdf} 
+           (these names will obviously be different
+           if your \PMX\ is not Version 2.70); 
+      \item{\musixlyr:~} \texttt{musixlyr.pdf};
+      \item{MusiX\TeX:~} \texttt{musixdoc.dvi}. 
+    \end{description}
+  \item  The archive site at \begin{quote}\archiveSite \end{quote} 
+  hosts not only the mailing list archive but also several tutorials 
+  in various languages on MusiX\TeX\ and \PMX.
+  \item  Join the \ixem{mailing list} by filling in the form
+at \texttt{http://tug.org/mailman/listinfo/tex-music}.
+\end{itemize} 
+
+\section{A short \PMX\ tutorial}  \label{pmx}
+
+  This section describes the parts of \ibxem{PMX} that you are likely to need 
+when coding scores in \MTx.  I have left out or simplified features 
+that are not 
+necessary or too advanced.  In most cases, you can still use them, as 
+\MTx\ simply passes through anything that it does not recognize.  
+
+  \PMX\ resembles English in that it is made up of \ixem{word}s, which are 
+strings of non-blank characters separated by blanks.  Each word, though, 
+has the character of an acronym, in that its letters each stand for 
+something longer, and in fact Don Simons designed the notation so that 
+you can actually say out loud what the acronym stands for.
+
+  \textsl{In the following, the symbol \ttxem{\#} stands for some number.}
+
+ \subsection{Words that contribute to the count}
+
+  Each bar of music has a certain \ixem{duration}, which is is the total of the 
+notes and rests in it.  The word for a note that contributes to the 
+count starts with \texttt{a} to \texttt{g}, which indicates \ixem{pitch}; and 
+the word for a \ixem{rest} starts with \ttxem{r}.  
+
+  A note may have a number of \ixem{suffix}es, which may come in any order.  
+The duration is indicated by a digit: from short to long, these are
+6 (1/\mark64-th note), 3, 1, 8, 4, 2, 0, (whole note), 9 (double note, 
+also known as `breve').   
+Moving a 
+note an \ixem{octave}\footnote{The \ttxem{=} suffix is not part of \PMX.
+Instead, \PMX\ offers the ability to specify octaves by numbers. \emph{This
+feature is not supported by \MTx.}}
+ up or down is indicated by \ttxem{+} and \ttxem{-},
+repeated if necessary.
+The other suffixes are the following marked letters: \mark dotted,
+\mark flat, \mark sharp, \mark natural, stem \mark upper, 
+stem \mark lower, offset to the \mark right, offset to the 
+l\mark eft, \mark apart (not attached to a beam).
+
+You can fine-tune \index{dot!fine-tuning} dot position,\NEW{0.52} e.g.\
+\verb"gd-2" puts the dot two internotes lower than it would normally go, 
+and \verb"gd-0+1" puts it one notehead to the right.  
+
+You can also fine-tune\NEW{0.52} accidental position in a similar way.  For
+accidentals (but not for dots) you are allowed to write \verb"gs>1"
+instead of \verb"gs-0+1".
+
+  A rest may also have suffixes: duration and \mark dot as for notes,
+\mark pause (duration is the whole bar), \mark blank (rest is 
+counted but not printed).    
+It can be moved up and down by \ttxem{+} and 
+\ttxem{-} followed by a number, e.g. \texttt{r0-4} is a whole-note rest 
+moved down four internotes.  The other rest suffixes mentioned
+in Section \ref{rests} are not yet (version 1.3.8) part of \PMX, 
+except \texttt{m}, which is allowed in a score for a single one-stave 
+instrument.  \NEW{0.43}  Also the `blind' and adjustment suffixes on the pause 
+\texttt{rp} are legal in \MTx, but not yet in \PMX.
+
+ The duration of a note may be influenced in various ways by a previous
+note: if unspecified, it is the same as the previous note; or the note 
+may be part of a chord, a multiplet, or a grace note group.
+
+ \subsection{Words excluded from the count} 
+
+Except for the first note of a chord or multiplet, the following words 
+for notes are excluded from the count, and should not have a duration 
+suffix. 
+
+\paragraph*{Chords:} Each note in a chord except the first has the 
+prefix \ttxem{z}.  It is excluded from the count, and suffixes 
+\ttxem{a} \ttxem{d} \ttxem{l} \ttxem{u} may only appear on the first, 
+non-\texttt{z} note. 
+The ``melodic note'' of Section \ref{chords} becomes the first note
+of the chord when the \MTx\ code is translated to \PMX.
+
+\paragraph*{Multiplets:} A normal note may have an extra suffix, after 
+all the others, of the form \verb"x#" \index{\texttt{x}} 
+or \verb"x#n", where \ttxem{\#} 
+stands for a number.  This means that the note is the first of a 
+multiplet (or $x$-tuplet) with \verb"#" equal notes in the time of one.  
+Only the duration coded on this first note is included in the count. The 
+appearance of the first note will not be the normal one for its 
+specified duration: it will look like all the others.  
+E.g.~\verb"g4x3 a b" defines a \ixem{triplet} of total duration a quarter-note 
+looking like three eighth-notes. The \ttxem{n} means that the number 
+\verb"#" is not to be printed. 
+
+\paragraph*{Grace notes:} A normal note may have a prefix group starting
+with \verb"G#" or \ttxem{G}.  This indicates that the note is the first 
+of a grace note \index{note!grace}
+group with \verb"#" notes, to be set in a tiny font.   
+All the notes in the group, even the first, are excluded from the 
+count. 
+
+\subsection{Words for other things than notes}  \label{ornaments}
+
+Other things than notes go into a music score: ornaments, 
+clefs,                                          
+expression markings, changes in key and time signature, etc.  
+\PMX\ contains support for many of these.  Here I mention only a small 
+selection: see the \PMX\ manual for items you need but which are not 
+described here.  A word for each such feature has its characteristic 
+first letter followed by a selection of \ixem{suffix}es that qualify it.
+
+\begin{description}
+ \item{Ornament:}  An \ixem{ornament} is set off-stave in line with its note, 
+and its word, starting with \ttxem{o}, comes directly after that of its 
+note.   The more commonly needed suffixes are           
+\texttt{u} (dot for 
+pizzicato), \texttt{p} (\mark prime for sharp pizzicato), 
+\mark fermata above, \textbf{fd} (\mark fermata \mark down). 
+The suffixes \texttt{.} (staccato) and
+\texttt{-} (tenuto) differ from the others by being set close to the
+note, not off-stave.
+There are several more in \PMX\ and many others in MusiX\TeX. 
+ \item{Clef change:}  You get a small \ixem{clef} at the point where 
+the clef change occurs and a big one at the start of the next line.
+The clef change word begins with \ttxem{C}.  The suffix \verb"#" places 
+middle C on line \verb"#" of the stave, where \ttxem{1} is the bottom 
+line and \ttxem{5} the top.  An appropriate clef is selected 
+automatically, e.g. \ttxem{C0} is the G-clef (treble) and \ttxem{C6} is 
+the F-clef (bass). 
+ \item{Voltas:}  \index{volta} These are the labels to mark sections of the score
+that are not played at every repeat.  You put \ttxem{V}\textbf{1} to indicate
+that a bracket containing the number 1 should appear above the bar
+in question.  Since \PMX\ wants all such indications in the bottom
+voice only, they are deleted by the \MTx\ preprocessor if found
+elsewhere.   See Appendix \ref{voltas}.
+ \item{Key change:} Put \verb'K+0-2' in a music line where a \ixem{key} change
+to two flats should occur.  As with voltas, this indication is deleted
+if not in the bottom voice.
+\end{description}
+
+\subsection{Useful things to put on \ttxem{\%\%} lines}
+\label{usefulPMX}
+
+Most of the following commands should appear in the first music paragraph
+or on a \ttxem{PMX} preamble command line.
+Some of them are actually raw \ixem{MusiX\TeX} ---
+consult the MusiX\TeX\ manual for other interesting commands.
+\verb"%%" lines in the preamble are treated a little differently -- see 
+Appendix \ref{expert}.
+\begin{description}
+ \item{Line, page and movement breaks:}  
+Put \ttxem{\%\%L}\texttt{6} above a paragraph
+to make the 6th system start there, and \verb'%%L6P2'  to put that
+paragraph at the top of page 2.  You can't ask for a \ixem{page break}
+without a \ixem{line break}.  Use this feature only when necessary.  
+Put \verb'L10M+10i0.1' to make a new movement start at the 6th system,
+with 10 internotes of extra space between movements and an indentation
+of $0.1=10\%$ of the width.
+ \item{\verb"h260m"} Height is 260 millimetres.
+ \item{\verb"w8i"} Width is 8 inches.
+ \item{\verb"\\vsize 270mm\"} Height given to MusiX\TeX\ is 270 millimetres. 
+ \item{\verb"Ar"}  Use relative \ixem{accidentals}.  This requires a different 
+  way of coding flats and sharps ---think of \verb's' as meaning 
+  `sharpened' instead of `sharp'.  E.g.~if the key signature has one or 
+  more flats, then \verb'bs' means a B natural, \verb'bn' a B flat, and 
+  \verb'bf' a B double flat.   If you need to \ixem{transpose} music often, 
+  it is a good idea to acquire the habit of using relative accidentals 
+  always.  If you don't, only pieces in C major or A minor can be 
+  transposed without trouble. 
+ \item{\verb"As"}  Always use small \ixem{accidentals}.  Normally \PMX\
+uses big accidentals and only switches to smaller ones if there is a
+reason to do so.  You can also force all big accidentals by \verb"Ab."
+ \item{\verb"Ar K+1-3"}  Use relative accidentals and transpose the 
+  piece up one internote, to a key with three flats.  You can only 
+  \ixem{transpose} correctly when using relative accidentals! 
+ \item{\verb"\\stdbarrules\"}  This will cause bar lines to be 
+  drawn solidly \index{bar lines!solid}
+  from the top to the bottom of each system, maybe
+  cutting through lyrics in the process. 
+  \item{Midi commands}  \PMX\ can make MIDI files.  For example, if you put
+\begin{verbatim}
+PMX: Ii55:55t96b56:72v127:100
+\end{verbatim}
+in the preamble of \texttt`netsoos.mtx`, a MIDI file will be generated 
+in which both instruments (Soprano/Alto and Tenor/Bass) are played on 
+MIDI instrument number 54 (on my system this means `voices') at a tempo 
+of 96 quarter-notes to a minute, with MIDI balances of 56 and 72 (centre 
+is 64) and MIDI velocities of 127 and 100 respectively.  More details 
+appear in the \PMX\ manual.  
+\end{description}
+
+\section{How to get and use \MTx}
+
+There are such excellent tutorials available at \archiveSite\ that 
+this section is unnecessary. In every subsection, only a few random 
+remarks are left. You can safely skip it all. Just visit the website.
+
+\subsection{Installation and running} \label{Archive}
+
+On a Debian system (which also includes Ubuntu) you can simply
+install the \verb`m-tx` package with all its dependencies (which,
+if you do not yet have \TeX, is staggeringly much).
+
+If you need to compile from source, grab it from \repository\ and
+look for a file whose name starts with \verb`README`. You will
+need a Free Pascal compiler.
+ 
+Once you have all the software, make an \MTx\ file with extension 
+\dotxem{mtx} using your normal text editor.  It must be an \ixem{editor} that
+respects the line boundaries and empty lines that you type in: in other 
+words, something fairly primitive, not an upmarket word processor.
+
+Thanks to Bob Tennent, all the intermediate steps that you used to
+need are now unnecessary. There will be an executable file called
+\verb`m-tx` on your system so that simply invoking 
+\begin{verbatim}
+  m-tx jobname
+\end{verbatim}
+will take you all the way from \verb`jobname.mtx` to \verb`jobname.pdf`.
+
+You can do the seven steps separately. The first of them is running
+\verb`prepmx jobname`. After that, the command you will need is
+\verb`pmx2pdf jobname`, also courtesy of Bob Tennent.
+
+There are several options available for the first step, which can be 
+displayed by running \verb`prepmx -h`.
+
+The \texttt{prepmx} program exits with \ixem{return code} 0 if no error was 
+found, and return code $n$ if an error was found while processing line $n$ of 
+the input. 
+ 
+\subsection{Bugs, restrictions and incompatibilities} \label{limits}
+
+The status of bugs changes too quickly for this document.  Please 
+consult the files supplied with the package, in particular 
+\texttt{README.txt}, \texttt{Corrections} and \texttt{Bugs}.
+
+In \MTx\current\ a paragraph may not be more than 100 lines long, 
+an input line (including those in lyrics paragraphs) not more than 
+255 characters, a lyrics line in a music paragraph not more than 
+128 characters, and you may define a maximum of 12 extra style 
+elements of your own, whether in the preamble or in the 
+\ttxem{mtxstyle.txt} file.  It is possible to change these if you compile
+from source: they are clearly recognizable in \texttt{globals.pas}.
+
+\NEW{0.42} You can have up to 15 voices, using up to 15
+staves.  For each two-voice stave, the number of staves you can have goes
+down by 1. 
+
+Other limitations are described in the \PMX\ documentation. 
+
+\subsubsection{Compatibility}
+
+\MTx\ 0.61 accepts all scores that were valid under \MTx\ 0.60.
+Older scores may need tweaking.
+
+\subsubsection{Unsupported features of Musix\TeX\ and \PMX}
+
+Support or otherwise of Musix\TeX\ and \PMX\ features comes at three 
+levels:
+\begin{enumerate}
+ \item  The most frequently used features are transparently 
+incorporated into the basic \MTx\ language.
+ \item  The default action of \MTx\ is to pass through unchanged 
+anything it does not recognize.  Most \PMX\ and MusiX\TeX\ features 
+still work in this case.  For example, you can use \verb"\PED\"\NEW{0.51}  
+in front of a 
+note to obtain a \ixem{pedal} annotation below the stave, and \verb"\DEP\" 
+to get the big asterisk for pedal release.  This is an example of a ``Type 1
+\TeX\ string'' \index{TeX string@{\TeX\ string}!Type 1} as 
+described in the \PMX\ manual.  
+ \item  When a new \PMX\ feature affects aspects like count
+or pitch of which \MTx\ should be aware, it is likely to be
+incompatible with the preceding release of \MTx, although I do try
+to catch up later.
+\end{enumerate}
+
+Some pertinent aspects:
+\begin{enumerate}
+ \item \MTx\current\ does not recognize the macro features of \PMX.
+You should therefore not use PMX macros for notes or anything else that 
+affects the count, the duration, the current octave and other properties
+that are inherited by a note from the next.  But there is no harm in
+HIESA
+using macros for things like extra space.
+ \item \MTx\current\ is not aware of movement breaks and the possibility 
+to change the number of voices.
+ \end{enumerate}
+
+\subsection{For \PMX- and MusiX\TeX-perts only}  \label{expert}
+
+PMX has four mechanisms for incorporating raw \TeX. Apart from putting
+them inside music lines as in \PMX, they are supported in \MTx\ as follows.
+
+1. You can issue a command in the preamble starting with \verb`%%`.
+The rest of the line will be taken to be a Type 4 
+
+
+You can send commands directly to \ibxem{PMX}.  All lines starting with 
+\ttxem{\%\%} in music paragraphs are collected, stripped of the leading 
+\verb"%%" and passed otherwise uninterpreted to \PMX\ before anything 
+else from that paragraph is translated.  \NEW{0.41}  If such a line
+is found in a preamble paragraph, it is treated as a ``Type 4 \TeX\ string'',
+\TeX\ string'' \index{TeX string@{\TeX\ string}!Type 4}
+which means that it will eventually appear at the top of the \TeX\ file,
+after \texttt{musixtex.tex} and \texttt{pmx.tex} have been read in.  
+Such lines should \emph{not} end with \verb"\".
+An example appears in Appendix \ref{dirty}.
+As in \TeX, a line starting with only one \ttxem{\%} is treated as a 
+\ixem{comment}: such lines do not appear in the \PMX\ file. 
+
+If you ever need to pass through something involving stave or instrument 
+numbers, remember that \PMX\ and MusiX\TeX\ number these from bottom to
+top, not from top to bottom, and that the ``first voice'' in \PMX\ is the 
+\emph{bottom stave} to \MTx.  
+
+Apart from the conversion of lyrics and chord lines into \PMX\ commands 
+(which is the main job of \MTx) the notes are modified in various ways.
+\begin{itemize}
+  \item Octave is inserted into the first note of each voice, depending 
+on the \NEW{0.54} \texttt{Octave} command, or if none is supplied, 
+on the clef.  
+Absolute \ixem{octave} numbers are not recognized by \MTx\ and
+may cause unexpected side effects.  You can get something like absolute 
+octave numbers by combining \verb"=" with \verb"-" or \verb"-".  This
+may cause an irritating but harmless error message about backward 
+incompatibiliy at the PMX stage. 
+  \item If a line is vocal, an \ttxem{a} is inserted into quavers and 
+shorter notes when not under slurs, to protect them from being beamed. 
+  \item Duration codes are inserted into all notes and rests before any 
+serious processing is done.   
+  \item  Long/short note groups are expanded into separate notes.
+Although \PMX\ allows these shortcuts, lyrics
+cannot be properly synchronized unless the groups are expanded. 
+  \item  \PMX\ syntax allows great freedom in the order in which
+different parts of a node are coded.  \MTx\ is not aware of
+all the subtleties, but extracts only those parts of which it needs to
+be aware, and reassembles the note afterwards.
+    \item Labels in the range
+    \texttt{I} to \texttt{T} are inserted into unlabelled slurs and ties.  \NEW{0.55}  
+    You should therefore avoid those labels for slurs that you label yourself.
+  \item  Chord lines are expanded into standard \PMX\ code and inserted
+into the main line for each voice.
+  \end{itemize} 
+
+Other ways in which an \MTx\ score differs from a native \PMX\ score in 
+more than layout are: a bar line is \emph{required} for a \ixem{pickup}; 
+\ixem{repeat} bars 
+are coded by the \ABC\ symbols instead of \ttxem{Rl} etc.; you don't 
+need to insert a meter change for an incomplete \ixem{final bar}: 
+\MTx\ does it.
+
+All the ability of \PMX\ to pass through \TeX\ (including MusiX\TeX) 
+commands is still there.   You might for example like to read the 
+\ttxem{musixlyr} documentation for a large variety of ways to 
+fine-tune horizontal lyrics placement, but I can promise that you hardly 
+ever will need to do horizontal tuning except to align multi-verse lyrics as 
+in Section \ref{fine-tune-lyrics}.
+
+
+\pagebreak
+\section{Annotated examples}
+ \subsection{Voltas} \label{voltas}
+ \hskip -12mm
+\begin{mus}
+ \input volta.tex
+\end{mus}
+\verbatiminput{volta.mtx}
+The main rule is: put every \ttxem{V} command in the \emph{bottom} voice
+at the start of a measure,
+after the bar line (if any) but before the first note, and don't try
+to use more than one at a time: the new volta automatically closes the
+old one.  Volta signs in other voices are silently ignored.
+When reading the \PMX\ manual, remember that \emph{your} last part will 
+become the first part for \PMX. 
+
+In the above example \texttt{V1} starts a volta box, 
+but to get the first volta box to be closed at the end, you must later
+say \texttt{Vb}.  Also, to get the text \texttt{2} into the ``second ending" 
+box, you add the \texttt{2}
+after the \texttt{Vb} to make \verb"Vb2".  Finally, to make the second 
+box open ended, you must enter \texttt{Vx} at the point you want it to be 
+done.  (If you forget to enter the \texttt{Vx} after your last volta box, you 
+will get a strange unwanted volta box at the end of your piece.)  
+
+This example also illustrates the interplay between \ttxem{Space}
+and \ixem{\atsign} required for proper spacing of lyrics when there
+is stuff above the staves.
+\hfill --- \textsl{Contributed by Joel Hunsberger}
+
+\subsection{Music size} \label{sizes}
+
+\verbatiminput{title1.mtx}
+\begin{center}
+\begin{mus}
+ \input title1.tex
+\end{mus}
+\end{center}
+
+The above does not look quite right, for a complicated reason.
+A piece as a whole has a basic music size, and then each stave can have its
+own ``local'' size.  The local size affects everything on the stave itself,
+but not the annotations, ornaments etc.  The range of legal basic sizes 
+is quite small: \PMX\ allows only 16-point and 20-point.
+In this example, the basic size is 20-point and the local size 29-point.
+
+To get the perfectly matched annotations displayed on the title page of this
+manual, the 
+input looks like this:
+\verbatiminput{title.mtx}
+MusiX\TeX\ has four size commands relative the basic size (called 
+\verb"\normalsize"). These commands affect all music fonts.  They are:
+
+\hskip 15mm
+\begin{tabular}{lrr}
+\keyindex{smallmusicsize}  & 13pt  & 16pt \\
+\keyindex{normalmusicsize} & 16pt  & 20pt \\
+\keyindex{largemusicsize}  & 20pt  & 24pt \\
+\keyindex{Largemusicsize}  & 24pt  & 29pt
+\end{tabular}
+
+There is no \verb"\tinymusicsize", although several of the music fonts are 
+individually available in 11-point size.
+
+\pagebreak \subsection{A psalm tune} 
+\hskip -20mm \begin{mus} 
+ \input psalm42.tex
+\end{mus}
+\vskip 12pt
+\verbatiminput{psalm42.mtx}
+\begin{itemize} 
+  \item \verb"Meter: 0/2" indicates counting in half-notes, but no bar
+lines.
+  \item Line breaks in the \texttt{Title} are made by \verb"\\".
+\end{itemize}
+
+\pagebreak
+\subsection{Beams, slurs and melismas}  \label{melisma}
+
+%  Macros for music examples
+
+\example{melisma1}{mtx}{60mm}{4mm}{90mm}{-5mm}{c}{5mm}
+
+\example{melisma2}{mtb}{60mm}{4mm}{90mm}{-10mm}{b}{5mm}
+
+\example{melisma3}{mtb}{60mm}{4mm}{90mm}{-10mm}{b}{5mm}
+
+\example{melisma4}{mtb}{60mm}{4mm}{90mm}{-15mm}{b}{5mm}
+
+\example{melisma5}{mtb}{60mm}{4mm}{90mm}{-10mm}{b}{5mm}
+
+\example{melisma6}{mtb}{60mm}{4mm}{90mm}{-15mm}{b}{5mm}
+
+\bigskip\bigskip
+
+Some points to note: Example 1 uses a slur with default PMX beaming, 
+Example 2 uses forced beaming to beam all notes, 
+Example 3 does both.  Examples 4 and 5 violate the \MTx\ convention
+that notes sung to a single syllable must be slurred or beamed together,
+so we override this in either of two ways using \texttt{musixlyr}
+commands.  Example 4 uses \verb"\beginmel" and \verb"\endmel"
+to force melismas in a situation where \verb"[[" has suppressed them;
+this method is good for long melismas
+over several beamed components.  Example 5 suppresses lyrics where
+the beaming would have put them.  
+Example 6 uses \verb"\lyr" to force lyrics where the beaming
+would have suppressed them, and shows the use of empty
+syllables to synchronize lyrics and of broken slurs to indicate different
+slurring in the two verses.
+\hfill --- \textsl{Suggested by Stefan Haller}
+
+\pagebreak
+\subsection{Dirty Tricks} \label{dirty}  \NEW{0.41}
+
+\verbatiminput{meter.mtx}
+\begin{center}
+\begin{mus}
+ \input meter.tex
+\end{mus}
+\end{center}
+
+These are bars 7--9 of the \emph{Credo} from \emph{Misa Criolla}
+by Ariel Ram{\'\i}rez.  It is in the \emph{chacarera trunca} meter, which
+mixes $\frac34$ and $\frac68$ time.  There is no \PMX\ construction for 
+such \ixem{exotic meters}, so we need to be ingenious.  
+
+We specify the meter as \verb"m3406"
+which tells \PMX\ to use $\frac34$ meter but to print the C symbol for common
+time.  Of course we do not actually want the C symbol, we want something
+that looks like $\frac34(\frac68).$  Now all that \PMX\ knows about the C 
+symbol is that it is called \verb"\meterC" in MusiX\TeX.  So we define
+\verb"\chacarera" and assign it to
+\verb"\meterC" in preamble \verb"%%" commands. These appear in the \TeX\
+file after the command to read in \texttt{musixtex.tex} but before the 
+commands that actually print something.   If later we need the original
+\verb"\meterC" it can be restored by \verb"\let\meterC=\oldmeterC".
+
+The excerpt illustrates some sophisticated \PMX\ features too.
+Since the \verb">" ornament on the bottom stave 
+goes above the stave by default, we
+need to move it down explicitly.  The beamed eighths look better with
+a horizontal beam, which is enforced by \verb"[h."  Finally, there is
+a tie involving a melodic note with a note in a chord; to allow this, 
+the chordal note must
+come on a music line, not on a \texttt{C:} line.
+\pagebreak
+
+\subsection{Extra text after the piece} \label{extra}  \NEW{0.50}
+
+\verbatiminput{borup.mtx}
+
+
+When typesetting a vocal composition you may sometimes want to put only the
+text of the initial stanza into your score and let the remaining part of the
+lyrics be printed below the score. You might also want to add some notes or
+comments.
+
+Apparently this is not possible according to the set of commands available
+for \MTx\ and \PMX. There is, however, a workaround to do things like
+that. The trick is to look for a command \keyindex{Endpiece} or --- as in
+this example --- \verb'\setrightrepeat\endpiece' near the bottom of the
+MusiX\TeX\ file generated by the \PMX\ preprocessing. You may extend the
+actions of \verb'\Endpiece' (or \keyindex{endpiece}) by saving the command
+with another name (\verb'\endpiecesav') and redefine \verb'\Endpiece'
+to first execute \verb'\endpiecesav' and then request the inclusion of
+one or more files containg plain \TeX\ code. The text of the included
+file(s) will be typeset on unutilized space on the last page or else on
+a new page.
+
+MusiX\TeX\ commands like these may --- as noted in Appendix \ref{usefulPMX}
+--- be put directly into the mtx source file in \verb"%%"-lines at the
+head of the first music paragraph.
+
+In the current example two files have been included. \texttt{lyrics.tex}
+contains the original Latin lyrics and an English translation. A \TeX\
+table\footnote{See Michael Doob: A Gentle Introduction to \TeX, section
+6.2. The book may be found as \texttt{gentle.tex} in the Documentation
+subdirectory of the \TeX\ CTAN mirror archives.} consisting of a template
+line followed by item lines for each lyrics line has been used to set
+up the text in two columns - one for the lyrics and one in italics for
+the translation. Notes on the song is included from \texttt{notes.tex}
+and appended below the lyrics.
+\hfill --- \textsl{Contributed by Christian Mondrup, following a hint by
+Werner Icking}
+
+\verbatiminput{notes.tex}
+\pagebreak
+
+\verbatiminput{lyrics.tex}
+
+\hskip -20mm
+\begin{mus}
+ \input borup.tex
+\end{mus}
+
+\pagebreak
+
+\section{\MTx\ and \LaTeX}  \NEW{0.54}
+
+\textit{This section assumes that you have some knowledge of 
+\LaTeX.}
+
+The normal output from \PMX\ is a stand-alone plain \TeX\ file, which 
+cannot without further ado succesfully be input into \LaTeX.  
+The file \ttxem{mtxlatex.tex} allows you to prepare music scores using
+\LaTeX\ rather than plain \TeX, which is particularly useful when you 
+need the enhanced font handling features of \LaTeX, and to produce
+books combining the outputs of several \PMX\ runs into a single
+document, such as a collection of songs, or a mainly text document
+ (like this one) with many small music excerpts.
+
+Two points apply to all cases:
+\begin{enumerate} 
+  \item Order of inclusion of packages is important.  \texttt{mtxlatex}
+    must be the first package included, before any font packages.
+  \item It is easy to incur \ttxem{TeX capacity exceeded}.  For
+example, the index to this manual is a separate document because
+package \texttt{multicol} won't load on top of all the others.
+If you wish to do large scores, it is probably advisable to change 
+\texttt{texmf.cnf} so that \verb"save_size = 10000" and run
+\texttt{initex}.
+\end{enumerate}
+
+\subsection{Collections of complete pieces}
+
+Suppose you need to make a document containing several complete
+pieces, with
+perhaps a title page, a foreword and an afterword, like a typical
+published book of piano pieces or songs.  
+\begin{enumerate}
+  \item Prepare a \texttt{.tex} file for each separate piece, using the methods
+described previously, and be sure that it is fully debugged and looks
+the way you want it, using the standard \texttt{tex-musixflx-tex}
+compiling cycle.
+  \item Write a \LaTeX\ file looking something like this:
+\verbatiminput{hallelujashort.ltx}
+  \item Use a \texttt{latex-musixflx-latex}
+compiling cycle to make the finished document.
+  \item If you make small changes in the \LaTeX\ part only, a single
+\LaTeX\ pass is sufficient, unless the page numbering has changed.
+\end{enumerate}
+You can see the finished product in \texttt{halleluja.pdf}.
+Some points to note: 
+\begin{itemize}
+  \item The package \texttt{mtxlatex} comes with \MTx.
+You must put the command \keyindex{mtxlatex} in the preamble.
+  \item The package \texttt{times} comes with standard distributions.
+You could use any \LaTeXe\ font package here.  The \texttt{times}
+font is quite narrow and therefore useful when the lyrics are crowded. 
+If you do use a font a package, load it \emph{after} \texttt{mtxlatex}. 
+  \item \verb"\pagestyle{headings}" puts page
+numbers and running headings at the top of the page.
+  \item To change fonts, use pure \LaTeXe\
+\ixem{font change} commands, as above.  Don't try to use \verb"\it", \verb"\bf"
+etc.  Briefly, subject to what fonts you have installed,
+you can independently change:
+  \begin{description}
+   \item[size]  \verb"\tiny",
+      \verb"\scriptsize", \verb"\footnotesize", \verb"\small",
+      \verb"\normalsize", \verb"\large", \verb"\Large", \verb"\LARGE",
+      \verb"\huge", \verb"\Huge";
+   \item[shape] \verb"\upshape", \verb"\itshape", \verb"\slshape", 
+     \verb"\scshape"; 
+    \item[family] \verb"\rmfamily", \verb"\sffamily", \verb"\ttfamily";
+    \item[series] \verb"\mdseries", \verb"\bfseries". 
+  \end{description}
+For a full description, see any good \LaTeXe\ manual.
+  \item  The blank line after \verb"\pagebreak" is essential.
+  \item  The environment \ttxem{Score} is used to include each piece.
+It takes two arguments: the first will appear in the list of
+contents and as a running page heading; the second is the name
+of the \texttt{.tex} file.  As usual, the extension \texttt{.tex}
+may be omitted.  There is also an environment \ttxem{score}
+which is less convenient but more flexible: it has no arguments,
+reads in nothing, puts nothing in the table of contents, and
+does not change the running page heading.  Use it when you need
+a special lyrics font, e.g.
+\begin{verbatim}
+\begin{score} \headingandcontents{Loof nou die Heer}
+  \sffamily \input loofnou 
+\end{score}
+\end{verbatim}
+\end{itemize}
+
+\subsection{Collections of morsels}
+
+The situation is a little different when the pieces are so short
+that more than one of them fit on one page.  For these, use the
+environment \ttxem{excerpts}, as in the following example:
+\verbatiminput{kanons.ltx}
+The rest of the procedure is the same as for collections of longer
+pieces.
+You can see the finished product in \texttt{halleluja.pdf}.
+Some points to note: 
+\begin{itemize}
+  \item The \texttt{excerpts} environment redefines the heading fonts
+to more modest sizes.
+  \item A page break should be made before quitting the environment.
+  \item The pieces do not have bar numbers, but space should be reserved
+for the numbers that show where the voices enter.  This is done
+by redefining the \keyindex{writebarno} command.
+\end{itemize}
+
+\subsection{Documents with small music excerpts}
+   
+This manual relies heavily on the \ttxem{mus} environment.  
+For example, the 
+musical emblem on the front page was set using the commands
+\begin{verbatim}
+\begin{center}  
+  \framebox[5in]{\parbox{3.6in}{
+    \begin{mus} \input title.tex \bigskip \end{mus}
+  }}        
+\end{center}
+\end{verbatim}
+Some points to note: 
+\begin{itemize}
+  \item  The excerpts vary in length and some experimentation is
+required to get the dimensions and positioning just right. 
+  \item  Putting the \texttt{mus} environment inside a \texttt{center}
+environment only works when the music line is not longer than the text.
+Otherwise, it is useful to use \verb"\hskip", as in the case of the
+first example in the manual:
+\begin{verbatim}
+\hskip -18mm
+\begin{mus}
+\input mozart0.tex
+\end{mus}
+\end{verbatim}
+For this technique to work properly, it is essential that the above four
+lines form a paragraph of their own, i.e.\ they are preceded and
+followed by blank lines.  
+\end{itemize}
+
+Appendix \ref{melisma} was produced using the command \keyindex{example}.
+This is a rather complicated macro with eight parameters, which is
+documented at the end of the file \ttxem{mtxlatex.sty}.
+ 
+\section{Overriding predefined \TeX\ commands}  \NEW{0.54}
+
+\textit{This section assumes that you are an experienced \TeX\
+user. }
+
+The logical structure of \TeX\ is such that most of the time, a command used
+in a definition need not exist at the time that the definition is made,
+as long as it is defined by the time that the definition is used.  This
+behaviour is known to computer programmers as \emph{run-time binding}.
+
+We have already met examples of how to exploit this feature in Sections
+\ref{dirty} and \ref{extra}, where respectively \verb"\meterC" and
+\verb"\Endpiece" were redefined. 
+The macros of the previous section also work in that way, by locally
+(i.e.\ inside the various environments) redefining commands that appear
+in the \TeX\ file generated by \PMX.
+
+The technique is an extremely powerful and flexible one, and in the
+hands of an expert can achieve practically any desired result.  
+Here we can only scratch the surface.  One point to note is that
+good programming practice requires that you save the current meaning
+of the command and restore it later, e.g.
+\begin{verbatim}
+  \let\commandsave\command\def\command{...}
+  ...
+  \let\command\commandsave
+\end{verbatim}
+In \LaTeX, if you redefine a command inside an environment, the saving and
+restoring is automatic.
+
+\subsection{Changing fonts}
+
+The font used for lyrics is the default text font of the moment,
+which usually is ten-point roman.
+It can be changed globally, e.g. 
+\verb"%% \twelverm" in the preamble will change the font to
+twelve-point.  When using \LaTeX, you can use font-changing commands
+inside the environment to change the lyrics font only for that
+particular piece.
+
+The fonts used for titles and other items in headers are respectively 
+called \keyindex{BIGfont} and \keyindex{Bigfont}.  In \verb"mtxlatex.sty"
+they are redefined as follows:
+\begin{verbatim}
+\renewcommand{\BIGfont}{\Huge\bfseries}
+\renewcommand{\Bigfont}{\Large} 
+\end{verbatim}
+If you are not using \LaTeX, they can be redefined in two ways:
+\begin{itemize}
+  \item You can simply assign an existing font, e.g.\ to get
+ somewhat smaller fonts,\\
+\verb"  \let\Bigfont\bigfont\let\BIGfont\BIgfont"
+  \item You can define the font explicitly, e.g.\ \\
+\verb"  \font\BIGfont=cmss9 scaled \magstep4"
+\end{itemize}
+
+\subsection{\Large \texttt{mtx.tex}}  \label{mtxtex}
+
+The \MTx\ preprocessor, as far as possible, issues commands starting
+with \verb"\mtx" instead of direct \TeX\ commands.  The main purpose
+for so doing is that the user can modify their effect by redefining
+them in the source file.  These macros, together with a few others
+that make life easier, are collected in the file \ttxem{mtx.tex}.
+
+Documentation of these commands can be found at the end of the file
+\texttt{mtx.tex}. 
+
+%\pagebreak
+
+%\printindex
+\end{document}  
+
+\endinput
+
+so it is a good idea to use \texttt{musixlyr} commands 
+for left-alignment (\keyindex{llyr}) and horizontal shift
+(\keyindex{lyroffset}) on the corresponding music line, for example:
+\begin{verbatim}
+\llyr\lyroffset{-2}\ d | g g ( a8 b ) | g4 g ( b8 c ) | d4 d e | c2
+L: 1. A-way in a man-ger, no crib for his bed,
+L: 2. The stars in the bright sky looked down where He lay.
+\end{verbatim}
+

@@ -1,0 +1,6 @@
+target = pdf
+latex = pdflatex
+concat = gs
+
+%.ps: %.pdf
+	pdf2ps $*.pdf $*.ps 

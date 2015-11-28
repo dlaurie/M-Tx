@@ -1,0 +1,144 @@
+Title: Kroon Hom!
+Flats: 2
+Style: SATB
+Pages: 3
+Systems: 14
+Space: 0 4
+% %\font\tensf=cmss10 \tensf
+
+%% h280m w193m 
+% 0
+f | b2 r4 b | d2 r4 d | { f0 | f2 } r4 || f- | fd f8 [ g a ] [ b c ] | 
+L: Kroon Hom, kroon Hom, kroon Hom! Rond-om die troon van 
+f | d2 r4 f | g2 r4 g | (-4 b2 a4 g | a2 )-4 r4 || c- | dd d8 e4 e | 
+f | b2 r4 d | d2 r4 d | (+2 d2 c4 b | c2 )+2 r4 || f- | bd b8 b4 b | 
+f | b2- r4 b+ | b2 r4 b | { f0 | f2 } r4 || a- | b2 e4 g | 
+
+% 5
+d4 d d e | d [ c8 b ] c4d b8 | b2d b4 | 
+L: God om-hoog juig steeds 'n men-se-skaar, 'n 
+f fs g g | f f fd f8 | f2d b4 | 
+b c b c | b b a a | b0 | 
+b a g c- | f f f e | (-6 d f8 e d c )-6 d4 |
+
+% 10
+[ a8 g ] [ a b ] c4 c | [ b8 a ] [ b c ] d4 [ c8 b ] | [ a b ] c4 a g | 
+L: skaar ver-los van sond' en skuld.   En kroon Hom as u 
+f f f fs | g g g g | f f f e | 
+c2 a4 d | c2 b4 c | c a c b | 
+@-6 e2 e4 d | g2d e4n | f2 c | 
+L: skaar los van sond', en kroon Hom
+
+% 13
+f2d |: f4 | [ b8 c ] [ d c ] b4 f | g2d g4 | [ c8 d ] [ e d ] c4 g | a2d f4 | 
+L: Heer, en kroon hom as u Heer, en kroon Hom as u Heer. Bring 
+c2d |: [ f8 e ] | [ d e ] [ f e ] d4 d | e2d f4r | [ e8 f ] [ g f ] e4 e | f2d f4 | 
+a2d |: f4 | f b f b | b2d b4n | c c g c | c2d a4 | 
+fd |: f4 | b2d- b4 | [ e8 f ] [ g f ] e4 d | c2d c4 | [ f8 g ] [ a g ] [ f g ] [ f e ] | 
+L: Heer, en kroon, en kroon Hom as u Heer, kroon Hom as Heer. Bring
+                       
+% 18-19
+b c d e | fd b8- a4 g | fd f8 [ a g ] [ f e ] | 
+L: lof en dank en prys sy Naam en kroon Hom as u 
+g a b b | bd f8 f4 cs | dd d8 e4 c | 
+b f+ f e | bd b8 b4 b | bd b8 [ c b ] a4 | 
+d4 f b g | dd d8 e4 en | fd f8 f4 [ f8 fs ] | 
+
+% 20-23
+d2d f4 | (+6 g c8 b a4 d8 c | b4 e d )+5 c |
+L: Heer. En kroon Hom 
+b2d f4+ | (-2 e g f a | b c b )-2 g | 
+b2d b4 | (+6 b e8 d c4 f8 e | d4 f2 )+4 e4 |
+g4 g- (-8 g8+ f e d | e d c4 f8 e d4 | g a b )-6 e- | 
+L: ~ En kroon Hom
+
+% 24-
+%%L5
+b2 a | bd :| d4 | dd d8 c4 b a g fsd d8 g4 a b c d2d r4
+L: as u Heer. Be-lof-te van die We-der-koms en Voor-spraak van die Gees
+f2 f | fd :| f4s | g4d g8 g4 g en e dd d8 | d4 d d g | f2sd r4
+d2 ( c4 e ) | d2d :| d4 | b b c c cs c d [ a8 fs ] | g4 fs g g | a2d r4
+f2 f2 zf- | b2d :| d4 | g g e g a a d- d | b a g e+ | d2d r4
+
+d c8 b a4 g c f- en d [ c8 f ] [ g a ] g4d f8 f2d r4
+g g8 g f4 en f c c cr c c end c8 c2d r4
+L: laat mens (en) skep-ping hoop-vol wag om e-wig vry te wees.
+b c c c c f- g g f en c+ b a2d r4
+g en f [ c8 b ] a4 a c b a b c c f2d r4 
+
+fs8 f4 f8 g4 g a a8 a b4 b c8 c4 c8 b4 c d2d d4 dd d8 d c b af 
+d8 d4 d8 d4 d d d8 d d4 f f8 f4 f8 f4 f f2d f4s g4d g8 f e d f 
+L: Een-maal word kaf en ko-ring ge-skei.  Hy sal ons in vre-de lei. Werp al jou sor-ge voor Hom 
+a4 a g2 fs g4 b a a b a b2d a4 b b ad b8 | 
+d c b2 a g4 d+ f e d c b2d d4 g g b- b | 
+L: Een-maal kom Hy weer, hy sal in vre-de lei. Werp al jou sor-ge
+
+g2d g4 ad g8 fs4 g a2d of f4
+e2d e4 en e d d d2d f4
+L: neer, (en) kroon Hom as u Heer.  En
+b0 | a4 a a g fs2d fn4
+e0 | cs4 c [ d8 cn ] b4 a2d ofd f4+
+
+[ b8 c ] [ d c ] b4 f g2d g4  [ c8 d ] [ e d ] c4 g a2d f4 
+[ d8 e ] [ f e ] d4 d e2d f4r [ e8 f ] [ g f ] e4 en f2d f4 
+L: kroon Hom as u Heer, en kroon Hom as u Heer.  Bring 
+f b f b b2d bn4 c c g c c2d a4 
+b2d- b4 [ e8 f ] [ g f ] e4 d c2d c4 [ f8 g ] [ a g ] [ f g ] [ f e ] | 
+L: kroon, en kroon Hom as u Heer, kroon Hom as Heer. Bring
+
+b c d e fd b8- a4 g fd f8 [ a g ] [ f e ]
+f a b b bd f8 f4 cs dd d8 e4 c
+L: lof en dank en prys sy Naam en kroon Hom as u
+b f+ f e bd b8 b4 b bd b8 [ c b ] a4
+d4 f b g | dd d8 e4 en | fd f8 f4 [ f8 fs ]
+
+d2d f4 (+8 g c8 b a4 d8 c b4 e d )+6 c b2 c
+L: Heer. En kroon Hom as u
+b2d f+4 g [ c8 b ] a4 [ d8 c ] b4 e d f- f2 en
+b2d f4  g [ c8 b ] a4 [ d8 c ] b4 e d c d2 ( c4 b )
+g2d f4  (-2 g c8 b a4 d8 c b4 e d )-6 a g2 c-
+
+fd- f4 fd f8 [ g a ] [ b c ] d4 d d e d [ c8 b ] c4d b8 
+fd c4 dd d8 e4 e f fs g g f f f f
+L: Heer.  Laat al-le men-se, el-ke volk op hier-die aard U 
+a2d f4 b b b b b c b c b b a a
+f2d a4- b b e g b a g c- f f f e
+
+b2d b4 [ a8 g ] [ a b ] c4 c 
+f2d f4 f f f fs 
+L: loof.  Aan Hom die eew'-ge 
+b2d b4 c c a d 
+( d f8 e d c )-6 d4 e e e d 
+
+[ b8 a ] [ b c ] d4 b [ a8 b ] c4 a g
+g g g g f f f en
+L: lof en eer, en kroon Hom as u        
+d d b c c a c b
+g2d en4 f2 c
+L: lof, en kroon Hom
+
+f2d g4  [ a8 b ] [ c d ] e4 en f2d of f4-
+c2d f4r [ f8 g ] [ a b ] a4 b a2d d4-
+L: Heer.  En kroon Hom as u Heer.  O 
+a2d b4 f+ f f c c2d b4
+f2d g4 [ c8 d ] [ c b ] c4 c f2d- ofd b4-
+
+b b b c d [ c8 b ] c4 f- g f8 e d4 f
+f g f f f en f f e b8 b b4 c 
+L: die wat uit-ver-ko-re is, kom skaar jul-le voor sy 
+b b b a b b a b b b8 g f4 a
+d e d f b g f d e d8 e f4 f 
+
+b2d f4 b b b c d [ c8 b ] c4 f- b2 b d d
+d2d d4 f f f f f en f [ f8 ef ] [ d e f g ] f2 ( g4d a8 ) b2
+L: voet.  Voeg al-mal saam in eew'-ge sang, en kroon Hom, kroon Hom,
+b2d b4 b b b a b g a a b2d [ d8 c ] [ b c d c ] [ b c d e ]
+b2d- b4 d e d f b- c f f [ b8- c d e ] [ d f b a ] [ g a b a ] [ g a b c ]
+
+f f d e d c b0 b b of
+@+2 b2 b b g b f f0 g f 
+L: kroon Hom, kroon Hom, as u Heer! A-men.
+f2 d f e [ f8 d c b ] a2 d0 e d
+%[ d b a g ] [ f e d c ] [ b c d b ] [ e b d e ] f2 f zf- b0 e b ofd
+[ d b a g ] [ f e d c ] [ b c d b ] [ e b d e ] f2 f zf- b0 e b ofd 
+

@@ -1,0 +1,9 @@
+Style: PianoBass
+PianoBass: Voices RH LH; Clefs F F; Continuo
+Meter: C/
+Flats: 1
+
+   f2 g4 e  | f2 a4   a | a2  f4 e | f2 f4 e | f2 g4 e | f2 a4   a | a2  f4 e |
+C: ad bd gd+ ad gle+ f+ gle+ ad acs ad d+ gd+ ad bd gd+ ad gle+ f+ gle+ ad acs
+   d2 d4 d  | d2 d4   a | a2  a4 a | a2 d4 d | d2 d4 d | d2 d4   a | a2  a4 a |
+C: d- d- d-   d- d-   d   a-  a- a-  d- d- d-  d- d- d-  d- d-   d   a-  a- a-

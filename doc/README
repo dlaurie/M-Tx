@@ -1,0 +1,115 @@
+M-Tx Documentation Package
+==========================
+
+This is the development version of the M-Tx documentation.  It contains
+all the sources for generating the Users's Manual (`mtxdoc.pdf`), its 
+index (`mtxindex.pdf`), both together (`mtx.pdf`) and two sample music 
+documents (`halleluja.pdf`, `kanons.pdf`). 
+
+I'm assuming a fairly recent TeX installation that has Bob Tennent's driver 
+programs `musixtex` and `m-tx`. TeXLive 2013 will do. If you install via 
+`apt-get`, the `m-tx` package will install all the prerequisites too. 
+'pdftk' will be used if available but you can get by without it.
+
+Everything after the "Quick Start" section is outdated. 
+
+Dirk Laurie `<dirk.laurie@gmail.com>`
+
+Quick Start
+-----------
+
+You probably got this code in one of two ways (`061` may be different):
+
+    unzip -a mtxD061.zip
+
+    git clone https://github.com/dlaurie/M-Tx
+
+In either case, your working directory must be the one containing this 
+file. If you have GNU make, issue the command
+
+    make
+
+Messages will flit by, hopefully ending in
+
+    Output written on mtxindex.pdf (3 pages, 54045 bytes).
+    Transcript written on mtxindex.log.
+
+and a new copy of the file mtx.pdf will be available.
+
+To make the examples, respectively do
+
+    make halleluja
+    make kanons
+
+If you do not have GNU Make, execute the commands found at the top
+of the Makefile by entering them in a command shell.
+
+Using the Makefile instead
+--------------------------
+
+There is legacy code in the Makefile for making `dvi`, `ps`, or `lj`
+options of the documentation files. This code does not require the 
+aforementioned driver programs.
+
+Via DVI files
+-------------
+
+You can make any of the four file formats. Type
+
+  make dvitarget && make config
+
+to configure the option.  Make sure that everything looked for was found.
+You can then choose between:
+
+  make	      Makes mtx.dvi (and mtxdoc.dvi, mtxindex.dvi on the way there)
+  make all    Make .dvi files.  
+  make ps     Make .dvi and .ps files
+  make pdf    Make .dvi, .ps and .pdf files
+  make ?.lj   Make the specified .lj file
+
+Via PDF files
+-------------
+
+Type
+
+    make pdftarget && make config
+
+to configure the option.  Make sure that everything looked for was found.
+You can then choose between:
+
+---------   --------------------------------------------------------------
+make	    Makes mtx.pdf (and mtxdoc.pdf, mtxindex.pdf on the way there)
+make all    Make .pdf files.  
+make ps     Make .pdf and .ps files
+---------   --------------------------------------------------------------
+ 
+You don't have the option of making .dvi or .lj files.
+
+FAQ - Frequently Asked Questions
+-------------------------------- 
+
+1. I get "make: ./prepmx: Command not found".
+
+   A: You have omitted the `make config` step.
+
+2. I have configured, but the make still fails.
+
+   A: Look at the screen output from `make config`.  Make sure that
+      there is a file name after each `...`.
+
+3. Is there any difference between the `.pdf` and `.ps` files made by the
+   two options?
+
+   A: Yes.  If you go by the second route, slurs tend to look smoother
+      and certain additional slur shapes are possible; see the PMX manual.
+      Also, the two versions look a little different on a low-resolution 
+      monitor, but apart from slurs, should be virtually indistinguishable
+      when printed.
+
+4.  What are the prerequisites?
+
+   A: You need to have MusiXTEX, PMX, musixlyr and M-Tx already installed.
+      If all that does not give you Ghostscript, you can still build 
+      everything except `mtx.pdf`. 
+
+

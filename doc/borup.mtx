@@ -1,0 +1,20 @@
+Meter: 3/4
+Title: Song of May
+Flats: 1
+Style: Singer
+Systems: 2
+Space: 10
+
+%% \\let\endpiecesav\endpiece\
+%% \\def\endpiece{\endpiecesav\input lyrics \input notes}\ 
+( d4 e ) g | ( d e ) g | ( f e ) f | d2 r4 |
+L: In ver-na-lis tem-po-ris
+L: Dum re-ces-sum fri-go-ris
+
+( f g ) a | ( a g ) f | g2d | g2 r4 :|: g2 d4+ | d2 d4 | ( d c ) b | a2 r4 |
+L: or-tu lae-ta-bun-do, ter-rae, ma-ris, ne-mo-ris
+L: nun-ti-at hi-run-do, vi-gor re-dit cor-po-ris,
+
+g2 a4 | ( b a ) g | ( f e ) f | d2 r4 | ( f g ) a | ( a g ) f | g2d | g2 r4 :|
+L: de-cus ad-est de-fo-ris re-no-va-to mun-do,
+L: ce-dit do-lor pec-to-ris tem-po-re iu-cun-do.

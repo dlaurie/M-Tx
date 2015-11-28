@@ -1,0 +1,10 @@
+Style: Piano
+Meter: m3406
+%% \def\upiii#1{\raise3\internote\hbox{{#1}}}
+%% \def\chacarera{\meterfrac34\upiii{\Big(}\meterfrac68\upiii{\Big)}}
+%% \let\oldmeterC=\meterC  \let\meterC=\chacarera
+
+%% w100m
+a-2d o> a8 r r a r r a2d o> |
+C: dfsa cea cea dfsa 
+d-2d o>-15 a4 a { [h d8 {u d+ ] d2d } zd- } |

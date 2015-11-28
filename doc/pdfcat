@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# pdfcat.sh
+# Thanks to Christian Mondrup for this script
+
+FILENAME=`basename $0`
+
+USAGE="Usage: $FILENAME [-a (A4 paper)] -o outputfile -i \"inputfile1 inputfile12 ...\""
+
+if [ $# -le 3 ]
+then
+    echo $USAGE
+    exit 2
+fi 
+
+GSARGS="-q -dNOPAUSE -dBATCH -dSAFER -sDEVICE=pdfwrite"
+
+while getopts "i:o:a" ARG_STRING
+do
+    case $ARG_STRING in
+    a)	GSARGS="-sPAPERSIZE=a4 $GSARGS"
+        ;;
+    i)  INPUTFILES=$OPTARG
+	;;
+    o)	OUTPUTNAME=$OPTARG
+	;;
+    *)	echo $USAGE
+	exit 2;;
+    esac
+done
+
+gs $GSARGS -sOutputFile=$OUTPUTNAME $INPUTFILES

@@ -1,0 +1,18 @@
+\documentclass[11pt]{article}
+\input musixtex
+\usepackage{a4wide,mtxdoc,multicol,charter} 
+\def\LBR{{\tt\char'173}}                
+\def\Bslash{\tt\char'134} 
+\def\Flat{{\musixfont\char'062}}
+\def\Sharp{{\musixfont\char'064}}    
+\def\mtxSharp{\mbox{\raise1ex\hbox{\Sharp}}}
+\def\mtxFlat{\mbox{\raise1ex\hbox{\Flat}}}    
+\begin{document}
+\setcounter{page}{1}
+\pagebreak
+\renewcommand{\thepage}{I-\arabic{page}}
+If you can't find what you need here, also try the Table of Contents.
+Other sources of help are listed in Appendix A. 
+
+\input mtxdoc.ind
+\end{document}

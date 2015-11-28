@@ -1,0 +1,16 @@
+target = dvi
+latex = latex
+concat = dviconcat
+
+%.lj: %.dvi
+	dvicopy $* xxx
+	dvilj -e$*.lj xxx
+	rm xxx.dvi
+
+%.pdf: %.ps
+	ps2pdf $*.ps
+
+%.ps: %.dvi
+	dvips -D 600 $* -o $*.ps 
+	
+
