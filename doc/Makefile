@@ -6,8 +6,19 @@ kanons:
 	texlua buildmtxdoc.lua kanons
 PHONY: default hallelua kanons
 
-############################################################################
+support = docversion Makefile make-dvi make-pdf make-target pdfcat \
+  buildmtxdoc.lua mtxproject.lua
 
+Dzip: 
+	- @zip -ju mtxD`./docversion` $(sources) $(support) README
+
+bare:
+	rm $(examples) $(halleluja_pieces) $(kanons_pieces) *.dvi *.lj *.ps *.pdf\
+     dwoman.mtx netsoos?.mtx melisma?.mtx *.mx? *.ind *.idx *.ilg *.toc *.aux *.log *.pm?
+
+############################################################################
+##    Everything below this box must be thought of as unmaintained code   ##
+############################################################################
 
 PREPMX = ../prepmx
 include make-target
@@ -113,15 +124,6 @@ mtx.pdf: mtxdoc.pdf mtxindex.pdf
 mtx.dvi: mtxdoc.dvi mtxindex.dvi
 	dviconcat -o mtx.dvi mtxdoc.dvi mtxindex.dvi
 
-support = docversion Makefile make-dvi make-pdf make-target pdfcat \
-  buildmtxdoc.lua mtxproject.lua
-
-Dzip: 
-	- @zip -ju mtxD`./docversion` $(sources) $(support) README
-
-bare:
-	rm $(examples) $(halleluja_pieces) $(kanons_pieces) *.dvi *.lj *.ps *.pdf\
-     dwoman.mtx netsoos?.mtx melisma?.mtx *.mx? *.ind *.idx *.ilg *.toc *.aux *.log *.pm?
 
 
 

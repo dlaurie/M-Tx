@@ -1,0 +1,8 @@
+Style: Singer
+Meter: C
+Start: @+2
+ 
+%% w2i
+%% \\let\BM\beginmel\let\EM\endmel\
+[[ \BM\ c8 d1 e1 ] [[ d8 e1 \EM\ f1 ] e2 |
+L: A-men
