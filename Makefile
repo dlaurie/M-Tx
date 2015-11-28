@@ -1,7 +1,7 @@
 pasfiles = globals.pas mtx.pas preamble.pas lyrics.pas analyze.pas mtxline.pas\
   status.pas uptext.pas prepmx.pas files.pas notes.pas multfile.pas \
   strings.pas utility.pas control.pas
-sfiles =  mtx.tex mtxdoc.tex mtxdoc.pdf Makefile Corrections Bugs MAINTENANCE
+sfiles =  mtx.tex mtxdoc.pdf Makefile Corrections Bugs MAINTENANCE
 
 SYSTEM=LINUX
 
