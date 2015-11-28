@@ -1,9 +1,0 @@
-This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
-Scanning input file mtxdoc.idx....
-!! Input index error (file = mtxdoc.idx, line = 215):
-   -- Incomplete first argument (premature LFD).
-done (333 entries accepted, 1 rejected).
-Sorting entries......done (3127 comparisons).
-Generating output file mtxdoc.ind....done (326 lines written, 0 warnings).
-Output written in mtxdoc.ind.
-Transcript written in mtxdoc.ilg.
