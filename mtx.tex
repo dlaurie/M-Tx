@@ -167,6 +167,8 @@
 
 % Commands taken from André van Ryckeghem's mypmxdef.tex
 % Page layout: Letter/A4, A4 only, Letter/A4 centered, A3 
+% Use only with plain TeX: these do not interact seamlessly with 
+% LaTeX page layout commands!
 \def\AVRpagforletaiv{%
 \hoffset=-12.4mm\hsize=210mm\advance\hsize-23mm% A4 10mm margin
 \voffset-15.4mm\vsize=11in\advance\vsize-20mm\advance\vsize-12pt}% letter 10 mm margin
@@ -197,7 +199,6 @@
 
 \sepbarrules
 \mtxPalatino
-\AVRpagforletaiv
 \elevenrm     % this will be the lyrics font unless overridden
 
 \immediate\write10{=== end of mtx.tex ===}
