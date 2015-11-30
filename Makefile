@@ -9,6 +9,7 @@ prepmx: $(pasfiles)
 	fpc -g -B -vn -So prepmx -T$(SYSTEM)
 
 commit: $(pasfiles) $(sfiles)
+	make -C doc commit
 	git add $(pasfiles) $(sfiles)
 	echo Now type: git commit -m \"DESCRIPTION OF_CHANGES\"
 

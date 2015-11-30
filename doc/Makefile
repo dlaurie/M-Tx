@@ -13,8 +13,11 @@ Dzip:
 	- @zip -ju mtxD`./docversion` $(sources) $(support) README
 
 bare:
-	rm $(examples) $(halleluja_pieces) $(kanons_pieces) *.dvi *.lj *.ps *.pdf\
+	- rm $(examples) $(halleluja_pieces) $(kanons_pieces) *.dvi *.lj *.ps *.pdf\
      dwoman.mtx netsoos?.mtx melisma?.mtx *.mx? *.ind *.idx *.ilg *.toc *.aux *.log *.pm?
+
+commit: bare
+	git add *
 
 ############################################################################
 ##    Everything below this box must be thought of as unmaintained code   ##
@@ -24,7 +27,7 @@ PREPMX = ../prepmx
 include make-target
 
 sources = mtxdoc.tex mtxdoc.sty mtxlatex.sty mozart0.mtx mozart.mtx\
- netfirst.mtx meter.mtx notes.tex lyrics.tex mtxindex.tex\
+ netfirst.mtx meter.mtx notes.tex lyrics.tex\
  dertod.mtx volta.mtx title.mtx title1.mtx psalm42.mtx netsoos1.mtb \
  netsoos2.mtb borup.mtx melisma1.mtb dwoman.mtb \
  melisma2.mtb melisma3.mtb melisma4.mtb melisma5.mtb melisma6.mtb \
@@ -56,8 +59,7 @@ mtxdoc.$(target): mtxdoc.tex mtxdoc.sty $(examples)
 	musixflx mtxdoc
 	makeindex mtxdoc
 	- $(latex) mtxdoc
-	- $(latex) mtxindex
-	rm mtxdoc.log mtxdoc.idx mtxdoc.ilg mtxindex.log mtxindex.aux
+	rm mtxdoc.log mtxdoc.idx mtxdoc.ilg 
 
 %.mtx: %.mta %.mtb
 	cat $*.mta $*.mtb > $*.mtx
@@ -82,7 +84,7 @@ kanons.$(target): kanons.tex $(kanons_pieces)
 
 halleluja.$(target): halleluja.tex $(halleluja_pieces)
 
-all: mtxdoc.$(target) kanons.$(target) halleluja.$(target) mtxindex.$(target)
+all: mtxdoc.$(target) kanons.$(target) halleluja.$(target) 
 
 config:
 	@echo "Configuring mtxdoc Version `./docversion`"
@@ -114,12 +116,9 @@ mtxdocus.$(target): paperus mtxdoc.$(target)
 mtxdoca4.$(target): papera4 mtxdoc.$(target)
 	mv mtxdoc.$(target) mtxdoca4.$(target)
 
-ps: mtxdoc.ps halleluja.ps kanons.ps mtxindex.ps
+ps: mtxdoc.ps halleluja.ps kanons.ps
 
-pdf: mtxdoc.pdf halleluja.pdf kanons.pdf mtxindex.pdf
-
-mtx.pdf: mtxdoc.pdf mtxindex.pdf
-	./pdfcat -a -o mtx.pdf -i "mtxdoc.pdf mtxindex.pdf"
+pdf: mtxdoc.pdf halleluja.pdf kanons.pdf 
 
 mtx.dvi: mtxdoc.dvi mtxindex.dvi
 	dviconcat -o mtx.dvi mtxdoc.dvi mtxindex.dvi

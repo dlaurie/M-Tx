@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 % mtxlatex and mtxdoc must be loaded before any font-defining packages
 % like charter, bookman etc
-\usepackage{color,mtxlatex,mtxdoc} 
+\usepackage{color,mtxlatex,mtxdoc,multicol} 
 \paperAfour
 % You might like to put \paperUS here
 \usepackage{verbatim,charter}
@@ -1018,7 +1018,10 @@ describe precisely what happens and you are advised to experiment.
 \subsection{Skipping and including portions of a score}   \label{multiscore} 
 
 To read in another file at the start of a paragraph, \NEW{0.55}
-use the \ttxem"Include:" directive, e.g.\ \verb"Include: mylayout.mti".
+use the \ttxem"Include:" directive, e.g.\ 
+
+   \verb"Include: mylayout.mti"
+
 The effect is exactly the same as if those lines had been part of the original
 input file.  The file thus included may also contain "Include:"
 directives; there is no restriction on the number of levels.  You may
@@ -1271,10 +1274,9 @@ of MusiX\TeX\ lost a personal friend and mentor.
 % be accessed at \texttt{ftp://ftp.gmd.de/music} or 
 % \texttt{http://www.gmd.de/Music}.
 
-Werner's work is still being carried on: the software is at the Werner 
-Icking Music Archive (\archiveSite), the mailing list is at the \TeX\
-Users Group (\mailingList), and the scores have been merged into the 
-Petrucci Music Library (\scoreSite).
+Werner's work is still being carried on: the software archive
+and mailing list URLs are listed in Appendix A, while
+the scores have been merged into the Petrucci Music Library (\scoreSite).
  
 My wife, Trienke, had to suffer many effectively husbandless evenings
 and weekends while I hammered the program and documentation into good 
@@ -1307,7 +1309,8 @@ Fortunately, here are many ways to get information and help.
   hosts not only the mailing list archive but also several tutorials 
   in various languages on MusiX\TeX\ and \PMX.
   \item  Join the \ixem{mailing list} by filling in the form
-at \texttt{http://tug.org/mailman/listinfo/tex-music}.
+at \\
+\texttt{http://tug.org/mailman/listinfo/tex-music}.
 \end{itemize} 
 
 \section{A short \PMX\ tutorial}  \label{pmx}
@@ -1892,14 +1895,16 @@ pieces, with
 perhaps a title page, a foreword and an afterword, like a typical
 published book of piano pieces or songs.  
 \begin{enumerate}
-  \item Prepare a \texttt{.tex} file for each separate piece, using the methods
-described previously, and be sure that it is fully debugged and looks
-the way you want it, using the standard \texttt{tex-musixflx-tex}
-compiling cycle.
   \item Write a \LaTeX\ file looking something like this:
 \verbatiminput{hallelujashort.ltx}
-  \item Use a \texttt{latex-musixflx-latex}
-compiling cycle to make the finished document.
+  \item Use the script \texttt{musixproject.lua} included in the M-Tx
+documentation package to build the separate TeX files needed. In this
+case you need to say:
+\begin{verbatim}
+    texlua musixproject.lua kroonhom.mtx loofnou.mtx halleluja.ltx
+\end{verbatim}
+It is important to put the main file last, so that the \TeX\ files
+are built before the main file is processed.
   \item If you make small changes in the \LaTeX\ part only, a single
 \LaTeX\ pass is sufficient, unless the page numbering has changed.
 \end{enumerate}
@@ -1954,7 +1959,7 @@ environment \ttxem{excerpts}, as in the following example:
 \verbatiminput{kanons.ltx}
 The rest of the procedure is the same as for collections of longer
 pieces.
-You can see the finished product in \texttt{halleluja.pdf}.
+You can see the finished product in \texttt{kanons.pdf}.
 Some points to note: 
 \begin{itemize}
   \item The \texttt{excerpts} environment redefines the heading fonts
@@ -2067,9 +2072,14 @@ that make life easier, are collected in the file \ttxem{mtx.tex}.
 Documentation of these commands can be found at the end of the file
 \texttt{mtx.tex}. 
 
-%\pagebreak
+\pagebreak
 
-%\printindex
+\def\Flat{{\musixfont\char'062}}
+\def\Sharp{{\musixfont\char'064}}    
+\def\mtxSharp{\mbox{\raise1ex\hbox{\Sharp}}}
+\def\mtxFlat{\mbox{\raise1ex\hbox{\Flat}}}  
+
+\printindex
 \end{document}  
 
 \endinput

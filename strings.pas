@@ -101,7 +101,7 @@ function substr (var s: string; start, count: integer): string;
 
 function nextWordBound(s: string; trigger: char; p: integer): integer;
  begin
-  repeat p:=p+1 until s[p]=trigger;
+  repeat p:=p+1 until (p>length(s)) or (s[p]=trigger);
   while (p<length(s)) and (s[p+1]<>' ') do p:=p+1;
   nextWordBound:=p;
 end;

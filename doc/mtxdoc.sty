@@ -36,14 +36,16 @@
 
 %  Making an index
 
+\definecolor{Green}{rgb}{0,0.5,0.1}
+\definecolor{Red}{rgb}{0.5,0,0.1}
 \long\def\theindex{\renewcommand{\thesection}{}\section{Index}\parindent\z@
   \parskip\z@ plus.3\p@\relax \let\item\@idxitem \columnseprule\z@
   \columnsep35\p@ \begin{multicols}{2}}
 \def\endtheindex{\end{multicols}}
 \def\keyindex#1{\leavevmode
- \hbox{{\color{red}\Bslash #1}}\index{#1@{\protect\Bslash #1}}}
-\def\zkeyindex#1{\index{#1@{\color{red}\protect\Bslash #1}}}
-\def\indexed#1{{\color{green}#1}}
+ \hbox{{\color{Red}\Bslash #1}}\index{#1@{\protect\Bslash #1}}}
+\def\zkeyindex#1{\index{#1@{\color{Red}\protect\Bslash #1}}}
+\def\indexed#1{{\color{Green}#1}}
 \def\ixem#1{\indexed{#1}\index{#1}}
 \def\itxem#1{\indexed{\ital{#1}}\index{#1}}
 \def\ttxem#1{\indexed{\tt #1}\index{#1@{\tt #1}}}

@@ -1,0 +1,22 @@
+\documentclass[a4paper]{article}
+\usepackage{mtxlatex,times}
+\mtxlatex
+\pagestyle{headings}
+\title{    {\Huge Halleluja!\\ [2ex]}
+  {\Large\textit{Anthems for unaccompanied church choir (SATB)}\\ [5ex]}}
+\author{\Large Edited by Dirk Laurie} 
+\date{} 
+\let\Writebarno\writebarno
+\begin{document}
+  \maketitle
+  \thispagestyle{empty}
+  \tableofcontents
+\pagebreak
+
+\def\writebarno{\vbox to 24pt{}{\Writebarno}}
+\begin{Score} {Kroon Hom!} {kroonhom} \end{Score}
+\def\writebarno{\vbox to 16pt{}{\Writebarno}}
+\begin{Score} {Loof nou die Heer} {loofnou} \end{Score}
+
+\end{document}
+

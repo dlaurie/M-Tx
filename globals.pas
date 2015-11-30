@@ -45,7 +45,6 @@ const PMXlinelength = 128;
       comma = ',';
       colon = ':';
       tilde = '~';
-      atsign = '@';
       dummy = #0;
 
       ndurs = 8;
