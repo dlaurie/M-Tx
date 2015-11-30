@@ -7,17 +7,16 @@ kanons:
 PHONY: default hallelua kanons
 
 support = docversion Makefile make-dvi make-pdf make-target pdfcat \
-  buildmtxdoc.lua mtxproject.lua
+  buildmtxdoc.lua musixproject.lua
 
 Dzip: 
 	- @zip -ju mtxD`./docversion` $(sources) $(support) README
 
-bare:
-	- rm $(examples) $(halleluja_pieces) $(kanons_pieces) *.dvi *.lj *.ps *.pdf\
-     dwoman.mtx netsoos?.mtx melisma?.mtx *.mx? *.ind *.idx *.ilg *.toc *.aux *.log *.pm?
+clean:
+	- rm *.pdf dwoman.mtx netsoos?.mtx melisma?.mtx *.pm?
 
-commit: bare
-	git add *
+commit: clean
+	git add $(sources) $(support)
 
 ############################################################################
 ##    Everything below this box must be thought of as unmaintained code   ##
@@ -26,13 +25,13 @@ commit: bare
 PREPMX = ../prepmx
 include make-target
 
-sources = mtxdoc.tex mtxdoc.sty mtxlatex.sty mozart0.mtx mozart.mtx\
+sources = mtxdoc.ltx mtxdoc.sty mtxlatex.sty mozart0.mtx mozart.mtx\
  netfirst.mtx meter.mtx notes.tex lyrics.tex\
  dertod.mtx volta.mtx title.mtx title1.mtx psalm42.mtx netsoos1.mtb \
  netsoos2.mtb borup.mtx melisma1.mtb dwoman.mtb \
  melisma2.mtb melisma3.mtb melisma4.mtb melisma5.mtb melisma6.mtb \
  dwoman.mta melisma.mta netsoos.mta kroonhom.mtx loofnou.mtx \
- viva.mtx dona.mtx sanctus.mtx halleluja.tex kanons.tex chord.mtx \
+ viva.mtx dona.mtx sanctus.mtx halleluja.ltx kanons.ltx chord.mtx \
  macro.mtx
 
 examples = mozart0.tex mozart.tex netfirst.tex meter.tex \
@@ -123,6 +122,9 @@ pdf: mtxdoc.pdf halleluja.pdf kanons.pdf
 mtx.dvi: mtxdoc.dvi mtxindex.dvi
 	dviconcat -o mtx.dvi mtxdoc.dvi mtxindex.dvi
 
+bare:
+	rm $(examples) $(halleluja_pieces) $(kanons_pieces) *.dvi *.lj *.ps *.pdf\
+     dwoman.mtx netsoos?.mtx melisma?.mtx *.mx? *.ind *.idx *.ilg *.toc *.aux *.log *.pm?
 
 
 
