@@ -32,7 +32,7 @@ const blank = ' ';
 
 type command_type =
      ( none, title, composer, pmx, tex, options, msize, bars, shortnote,
-       style, sharps, flats, meter, space, pages, systems,
+       style, sharps, flats, meter, space, pages, systems, width, height,
        enable, disable, range, name, indent,
        poet, part, only, octave, start );
 
@@ -46,17 +46,17 @@ const c1 = title; cn = start;
       commands: array[command_type] of string[16] =
   ( 'NONE', 'TITLE', 'COMPOSER', 'PMX', 'TEX', 'OPTIONS',
     'SIZE', 'BARS/LINE', 'SHORT',
-    'STYLE', 'SHARPS', 'FLATS', 'METER', 'SPACE', 'PAGES', 'SYSTEMS',
-    'ENABLE', 'DISABLE', 'RANGE',
+    'STYLE', 'SHARPS', 'FLATS', 'METER', 'SPACE', 'PAGES', 'SYSTEMS', 'WIDTH',
+    'HEIGHT', 'ENABLE', 'DISABLE', 'RANGE',
     'NAME', 'INDENT', 'POET', 'PART', 'ONLY', 'OCTAVE', 'START');
      cline: array[command_type] of string =
    ( '', '', '', '', '', '', '', '', '1/4', (* short *)
      '', '0', '',  'C', '', '1', '1', (* systems *)
-     '', '', '', '', '', '', '', '', '', '' );
+     '190mm', '260mm', '', '', '', '', '', '', '', '', '', '' );
       redefined: array[command_type] of boolean =
-    ( false, false, false, false, false, false, false, false, false,
+    ( false, false, false, false, false, false, false, false, false, false,
       false, false, false, false, false, false, false, false, false,
-      false, false, false, false, false, false, false, false );
+      false, false, false, false, false, false, false, false, false );
 
 (** Known styles *)
       known_style: array[style_index] of string = (
@@ -290,6 +290,22 @@ begin
   until s='';
 end;
 
+procedure setDimension(line: string; lno: command_type);
+  var l, n, p: integer;
+begin
+  if line = '' then exit;
+  l := length(line);
+  n := 0;
+  p := 0;
+  repeat n := n+1;
+    if line[n]='.' then p:=p+1;
+  until (n>l) or not ((line[n]='.') or (line[n]>='0') and (line[n]<='9'));
+  if (n=p) or (p>1) or 
+      not ((line[n]='i') or (line[n]='m') or (line[n]='p')) then
+    error('Dimension must be a number followed by in, mm or pt',print);
+  cline[lno] := 'w' + substr(line,1,n);
+end;
+
 procedure setSize(line: string);
   var i: stave_index0;
       word: string;
@@ -455,6 +471,8 @@ begin
   begin getNum(cline[flats],n_sharps); n_sharps:=-n_sharps; end;
   setName; setIndent; setInitOctave; setOnly(cline[only]);
   setRange(cline[range]);
+  setDimension(cline[width],width);
+  setDimension(cline[height],height);
   if options_line <>'' then begin
     warning('"Options" is cryptic and obsolescent.',  not print);
     writeln('  Use "Enable" and "Disable" instead.')
@@ -655,6 +673,7 @@ begin
   begin putLine('Tc'); putLine('\mtxPoetComposer'); end;
   if pmx_line <> '' then putLine(pmx_line);
   doTenorClefs;
+  if cline[width] <> '' then putLine(cline[width]);
   wipeCommands;
 end;
 

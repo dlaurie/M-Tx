@@ -1,1 +1,1 @@
-grep 'def\\versionname' mtxdoc.tex | sed -e "s/.*{\(.*\)\.\(.*\)}.*/\1\2/"
+grep 'def\\versionname' mtxdoc.ltx | sed -e "s/.*{\(.*\)\.\(.*\)}.*/\1\2/"

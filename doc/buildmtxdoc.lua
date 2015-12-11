@@ -2,15 +2,17 @@
 -- buildmtxdoc.lua   © Dirk Laurie 2015  MIT license
 -- Build M-Tx documentation from scratch.
 
-local project = {halleluja = "kroonhom loofnou halleluja.ltx";
-kanons = "viva dona sanctus kanons.ltx";
-mtxdoc = "borup chord dertod dwoman"..
+local project = {halleluja = "-t kroonhom loofnou -f -q -p halleluja";
+kanons = "-t viva dona sanctus -f -q -p kanons";
+mtxdoc = "-t borup chord dertod dwoman macro"..
 " melisma1 melisma2 melisma3 melisma4 melisma5 melisma6"..
 " meter mozart mozart0 netfirst netsoos1 netsoos2 psalm42 title title1 volta"..
-" mtxdoc.ltx"}
+" -f -x -q -p mtxdoc"}
 
-local sys = os.execute
-local mtxproject = "texlua musixproject.lua -X mtx "
+local sys = function(...)
+   print(...)
+   return(os.execute(...))
+end
 
 local cat = function(target,...)
    local result = io.open(target,'w')
@@ -32,17 +34,13 @@ local make_examples = function()
       mtxname = ("melisma%d.mtx"):format(k)
       cat(mtxname,"melisma.mta",("melisma%d.mtb"):format(k))
    end
-   sys"prepmx macro" -- this step is not done via the m-tx script
-   sys"pmxab macro" -- because PMX generates a spurious error message
 end
 
 local build_project = function(target)
    if target == "mtxdoc" then 
       make_examples() 
-      sys(mtxproject.."-x "..project[target])
-   else
-      sys(mtxproject..project[target])
    end
+   sys("musixtex -q "..project[target])
 end   
 
 -- Main program

@@ -1,8 +1,9 @@
 Bars/line: 2 
 Style: Solo 
 Meter: m3400
+Width: 3.7in
+TeX: \Largemusicsize
 
-%% w3.7i \\Largemusicsize\
 U: @<v-2 ~ ~ ~ ~ sf ~ ~ sf sf
 [ c1+ r g g ] ( [ af8 g ] ) r b o. | c o. 
 

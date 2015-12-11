@@ -4,9 +4,9 @@ Style: SATB
 Pages: 3
 Systems: 14
 Space: 0 4
-% %\font\tensf=cmss10 \tensf
-
-%% h280m w193m 
+Height: 280mm
+Width: 193mm
+ 
 % 0
 f | b2 r4 b | d2 r4 d | { f0 | f2 } r4 || f- | fd f8 [ g a ] [ b c ] | 
 L: Kroon Hom, kroon Hom, kroon Hom! Rond-om die troon van 

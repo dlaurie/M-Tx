@@ -6,7 +6,7 @@ uses control, strings, globals, preamble, lyrics, mtx, analyze,
 
 {* M-Tx preprocessor to PMX     Dirk Laurie }
 const version = '0.61';
-      version_date = '<10 August 2015>';
+      version_date = '<11 December 2015>';
 
 {* See file "Corrections" for updates later than those listed below
 }
@@ -333,7 +333,7 @@ procedure musicParagraph;
 
 begin
   paragraphSetup(nvoice);
-  if nvoice=0 then begin  nonMusic; exit end
+  if nvoice=0 then begin nonMusic; exit end
   else if nvoice>nvoices then
   begin  if nvoice=0 then
     error('No voices! Did you remember to to supply a Style?',not print);

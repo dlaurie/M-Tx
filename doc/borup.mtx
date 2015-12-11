@@ -4,9 +4,9 @@ Flats: 1
 Style: Singer
 Systems: 2
 Space: 10
+TeX: \let\endpiecesav\endpiece
+TeX: \def\endpiece{\endpiecesav\input lyrics \input notes}
 
-%% \\let\endpiecesav\endpiece\
-%% \\def\endpiece{\endpiecesav\input lyrics \input notes}\ 
 ( d4 e ) g | ( d e ) g | ( f e ) f | d2 r4 |
 L: In ver-na-lis tem-po-ris
 L: Dum re-ces-sum fri-go-ris

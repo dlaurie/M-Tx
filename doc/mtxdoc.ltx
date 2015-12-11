@@ -26,7 +26,7 @@
 \def\versionname{0.61}
 \def\version{0.61}
 \def\newfrom{0.61}
-\date{4 August 2015}
+\date{11 December 2015}
 \title{\Huge \textbf{\MTx: Music from Text \\ \LARGE Version\current} \\
   User's Guide \vfill}
 \author{\LARGE Dirk Laurie\\ \texttt{dirk.laurie@gmail.com} }
@@ -133,17 +133,8 @@ printed music will not necessarily be broken at the same places as
 the paragraphs. 
 
 Only in the simplest cases (every music line in the paragraph starts with
-what might be a note) are you allowed to omit the preamble.  
-
-The preamble lines in this example are self-explanatory. The one 
-mysterious line is the one starting with \ttxem{\%\%}at the top of 
-the music paragraph.  The present 
-implementation of \MTx~acts as a front end to the \PMX\ program.  
-Things that 
-can be done easily in \PMX\ are not re-invented, but instead the \ttxem{\%\%} 
-facility is  provided to pass information directly to \PMX. The \PMX\ command 
-\texttt{w120m}  means `width 120 millimetres'.  A short tutorial on \PMX\ 
-appears in Appendix \ref{pmx}. 
+what might be a note) are you allowed to omit the preamble.  The preamble 
+lines in this example are self-explanatory, I hope. 
 
 A few words on technical terms, to make sure that we know what we are 
 talking about:
@@ -284,8 +275,7 @@ formatted meter change word. \NEW{0.30}
 E.g.~\ttxem{m3/4/0/0} gives a blind meter change 
 --- one that takes effect but is not printed.  See the \PMX\ manual.
 This is also legal in the preamble \ttxem{Meter:} command. 
-You may not introduce a meter change directly to \PMX\ via a \verb"%%"
-command --- \MTx\ must know about it too.    
+   
   \end{itemize}
 
 \subsection{Beams and \ixem{slurs}}  \label{beamslur}
@@ -310,7 +300,7 @@ Look at the second system of the same song:
 \small
 \input netsoos1.tex
 \end{mus}
-Omitting the preamble and \PMX\ lines, this is coded 
+Omitting the preamble, this is coded 
 as:\footnote{The coding is for this 
 morsel only, not an extract out of the coding for the whole piece.  The 
 octave of the first note here is the default, not deduced from a 
@@ -441,7 +431,7 @@ style names are translated to uppercase internally.
 \verb"Flats: 3" & Key signature has three flats. \\
 \verb"Sharps: 2" & Key signature has two sharps. \\
 \verb"Space: 6 0 3" & Extra interlines of space below staves. \\
-\verb"PMX: h10i" & \PMX\ command in preamble. Rather like \verb"%%" feature.\\
+\verb"PMX: Ar" & \PMX\ command in preamble.\\
 \verb"Options: x" & Forces the \texttt x option to be in effect, despite the command line. \\
 \verb"Enable: pedanticWarnings" & Enables the \texttt{pedanticWarnings} feature. \\
 \verb"Disable: unbeamVocal" & Disables the \texttt{unbeamVocal} feature. \\
@@ -449,6 +439,8 @@ style names are translated to uppercase internally.
 \verb"Systems: 11" & Use a total of eleven systems. \\
 \verb"Bars/line: 4" & Try to use on the average four bars to a line. \\
 \verb"Size: 16" & Size of music in points: default is 20. \\
+\verb"Width: 190mm" & Width of line in \texttt{mm} (or \texttt{in} or 
+\texttt{pt}). Default is \texttt{190mm}.\\
 \verb"Style: Singer Piano" & 
   The piece is for a singer with piano accompaniment. \\
 \verb"Name: Dietrich Gerald" & Names of instruments, performers etc. \\
@@ -1139,7 +1131,7 @@ by actually inserting the strings into \MTx\ input lines, which
 may not be longer than 255 characters.  Too many macro expansions,
 and you hit your head against the ceiling.
 
-\section{Debugging aids} \NEW{0.61}
+\section{Debugging aids} \NEW{0.61} \label{debugging-aids}
 
 The very compactness of \PMX\ music notation works against you
 when debugging. One music paragraph looks very much like another.
@@ -1448,6 +1440,15 @@ if not in the bottom voice.
 \subsection{Useful things to put on \ttxem{\%\%} lines}
 \label{usefulPMX}
 
+You have three ways of passing information directly to PMX.
+
+\begin{enumerate}
+   \item The \ttxem{PMX} preamble command.
+   \item A line starting with \ttxem{\%\%}. The rest of the line is
+treated as \PMX.
+   \item Inside music lines. Anything not recognized is passed through.
+\end{enumerate}
+
 Most of the following commands should appear in the first music paragraph
 or on a \ttxem{PMX} preamble command line.
 Some of them are actually raw \ixem{MusiX\TeX} ---
@@ -1464,7 +1465,8 @@ Put \verb'L10M+10i0.1' to make a new movement start at the 6th system,
 with 10 internotes of extra space between movements and an indentation
 of $0.1=10\%$ of the width.
  \item{\verb"h260m"} Height is 260 millimetres.
- \item{\verb"w8i"} Width is 8 inches.
+ \item{\verb"w8i"} Width is 8 inches. Note that \PMX's height and width
+have one-letter units, not two-letter like \TeX\ itself and \MTx.
  \item{\verb"\\vsize 270mm\"} Height given to MusiX\TeX\ is 270 millimetres. 
  \item{\verb"Ar"}  Use relative \ixem{accidentals}.  This requires a different 
   way of coding flats and sharps ---think of \verb's' as meaning 
@@ -1495,6 +1497,10 @@ of 96 quarter-notes to a minute, with MIDI balances of 56 and 72 (centre
 is 64) and MIDI velocities of 127 and 100 respectively.  More details 
 appear in the \PMX\ manual.  
 \end{description}
+
+One thing that you must only pass to PMX by the third method — embedded
+in a music line — is a meter change, otherwise \MTx\ does not know about 
+it and will continue to count bars by the old meter.
 
 \section{How to get and use \MTx}
 
@@ -1596,20 +1602,33 @@ to change the number of voices.
 
 \subsection{For \PMX- and MusiX\TeX-perts only}  \label{expert}
 
-PMX has four mechanisms for incorporating raw \TeX. Apart from putting
-them inside music lines as in \PMX, they are supported in \MTx\ as follows.
-
-1. You can issue a command in the preamble starting with \verb`%%`.
-The rest of the line will be taken to be a Type 4 
-
-
 You can send commands directly to \ibxem{PMX}.  All lines starting with 
 \ttxem{\%\%} in music paragraphs are collected, stripped of the leading 
 \verb"%%" and passed otherwise uninterpreted to \PMX\ before anything 
-else from that paragraph is translated.  \NEW{0.41}  If such a line
-is found in a preamble paragraph, it is treated as a ``Type 4 \TeX\ string'',
-\TeX\ string'' \index{TeX string@{\TeX\ string}!Type 4}
-which means that it will eventually appear at the top of the \TeX\ file,
+else from that paragraph is translated.  \NEW{0.41} 
+
+PMX has four mechanisms for incorporating raw \TeX. Apart from putting
+them inside music lines as in \PMX, they are supported in \MTx\ as follows.
+
+1. A Type 1 \TeX\ string appears on a music line, terminated 
+by a backslash. It takes effect at the next note.
+
+2. A Type 2 \TeX\ string appears in a \ttxem{TeX} command in the preamble.
+The rest of the line will be taken to be \TeX\ and must not end in a
+backslash. There may be several \ttxem{TeX} commands. They take effect
+just before the real typesetting takes place, after all other definitions
+have been processed, and can be used to override just about anything.
+
+3. A Type 3 \TeX\ string appears on a \verb"%%" line in a paragraph, e.g.
+\begin{verbatim}
+%% \\\def\foo{bar}\
+\end{verbatim}
+It takes effect at the start of paragraph, irrespective of where in
+the paragraph it appeared. Note the trailing backslash.
+
+4. A Type 4 \TeX\ string appears on a \verb"%%" line in the preamble. 
+\index{TeX string@{\TeX\ string}!Type 4}
+It will eventually appear at the top of the \TeX\ file,
 after \texttt{musixtex.tex} and \texttt{pmx.tex} have been read in.  
 Such lines should \emph{not} end with \verb"\".
 An example appears in Appendix \ref{dirty}.
@@ -1876,17 +1895,10 @@ books combining the outputs of several \PMX\ runs into a single
 document, such as a collection of songs, or a mainly text document
  (like this one) with many small music excerpts.
 
-Two points apply to all cases:
-\begin{enumerate} 
-  \item Order of inclusion of packages is important.  \texttt{mtxlatex}
-    must be the first package included, before any font packages.
-  \item It is easy to incur \ttxem{TeX capacity exceeded}.  For
-example, the index to this manual is a separate document because
-package \texttt{multicol} won't load on top of all the others.
-If you wish to do large scores, it is probably advisable to change 
-\texttt{texmf.cnf} so that \verb"save_size = 10000" and run
-\texttt{initex}.
-\end{enumerate}
+\begin{quote} \emph{Order of inclusion of packages is important.
+  \emph{\texttt{mtxlatex}}
+    must be the first package included, before any font packages.}
+\end{quote}
 
 \subsection{Collections of complete pieces}
 
@@ -1895,18 +1907,24 @@ pieces, with
 perhaps a title page, a foreword and an afterword, like a typical
 published book of piano pieces or songs.  
 \begin{enumerate}
-  \item Write a \LaTeX\ file looking something like this:
+  \item Write a \LaTeX\ file, say \texttt{halleluja.ltx}, 
+looking something like this:
 \verbatiminput{hallelujashort.ltx}
-  \item Use the script \texttt{musixproject.lua} included in the M-Tx
-documentation package to build the separate TeX files needed. In this
-case you need to say:
+By the way, this code contains another dirty trick: vertical space
+between systems is tweaked by embedding the bar number in a vertical box.
+  \item Use the script \texttt{musixtex.lua} that, thanks to Bob Tennent,
+forms part of modern \TeX\ distributions\footnote{You need at least Version 
+0.15. If your distribution is not recent enough, download the latest version
+from \texttt{http://icking-music-archive.org/software/musixtex/musixtex.lua}} 
+to build everything in one go. In this case you need to say:
 \begin{verbatim}
-    texlua musixproject.lua kroonhom.mtx loofnou.mtx halleluja.ltx
+    musixtex kroonhom loofnou halleluja.ltx
 \end{verbatim}
 It is important to put the main file last, so that the \TeX\ files
 are built before the main file is processed.
   \item If you make small changes in the \LaTeX\ part only, a single
 \LaTeX\ pass is sufficient, unless the page numbering has changed.
+You achieve this with the \texttt{-1} option of \texttt{musixtex.lua}.
 \end{enumerate}
 You can see the finished product in \texttt{halleluja.pdf}.
 Some points to note: 
@@ -1916,7 +1934,7 @@ You must put the command \keyindex{mtxlatex} in the preamble.
   \item The package \texttt{times} comes with standard distributions.
 You could use any \LaTeXe\ font package here.  The \texttt{times}
 font is quite narrow and therefore useful when the lyrics are crowded. 
-If you do use a font a package, load it \emph{after} \texttt{mtxlatex}. 
+If you do use a font package, load it \emph{after} \texttt{mtxlatex}. 
   \item \verb"\pagestyle{headings}" puts page
 numbers and running headings at the top of the page.
   \item To change fonts, use pure \LaTeXe\
@@ -1965,6 +1983,7 @@ Some points to note:
   \item The \texttt{excerpts} environment redefines the heading fonts
 to more modest sizes.
   \item A page break should be made before quitting the environment.
+
   \item The pieces do not have bar numbers, but space should be reserved
 for the numbers that show where the voices enter.  This is done
 by redefining the \keyindex{writebarno} command.
@@ -2035,12 +2054,23 @@ of the command and restore it later, e.g.
 In \LaTeX, if you redefine a command inside an environment, the saving and
 restoring is automatic.
 
+\subsection{\Large \texttt{mtx.tex}}  \label{mtxtex}
+
+The \MTx\ preprocessor, as far as possible, issues commands starting
+with \verb"\mtx" instead of direct \TeX\ commands.  The main purpose
+for so doing is that the user can modify their effect by redefining
+them in the source file.  These macros, together with a few others
+that make life easier, are collected in the file \ttxem{mtx.tex}.
+
+Documentation of these commands can be found at the end of the file
+\texttt{mtx.tex}. 
+
 \subsection{Changing fonts}
 
 The font used for lyrics is the default text font of the moment,
-which usually is ten-point roman.
+which usually is eleven-point roman.
 It can be changed globally, e.g. 
-\verb"%% \twelverm" in the preamble will change the font to
+\verb"TeX: \twelverm" in the preamble will change the font to
 twelve-point.  When using \LaTeX, you can use font-changing commands
 inside the environment to change the lyrics font only for that
 particular piece.
@@ -2061,16 +2091,10 @@ If you are not using \LaTeX, they can be redefined in two ways:
 \verb"  \font\BIGfont=cmss9 scaled \magstep4"
 \end{itemize}
 
-\subsection{\Large \texttt{mtx.tex}}  \label{mtxtex}
-
-The \MTx\ preprocessor, as far as possible, issues commands starting
-with \verb"\mtx" instead of direct \TeX\ commands.  The main purpose
-for so doing is that the user can modify their effect by redefining
-them in the source file.  These macros, together with a few others
-that make life easier, are collected in the file \ttxem{mtx.tex}.
-
-Documentation of these commands can be found at the end of the file
-\texttt{mtx.tex}. 
+The macros \keyindex{mtxPalatino} and \keyindex{mtxHelvetica} defined in
+\texttt{mtx.tex}, based on work by Andr\'e van Ryckeghem, replace 
+Computer Modern in all the font definitions by Palatino and Helvetica
+respectively.
 
 \pagebreak
 
