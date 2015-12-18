@@ -1148,12 +1148,12 @@ at a bar ending, and that lines from the same paragraph have the
 same length. But it cannot tell that which of two lines is wrong, 
 only that they are different.
 
-Many programmers use commenta lines \verb`% -- Bar 40 --` to help 
+Many programmers use comment lines \verb`% -- Bar 40 --` to help 
 them keep track of where they are in a score. This practice has
 now been formalized as a debugging aid.
 
 Certain comments can be recognized by \MTx\ as assertions, allowing
-additional correctness checks can be made. Apart from the comment
+additional correctness checks to be made. Apart from the comment
 sign, they look like preamble commands, but are normally placed in
 the music paragraph to which they apply.
 
@@ -1525,22 +1525,30 @@ words, something fairly primitive, not an upmarket word processor.
 
 Thanks to Bob Tennent, all the intermediate steps that you used to
 need are now unnecessary. There will be an executable file called
-\verb`m-tx` on your system so that simply invoking 
+\verb`musixtex` on your system, a real Swiss army knife, so that 
+simply invoking 
 \begin{verbatim}
-  m-tx jobname
+  musixtex -q jobname
 \end{verbatim}
 will take you all the way from \verb`jobname.mtx` to \verb`jobname.pdf`.
+The \verb`-q` (for "quiet") suppresses the zillions of lines of screen
+output which \verb`tex` normally provides for you edification.
 
-You can do the seven steps separately. The first of them is running
-\verb`prepmx jobname`. After that, the command you will need is
-\verb`pmx2pdf jobname`, also courtesy of Bob Tennent.
+You can do the steps manually. The program \verb`musixtex` writes a file 
+\verb`musixtex.log` documenting everything it did. For example, there 
+will be a line starting with `prepmx` for the step the converts
+\verb`jobname.mtx` to \verb`jobname.pmx`. If you need only that, 
+\begin{verbatim}
+  musixtex -p jobname
+\end{verbatim}
+will do it, but you may want to exploit some of the many commandline 
+options that \verb`prepmx` has. Run \verb`prepmx -h` to see them.
 
-There are several options available for the first step, which can be 
-displayed by running \verb`prepmx -h`.
-
-The \texttt{prepmx} program exits with \ixem{return code} 0 if no error was 
-found, and return code $n$ if an error was found while processing line $n$ of 
-the input. 
+The \texttt{prepmx} program exits with \ixem{return code} 0 if no error 
+was found, and return code $n$ if an error was found while processing 
+line $n$ of the input, whereas the \texttt{musixtex} program returns
+the number of input files that gave errors. There is more about
+\verb`musixtex` in Appendix \ref{latex}.
  
 \subsection{Bugs, restrictions and incompatibilities} \label{limits}
 
@@ -1881,7 +1889,7 @@ Werner Icking}
 
 \pagebreak
 
-\section{\MTx\ and \LaTeX}  \NEW{0.54}
+\section{\MTx\ and \LaTeX}  \NEW{0.54} \label{latex}
 
 \textit{This section assumes that you have some knowledge of 
 \LaTeX.}
@@ -1985,7 +1993,7 @@ to more modest sizes.
   \item A page break should be made before quitting the environment.
 
   \item The pieces do not have bar numbers, but space should be reserved
-for the numbers that show where the voices enter.  This is done
+for the numbers that show where the voices enter.  As above, this is done
 by redefining the \keyindex{writebarno} command.
 \end{itemize}
 
@@ -2098,10 +2106,16 @@ respectively.
 
 \pagebreak
 
+\setcounter{page}{1}
+\renewcommand{\thepage}{I-\arabic{page}}
+
 \def\Flat{{\musixfont\char'062}}
 \def\Sharp{{\musixfont\char'064}}    
 \def\mtxSharp{\mbox{\raise1ex\hbox{\Sharp}}}
 \def\mtxFlat{\mbox{\raise1ex\hbox{\Flat}}}  
+
+If you can't find what you need here, also try the Table of Contents.
+Other sources of help are listed in Appendix A. 
 
 \printindex
 \end{document}  
