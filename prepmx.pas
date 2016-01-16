@@ -286,6 +286,16 @@ procedure musicParagraph;
     old_meter_word := new_meter_word;
   end;
 
+  procedure processMBR;
+  var bars_of_rest: integer;
+      mbr: string;
+  begin  
+    mbr := P[1];
+    predelete(mbr,2); getNum(mbr,bars_of_rest);
+    bar_no := bar_no + bars_of_rest;
+    putLine(P[1] +' /'); putLine('')
+  end;
+
 begin
   paragraphSetup(nvoice);
   if nvoice=0 then begin nonMusic; exit end
@@ -318,8 +328,9 @@ begin
   if must_respace then respace;
   if (meternum=0) then putMeter(meterChange(beatsPerLine,meterdenom,true));
   if nleft > 0 then inc(nbars);
-  if (nbars=0) and multi_bar_rest then nbars:=1; 
-  for bar_of_line:=1 to nbars do
+  if (nbars=0) and multi_bar_rest then 
+    processMBR
+  else for bar_of_line:=1 to nbars do
     processOneBar;
   restoreDurations;
 end;
