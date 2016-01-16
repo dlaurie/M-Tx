@@ -5,10 +5,9 @@
 % All TeX commands put directly into PMX files by M-Tx are defined below,
 %   except the following:
 % 1. \input mtx
-% 2. code to achieve a multi-bar rest
-% 3. User's own inline TeX
-% 4. \mtxversion and \mtxdate are defined in prepmx itself
-% 5. Utterly basic TeX commands like "\ " and "%"
+% 2. User's own inline TeX
+% 3. \mtxversion and \mtxdate are defined in prepmx itself
+% 4. Utterly basic TeX commands like "\ " and "%"
 % It is therefore possible for a TeXpert to tune the performance
 %   of M-Tx without touching the preprocessor.
 
@@ -19,22 +18,25 @@
 
 \ifx\mtxtexversion\undefined\else\endinput\fi 
 
-\def\mtxtexversion{0.61}
-\def\mtxtexdate{19 November 2015}
+\def\mtxtexversion{0.61a}
+\def\mtxtexdate{16 January 2016}
 \let\:=\relax
 \message{mtx.tex \mtxtexversion\space<\mtxtexdate>} 
 \message{M-Tx \mtxversion\space(Music from TeXt) <\mtxdate>} 
 
 \input musixtex
-\ifx\akkoladen\undefined\message{Your musixtex.tex is too old}\fi
+\def\musixtexneeded{121}
+\ifnum\mxvernumber<\musixtexneeded\immediate\write16{ }
+\message{! Requires MusiXTeX Version \musixtexneeded. Please upgrade.}\fi
 
 \input pmx
-\def\pmxneeded{2.5}
-\ifdim\pmxversion pt<\pmxneeded  pt\message{Requires PMX Version
-\pmxneeded. Please upgrade.}\fi
- 
+\def\pmxneeded{2.71}
+\ifdim\pmxversion pt<\pmxneeded pt\immediate\write16{ }
+\message{! Requires PMX Version \pmxneeded. Please upgrade.}
+\end{document}\fi
+
 \input musixlyr
-\ifx\assignlyricshere\undefined\message{Your musixlyr.tex is too old}\fi
+\ifx\assignlyricshere\undefined\message{! Your musixlyr.tex is too old}\fi
 
 % M-Tx font definitions
 % \mtxeightsf etc: defines \eightsf etc by analogy to \eightrm. 

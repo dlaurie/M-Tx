@@ -24,7 +24,9 @@ nonsources = borup.tex chord.tex dertod.tex dwoman.tex macro.tex\
  melisma1.tex melisma2.tex melisma3.tex melisma4.tex melisma5.tex\
  melisma6.tex meter.tex mozart.tex mozart0.tex netfirst.tex\
  netsoos1.tex netsoos2.tex psalm42.tex title1.tex title.tex volta.tex\
- mtxdoc.aux mtxdoc.ind mtxdoc.toc mtxdoc.pdf halleluja.pdf kanons.pdf
+ mtxdoc.aux mtxdoc.ind mtxdoc.toc mtxdoc.pdf halleluja.pdf kanons.pdf\
+ dona.tex halleluja.aux halleluja.toc kanons.aux kroonhom.tex\
+ loofnou.tex musixtex.log sanctus.tex viva.tex
 
 zip: 
 	texlua buildzip.lua $(sources) $(support) README

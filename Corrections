@@ -3,6 +3,13 @@ Corrections and enhancements to M-Tx starting from 0.53
    
 Newest items at top. You might also want to look at file `MAINTENANCE`.
 
+Version 0.61a
+-------------
+
+1. Special code for multi-bar rests removed, taking advantage of
+upstream improvements. 
+2. MusiXTeX 1.21 and PMX 2.71 required in `mtx.tex`.
+
 Version 0.61
 ------------
 
@@ -205,4 +212,12 @@ Version 0.53a
   From Christian Mondrup
     preamble.pas: added trailing backslash to \mtxTenorClef
     mtx.tex: changed \mtxmtxNormalSize to \mtxNormalSize 
+
+Changes since 0.52b, undated.
+   Uses mtx.tex file
+   More than one # or % per word treated correctly in uptext
+   Better way of handling line numbers in lyrics
+
+For earlier history, see comments in prepmx.pas of 0.52b.
+
 
