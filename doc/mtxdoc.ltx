@@ -8,7 +8,6 @@
 % \renewcommand{\ttdefault}{cmtt}  
 % Some such font packages override cmtt with wider fonts like 'courier', 
 % and then 80-character lines don't fit
-\mtxlatex
 \newcommand{\delete}[1]{\relax}
 \newcommand{\archiveSite}{
  \texttt{http://icking-music-archive.org}
@@ -999,13 +998,9 @@ bars printed above them.  The word for a \mark multi-bar rest is e.g.\
 and there may be no other notes or rests on that line.  The same rest
 will be printed on all staves.
 
-
-You can tune the appearance of the rest by appending a signed integer
-to the word, e.g.\ \texttt{rm19+18}.   \NEW{0.41}Roughly speaking,
-this moves the front end of the rest to the right by 18 points. Since
-multibar rests can have several shapes and may even contain as many as
-three separate symbols (in the case of \texttt{rm7}) it is difficult to
-describe precisely what happens and you are advised to experiment.
+Thanks to recent improvements to MusiXTeX and PMX \NEW{0.62} it is no
+longer necessary to tune the appearance of the rest e.g.\ \texttt{rm19+18}.
+Such adjustments are now ignored.
 
 \subsection{Skipping and including portions of a score}   \label{multiscore} 
 
@@ -1937,8 +1932,9 @@ You achieve this with the \texttt{-1} option of \texttt{musixtex.lua}.
 You can see the finished product in \texttt{halleluja.pdf}.
 Some points to note: 
 \begin{itemize}
-  \item The package \texttt{mtxlatex} comes with \MTx.
-You must put the command \keyindex{mtxlatex} in the preamble.
+  \item The file \texttt{mtxlatex.sty} is supplied with the \MTx\
+documentation source. You may need to copy it to some other place
+for \TeX\ to find it.
   \item The package \texttt{times} comes with standard distributions.
 You could use any \LaTeXe\ font package here.  The \texttt{times}
 font is quite narrow and therefore useful when the lyrics are crowded. 
@@ -1980,7 +1976,7 @@ a special lyrics font, e.g.
 \subsection{Collections of morsels}
 
 The situation is a little different when the pieces are so short
-that more than one of them fit on one page.  For these, use the
+that several of them fit on one page.  For these, use the
 environment \ttxem{excerpts}, as in the following example:
 \verbatiminput{kanons.ltx}
 The rest of the procedure is the same as for collections of longer

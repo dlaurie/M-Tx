@@ -293,7 +293,7 @@ procedure musicParagraph;
     mbr := P[1];
     predelete(mbr,2); getNum(mbr,bars_of_rest);
     bar_no := bar_no + bars_of_rest;
-    putLine(P[1] +' /'); putLine('')
+    putLine('rm' + toString(bars_of_rest) + ' /'); putLine('')
   end;
 
 begin

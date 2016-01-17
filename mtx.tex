@@ -29,12 +29,7 @@
 \ifnum\mxvernumber<\musixtexneeded\immediate\write16{ }
 \message{! Requires MusiXTeX Version \musixtexneeded. Please upgrade.}\fi
 
-\input pmx
-\def\pmxneeded{2.71}
-\ifdim\pmxversion pt<\pmxneeded pt\immediate\write16{ }
-\message{! Requires PMX Version \pmxneeded. Please upgrade.}
-\end{document}\fi
-
+\input pmx      % needed here otherwise musixlyr does not load correctly
 \input musixlyr
 \ifx\assignlyricshere\undefined\message{! Your musixlyr.tex is too old}\fi
 

@@ -3,6 +3,12 @@ Corrections and enhancements to M-Tx starting from 0.53
    
 Newest items at top. You might also want to look at file `MAINTENANCE`.
 
+Version 0.62
+------------
+
+1. `\mtxlatex` command no longer needed.
+2. Various subtleties in the code have been commented.
+
 Version 0.61a
 -------------
 
