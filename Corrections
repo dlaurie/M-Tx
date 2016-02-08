@@ -3,6 +3,14 @@ Corrections and enhancements to M-Tx starting from 0.53
    
 Newest items at top. You might also want to look at file `MAINTENANCE`.
 
+Version 0.62a
+-------------
+
+1. Fonts bigtype and BIgtype, needed because PMX header font sizes
+were made smaller in July 2015, added to \mtxPalatino. Also, for
+completeness, \mtxbigsf and \mtxBIGsf. This version tagged on GitHub
+as 0.62.
+
 Version 0.62
 ------------
 
