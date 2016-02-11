@@ -387,7 +387,12 @@ begin
     if last_command<>none then
     begin 
       if mustAppend(last_command) and redefined[last_command] then
-        cline[last_command]:=cline[last_command]+#10+line
+        begin
+          if length(cline[last_command])+length(line)>254 then
+          error('Total length of preamble command '+commands[last_command]+
+            ' must not exceed 255',not print);
+          cline[last_command]:=cline[last_command]+#10+line
+        end
       else 
       begin cline[last_command]:=line;
         if warn_redefine and redefined[last_command] then
