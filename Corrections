@@ -3,6 +3,12 @@ Corrections and enhancements to M-Tx starting from 0.53
    
 Newest items at top. You might also want to look at file `MAINTENANCE`.
 
+Version 0.62c
+-------------
+
+1. Emit one `rmN` per stave, rather than only one. This error was
+  introduced in Version 0.61a when the multibar scosing was streamlined.
+
 Version 0.62b
 -------------
 

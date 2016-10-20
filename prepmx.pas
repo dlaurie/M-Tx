@@ -5,8 +5,8 @@ uses control, strings, globals, preamble, lyrics, mtx, analyze,
 { CMO: addition/change by Christian Mondrup }
 
 {* M-Tx preprocessor to PMX     Dirk Laurie }
-const version = '0.62b';
-      version_date = '<11 February 2016>';
+const version = '0.62c';
+      version_date = '<20 October 2016>';
 
 {* See file "Corrections" for updates later than those listed below
 }
@@ -287,13 +287,14 @@ procedure musicParagraph;
   end;
 
   procedure processMBR;
-  var bars_of_rest: integer;
+  var s, bars_of_rest: integer;
       mbr: string;
   begin  
     mbr := P[1];
     predelete(mbr,2); getNum(mbr,bars_of_rest);
     bar_no := bar_no + bars_of_rest;
-    putLine('rm' + toString(bars_of_rest) + ' /'); putLine('')
+    for s:=1 to nstaves do putLine('rm' + toString(bars_of_rest) + ' /'); 
+    putLine('')
   end;
 
 begin
