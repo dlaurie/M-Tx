@@ -21,8 +21,8 @@
 \def\mtxtexversion{0.62}
 \def\mtxtexdate{4 February 2016}
 \let\:=\relax
-\message{mtx.tex \mtxtexversion\space<\mtxtexdate>} 
-\message{M-Tx \mtxversion\space(Music from TeXt) <\mtxdate>} 
+\immediate\write10{%
+mtxTeX \mtxtexversion\space<\mtxtexdate>} 
 
 \input musixtex
 \def\musixtexneeded{121}
@@ -103,6 +103,10 @@
 \def\mtxHugeSize{\Largevalue}
 
 % musixlyr interface
+
+% TODO: use musixlyr 'here' commands, e.g as in the following line
+\def\mtxAt#1{\lyrraisehere{#1\internote}}%
+% not emitted by prepmx yet
 
 \def\mtxSetLyrics#1#2{\setlyrics{#1}{#2}}
 \def\mtxCopyLyrics#1#2{\copylyrics{#1}{#2}}
