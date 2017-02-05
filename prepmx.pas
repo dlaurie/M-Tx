@@ -5,14 +5,13 @@ uses control, strings, globals, preamble, lyrics, mtx, analyze,
 { CMO: addition/change by Christian Mondrup }
 
 {* M-Tx preprocessor to PMX     Dirk Laurie }
-const version = '0.62c';
-      version_date = '<20 October 2016>';
+const version = '0.63';
+      version_date = '<5 February 2017>';
 
 {* See file "Corrections" for updates later than those listed below
 }
 
 {* To do next:
-   Take notice of recent improvements in musixtex, pmx and musixlyr
 {* Current bugs:
 {* Old bugs:
    Does not check PMX syntax

@@ -492,7 +492,8 @@ begin
   some_vocal:=false; ngroups:=0;
   style_supplied := false; 
   for i:=1 to maxvoices do setVocal(i,false);
-  for i:=1 to maxstaves do
+  for i:=1 to maxstaves do stave_size[i]:=unspec;
+  for i:=0 to maxstaves do nspace[i]:=unspec;
   begin  nspace[i]:=unspec;  stave_size[i]:=unspec;  end;
   n_pages:=1; n_systems:=1;
   readStyles; old_known_styles := known_styles;
@@ -672,10 +673,14 @@ begin
       '\\mtxSetSize{'+toString(ninstr+1-j)+'}{'+sizecode(stave_size[j])+'}\');
   if part_line <> '' then
   begin putLine('Ti'); putLine(part_line); end;
-  if title_line <> '' then
-  begin putLine('Tt'); putLine('\mtxTitle'); end;
   if composer_line <> '' then
   begin putLine('Tc'); putLine('\mtxPoetComposer'); end;
+  if title_line <> '' then
+  begin write(outfile,'Tt'); 
+    if nspace[0] <> unspec then write(outfile,toString(nspace[0]));
+    writeln(outfile);
+    putLine('\mtxTitle'); 
+  end;
   if pmx_line <> '' then putLine(pmx_line);
   doTenorClefs;
   if cline[width] <> '' then putLine(cline[width]);

@@ -22,10 +22,10 @@
 \texttt{https://github.com/dlaurie/M-Tx}
 }
 
-\def\versionname{0.61}
-\def\version{0.61}
+\def\versionname{0.62}
+\def\version{0.62}
 \def\newfrom{0.61}
-\date{11 December 2015}
+\date{20 October 2016}
 \title{\Huge \textbf{\MTx: Music from Text \\ \LARGE Version\current} \\
   User's Guide \vfill}
 \author{\LARGE Dirk Laurie\\ \texttt{dirk.laurie@gmail.com} }
@@ -427,7 +427,7 @@ style names are translated to uppercase internally.
 \verb"Meter: C/" & \textit{Alla breve} meter: another notation for \verb"2/2". \\
 \verb"Flats: 3" & Key signature has three flats. \\
 \verb"Sharps: 2" & Key signature has two sharps. \\
-\verb"Space: 6 0 3" & Extra interlines of space below staves. \\
+\verb"Space: 10; 6 0 3" & Extra interlines of space after title block (optional) and below staves. \\
 \verb"PMX: Ar" & \PMX\ command in preamble.\\
 \verb"Options: x" & Forces the \texttt x option to be in effect, despite the command line. \\
 \verb"Enable: pedanticWarnings" & Enables the \texttt{pedanticWarnings} feature. \\
@@ -615,7 +615,10 @@ staves.  There may be a number for every stave: the last number is
 interpreted as extra space below the bottom stave.   You will probably
 need to specify it if you have lyrics or very low notes down there.
 This command can be issued in any music paragraph, not only in
-the preamble.  It will take effect at the start of the next system.
+the preamble. It will take effect at the start of the next system.
+If issued in the preamble, however, you may optionally also give extra 
+space to be inserted below the title block, separated from the other 
+numbers by a semicolon.  \NEW{0.63} 
 See Appendix \ref{voltas} for an example of how this command interacts
 with lyrics adjustments.
 
