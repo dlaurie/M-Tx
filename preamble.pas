@@ -349,21 +349,28 @@ end;
 
 procedure setRange(line: string);
   var v,p: integer;
+      vl: string;
 begin 
   line_no := orig_range_line;
   for v:=1 to nvoices do 
-  begin p:=pos(voice_label[v]+'=',line);
+  begin vl := voice_label[v];
+    p:=pos(vl+'=',line);
     if p>0 then
     begin
       if length(line)<p+6 then
-        error('At least five characters must follow "'+voice_label[v]+'="',
+        error('At least five characters must follow "'+vl+'="',
         print);
-      defineRange(v,substr(line,p+2,5));
+      defineRange(v,substr(line,p+1+length(vl),5));
     end
-    else defineRange(v,'');
+    else begin
+      warning('No range defined for voice '+vl,print);
+      defineRange(v,'');
+    end
   end;
 end;
 
+{ TODO: This procedure should test for assertions in a comment
+ or be removed }
 function isAssertion(var line: string): boolean;
 begin 
   exit(false)
