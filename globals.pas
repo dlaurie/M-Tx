@@ -95,9 +95,9 @@ var  voice_label: array[voice_index] of string;
      orig_line_no: line_nos;
      infile, outfile, stylefile: text;
      default_duration: char;
-     fracindent, this_version, this_version_date: string;
+     fracindent, this_version, this_version_date, multi_bar_rest: string;
      pmx_preamble_done, first_paragraph, final_paragraph, must_respace,
-       must_restyle, multi_bar_rest, some_vocal: boolean;
+       must_restyle, some_vocal: boolean;
 
 procedure error(message: string; printLine: boolean);
 procedure fatalerror(message: string);

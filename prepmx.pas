@@ -187,7 +187,7 @@ begin
   repeat note:=getMusicWord(voice);  if note='' then exit;
     { if debugMode then writeln(voice,' ',note); }
     case thisNote(voice) of
-  rword: begin if multi_bar_rest then
+  rword: begin if multi_bar_rest<>'' then
            begin if uptextOnRests then
                addUptext(voice, no_uptext, pretex);
            end
@@ -289,7 +289,7 @@ procedure musicParagraph;
   var s, bars_of_rest: integer;
       mbr: string;
   begin  
-    mbr := P[1];
+    mbr := multi_bar_rest;  
     predelete(mbr,2); getNum(mbr,bars_of_rest);
     bar_no := bar_no + bars_of_rest;
     for s:=1 to nstaves do putLine('rm' + toString(bars_of_rest) + ' /'); 
@@ -328,7 +328,7 @@ begin
   if must_respace then respace;
   if (meternum=0) then putMeter(meterChange(beatsPerLine,meterdenom,true));
   if nleft > 0 then inc(nbars);
-  if (nbars=0) and multi_bar_rest then 
+  if (nbars=0) and (multi_bar_rest<>'') then 
     processMBR
   else for bar_of_line:=1 to nbars do
     processOneBar;

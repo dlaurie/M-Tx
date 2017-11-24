@@ -114,9 +114,9 @@ end;
 function isMultiBarRest(rest: string): boolean;
 begin  isMultibarRest:=false;  if length(rest)<3 then exit;
   if rest[2]<>'m' then exit;
-  if multi_bar_rest then error(
+  if multi_bar_rest<>'' then error(
     'Only one multibar rest allowed per line',print);
-  multi_bar_rest := true; isMultibarRest:=true;
+  multi_bar_rest := rest; isMultibarRest:=true;
 end;
 
 { Double-length in xtuplet detected by a brute search for D anywhere.
@@ -230,7 +230,7 @@ begin
     enote := note;
     if (nscan=macro) or (nscan=endMacro) then examineMacro;
     if nscan=abcdefg then
-      if (not multi_bar_rest) and (ngrace + nmulti = 0) then
+      if (multi_bar_rest='') and (ngrace + nmulti = 0) then
       begin
         processNote(enote,xnote,dur1,lastdur,count);
         if xnote<>'' then
@@ -258,7 +258,7 @@ begin
       else barForward(voice,-1);  has_next := true;
     end
     else  if isPause(note) then  inc(bar_length,bar)
-    else  if multi_bar_rest then {do nothing}
+    else  if multi_bar_rest<>'' then {do nothing}
     else if not done and isNoteOrRest(note) then countIt
       else maybeGroup;
     dur1:=lastdur; 
