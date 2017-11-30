@@ -601,7 +601,7 @@ begin
 'F','b','6': clefno:=6;
 'C': clefno:=3;
     else
-    begin  warning('Unknown clef code - replaced by treble',print);
+    begin  warning('Unknown clef code "' + cl + '" - replaced by treble',print);
       clefno:=0;
     end;
   end

@@ -249,7 +249,7 @@ begin
     else if bar_length=0 then markBar(voice)
     else if (numberOfBars(voice)=0) and (bar_length<bar) then
     begin  if has_next then
-      has_next:=false  {Should check whether pickups are equal}
+      has_next:=false  {TODO Should check whether pickups are equal}
       else if left_over>0 then error3(voice,'Bar is too short');
       left_over:=bar_length;  bar_length := 0;
     end;

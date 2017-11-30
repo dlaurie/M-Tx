@@ -236,6 +236,7 @@ end;
 procedure musicParagraph;
   var j, nvoice: voice_index0;
       new_meter, lyrassign: string;
+      only_pickup: boolean;
 
   procedure putPMXlines;
     var i: paragraph_index;
@@ -328,8 +329,14 @@ begin
   if must_respace then respace;
   if (meternum=0) then putMeter(meterChange(beatsPerLine,meterdenom,true));
   if nleft > 0 then inc(nbars);
-  if (nbars=0) and (multi_bar_rest<>'') then 
-    processMBR
+  only_pickup := false;
+  if (nbars=0) then 
+    if multi_bar_rest<>'' then 
+      processMBR
+    else begin
+      only_pickup := pickup>0;
+      if only_pickup then  {do what?}
+    end
   else for bar_of_line:=1 to nbars do
     processOneBar;
   restoreDurations;
