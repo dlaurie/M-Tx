@@ -12,6 +12,8 @@ first stave.
 to Christian Mondrup for finding the bug.)
 3. Spurious error message when using `][` corrected. (Thanks
 to Christian Mondrup for finding the bug.)
+4. Pickup consisting of rests allowed with multibar rest. (Feature requested
+by  Christian Mondrup.)
 
 Version 0.62c
 -------------

@@ -996,8 +996,9 @@ of empty bars may be difficult to count, and the conventional notation
 is to put all the rests in a single bar, with the total number of
 bars printed above them.  The word for a \mark multi-bar rest is e.g.\
 \texttt{rm8} for a rest of eight bars.  You code this for one voice only,
-and there may be no other notes or rests on that line.  The same rest
-will be printed on all staves.
+and there may be no other notes or rests on that line, with one 
+exception:\NEW{0.63} at the start of the piece, there may be a pickup 
+consisting of rests.  The same rest will be printed on all staves.
 
 Thanks to recent improvements to MusiXTeX and PMX \NEW{0.62} it is no
 longer necessary to tune the appearance of the rest e.g.\ \texttt{rm19+18}.
@@ -1219,9 +1220,7 @@ preprocessor to Music\TeX\ (Daniel's first package).  My lack of
 expertise caused that project to die.  The appearance in January 1997 of 
 \PMX\ 1.1 inspired me to resurrect the idea --- thanks to Don Simons. 
 Don has also made some comments which helped me to improve the \MTx\ 
-input language.  Some \MTx\ features that are implemented by using \TeX\ directly, 
-such as multi-bar rests in scores with more than one stave, make use of
-MusiXTeX code written by Don.
+input language.  Some \MTx\ features that are implemented by using \TeX\ directly, make use of MusiXTeX code written by Don.
 
 Since version 0.21, \MTx\ uses Rainer Dunker's \ttxem{musixlyr} package.  
 This gives much neater horizontal spacing of lyrics than the manual system 

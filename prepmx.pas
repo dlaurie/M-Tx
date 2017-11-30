@@ -6,10 +6,9 @@ uses control, strings, globals, preamble, lyrics, mtx, analyze,
 
 {* M-Tx preprocessor to PMX     Dirk Laurie }
 const version = '0.63';
-      version_date = '<5 February 2017>';
+      version_date = '<30 November 2017>';
 
-{* See file "Corrections" for updates later than those listed below
-}
+{* See file "Corrections" for updates }
 
 {* To do next:
 {* Current bugs:
@@ -236,7 +235,6 @@ end;
 procedure musicParagraph;
   var j, nvoice: voice_index0;
       new_meter, lyrassign: string;
-      only_pickup: boolean;
 
   procedure putPMXlines;
     var i: paragraph_index;
@@ -290,6 +288,7 @@ procedure musicParagraph;
   var s, bars_of_rest: integer;
       mbr: string;
   begin  
+    if pickup>0 then put(rests(pickup,meterdenom,visible),nospace);
     mbr := multi_bar_rest;  
     predelete(mbr,2); getNum(mbr,bars_of_rest);
     bar_no := bar_no + bars_of_rest;
@@ -329,14 +328,8 @@ begin
   if must_respace then respace;
   if (meternum=0) then putMeter(meterChange(beatsPerLine,meterdenom,true));
   if nleft > 0 then inc(nbars);
-  only_pickup := false;
-  if (nbars=0) then 
-    if multi_bar_rest<>'' then 
-      processMBR
-    else begin
-      only_pickup := pickup>0;
-      if only_pickup then  {do what?}
-    end
+  if (nbars=0) and (multi_bar_rest<>'') then 
+    processMBR
   else for bar_of_line:=1 to nbars do
     processOneBar;
   restoreDurations;
