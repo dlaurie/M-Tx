@@ -14,7 +14,7 @@ to Christian Mondrup for finding the bug.)
 to Christian Mondrup for finding the bug.)
 4. Pickup consisting of rests allowed with multibar rest. (Feature requested
 by  Christian Mondrup.)
-5. Also recognized `F` as doubling duration in multiplet. (Feature requested
+5. Also recognizes `F` as doubling duration in multiplet. (Feature requested
 by  Christian Mondrup.)
 
 Version 0.62c

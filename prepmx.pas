@@ -288,11 +288,14 @@ procedure musicParagraph;
   var s, bars_of_rest: integer;
       mbr: string;
   begin  
-    if pickup>0 then put(rests(pickup,meterdenom,visible),nospace);
     mbr := multi_bar_rest;  
     predelete(mbr,2); getNum(mbr,bars_of_rest);
     bar_no := bar_no + bars_of_rest;
-    for s:=1 to nstaves do putLine('rm' + toString(bars_of_rest) + ' /'); 
+    for s:=1 to nstaves do 
+    begin
+      if pickup>0 then put(rests(pickup,meterdenom,visible),nospace);
+      putLine('rm' + toString(bars_of_rest) + ' /')
+    end;
     putLine('')
   end;
 
