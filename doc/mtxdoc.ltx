@@ -1386,6 +1386,14 @@ E.g.~\verb"g4x3 a b" defines a \ixem{triplet} of total duration a quarter-note
 looking like three eighth-notes. The \ttxem{n} means that the number 
 \verb"#" is not to be printed. 
 
+The other \verb"#"$-1$ notes in the multiplet are excluded from the count.
+They need not all be of the same length: double-length notes are allowed. 
+You can double the length using either \verb"D" or \verb"F". Either of 
+these in a multiplet note makes that note count as two notes and 
+changes the way it is printed. Consult the PMX documentation for 
+the difference between \verb"D" and \verb"F" (or experiment and see 
+for yourself).
+
 \paragraph*{Grace notes:} A normal note may have a prefix group starting
 with \verb"G#" or \ttxem{G}.  This indicates that the note is the first 
 of a grace note \index{note!grace}

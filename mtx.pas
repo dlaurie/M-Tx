@@ -211,7 +211,7 @@ begin
   repeat  GetNextMusWord(buf,note,nscan);  if length(note)=0 then break; count:=0;
 {    if isNoteOrRest(note) and not (isPause(note) or isMultibarRest(note))
       then note:=toStandard(note); }
-    doublex := pos1('D',note)>0; 
+    doublex := (pos1('D',note)>0) or (pos1('F',note)>0); 
     if nscan=mword then
     begin 
       if length(note)=0 then 
