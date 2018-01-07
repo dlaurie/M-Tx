@@ -16,12 +16,14 @@ to Christian Mondrup for finding the bug.)
 by  Christian Mondrup.)
 5. Also recognizes `F` as doubling duration in multiplet. (Feature requested
 by  Christian Mondrup.)
+6. No longer adds an undesired duration to rests in a multiplet.  (Thanks
+to Christian Mondrup for finding the bug.)
 
 Version 0.62c
 -------------
 
 1. Emit one `rmN` per stave, rather than only one. This error was
-  introduced in Version 0.61a when the multibar scosing was streamlined.
+  introduced in Version 0.61a when the multibar coding was streamlined.
 
 Version 0.62b
 -------------

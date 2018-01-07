@@ -6,7 +6,7 @@ uses control, strings, globals, preamble, lyrics, mtx, analyze,
 
 {* M-Tx preprocessor to PMX     Dirk Laurie }
 const version = '0.63';
-      version_date = '<30 November 2017>';
+      version_date = '<7 January 2018>';
 
 {* See file "Corrections" for updates }
 
@@ -161,7 +161,7 @@ atword: lyricsAdjust(voice, note);
  var l: integer;
      in_group: boolean;
 
-  procedure processNote;
+  procedure processUsual;
   begin  
     begin if hasVerseNumber(voice) then pretex:=pretex+'\mtxVerse';
       l := pos1(multi_group,note);  
@@ -196,10 +196,11 @@ begin
              if nmulti>0 then begin in_group:=true; dec(nmulti);  end;
              if uptextOnRests then
                addUptext(voice, no_uptext, pretex);
-             if not isPause(note) then resetDuration(voice,durationCode(note));
+             if not (isPause(note) or in_group) {0.63: allow rests in xtuples}
+               then resetDuration(voice,durationCode(note));
            end
          end;
-  abcdefg: processNote;
+  abcdefg: processUsual;
   barword: begin
       if voice=nvoices then
       if endOfBar(voice,bar_no) then repeat_sign := note

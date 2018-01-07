@@ -221,7 +221,8 @@ begin
       else bar:=barLength(note);
     end
     else if nscan=rword then
-      if not (isPause(note) or isMultiBarRest(note)) then
+      if not (isPause(note) or isMultiBarRest(note) 
+        or (ngrace + nmulti > 0)) then  {0.63: allow rests in xtuples}
       begin
         processNote(note,xnote,dur1,lastdur,count);
         checkSticky(note,rest_attrib[voice]);
